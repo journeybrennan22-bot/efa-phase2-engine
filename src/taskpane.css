@@ -1,0 +1,341 @@
+/* Base Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    color: #323130;
+    background: #faf9f8;
+    min-height: 100vh;
+    transition: background-color 0.3s ease;
+}
+
+/* Status-based body backgrounds */
+body.status-critical {
+    background: #f5a3aa !important;
+}
+
+body.status-medium {
+    background: #ffc107 !important;
+}
+
+body.status-info {
+    background: #2196f3 !important;
+}
+
+body.status-safe {
+    background: #4caf50 !important;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 10px;
+}
+
+/* Loading State */
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #e1dfdd;
+    border-top-color: #0078d4;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading p {
+    margin-top: 16px;
+    color: #605e5c;
+}
+
+/* Hidden class */
+.hidden {
+    display: none !important;
+}
+
+/* Results Container */
+.results {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Status Badge */
+.status-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+
+.status-badge.danger {
+    background: #fde7e9;
+    color: #a80000;
+    border-left: 4px solid #a80000;
+}
+
+.status-badge.warning {
+    background: #fff4ce;
+    color: #8a6914;
+    border-left: 4px solid #c19c00;
+}
+
+.status-badge.info {
+    background: #deecf9;
+    color: #0078d4;
+    border-left: 4px solid #0078d4;
+}
+
+.status-badge.safe {
+    background: #dff6dd;
+    color: #107c10;
+    border-left: 4px solid #107c10;
+}
+
+.status-icon {
+    font-size: 18px;
+}
+
+.status-text {
+    flex: 1;
+}
+
+/* Section - White card that extends to bottom */
+.section {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    padding: 14px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Warnings */
+.warnings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.warning-item {
+    padding: 14px;
+    border-radius: 6px;
+    border-left: 4px solid;
+    background: #fdf3f4;
+}
+
+.warning-item.critical {
+    background: #fdf3f4;
+    border-color: #a80000;
+}
+
+.warning-item.medium {
+    background: #fffbf0;
+    border-color: #c19c00;
+}
+
+.warning-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 6px;
+    color: #323130;
+}
+
+.warning-description {
+    font-size: 13px;
+    color: #323130;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+/* Email display in warnings */
+.warning-emails {
+    margin-top: 10px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 4px;
+}
+
+.warning-email-row {
+    margin-bottom: 8px;
+}
+
+.warning-email-row:last-child {
+    margin-bottom: 0;
+}
+
+.warning-email-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #605e5c;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.warning-email-value {
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Consolas', 'Courier New', monospace;
+    word-break: break-all;
+    display: block;
+}
+
+.warning-email-value.suspicious {
+    color: #a80000;
+}
+
+.warning-email-value.known {
+    color: #107c10;
+}
+
+.warning-reason {
+    font-size: 12px;
+    color: #605e5c;
+    margin-top: 6px;
+    font-style: italic;
+}
+
+/* Keyword tags */
+.warning-keywords-section {
+    margin-top: 10px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 4px;
+    text-align: center;
+}
+
+.warning-keywords-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #605e5c;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.warning-keywords {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+}
+
+.keyword-tag {
+    background: #a80000;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.warning-advice {
+    margin-top: 12px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 4px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #323130;
+}
+
+/* Warnings footer - pushes to bottom of white card */
+.warnings-footer {
+    margin-top: auto;
+    padding-top: 16px;
+    text-align: center;
+}
+
+.learn-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #f5a3aa;
+    color: #323130;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 13px;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.learn-btn:hover {
+    background: #e8929a;
+}
+
+/* Safe message */
+.safe-message {
+    text-align: center;
+    padding: 40px 20px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.safe-message p {
+    font-size: 14px;
+    color: #323130;
+}
+
+/* Error State */
+.error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.error-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.error p {
+    color: #605e5c;
+    margin-bottom: 16px;
+}
+
+/* Buttons */
+.btn {
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s;
+}
+
+.btn-primary {
+    background: #0078d4;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #106ebe;
+}
