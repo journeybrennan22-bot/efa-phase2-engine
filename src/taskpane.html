@@ -1,9 +1,50 @@
-Analyzing email...
-
-Learn how scams work
-No warning signs detected in this email.
-
-❌
-An error occurred.
-
-Retry
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Fraud Detector</title>
+    <script src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
+    <script src="https://alcdn.msauth.net/browser/2.30.0/js/msal-browser.min.js"></script>
+    <link rel="stylesheet" href="taskpane.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Loading State -->
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Analyzing email...</p>
+        </div>
+        
+        <!-- Results Container -->
+        <div id="results" class="results hidden">
+            <!-- Status Badge -->
+            <div id="status-badge" class="status-badge">
+                <span class="status-icon"></span>
+                <span class="status-text"></span>
+            </div>
+            
+            <!-- Warnings Section - White card extends to bottom -->
+            <div id="warnings-section" class="section hidden">
+                <div id="warnings-list" class="warnings-list"></div>
+                <div id="warnings-footer" class="warnings-footer">
+                    <a href="https://emailfraudalert.com/learn.html" target="_blank" class="learn-btn">Learn how scams work</a>
+                </div>
+            </div>
+            
+            <!-- Safe State Message -->
+            <div id="safe-message" class="section safe-message hidden">
+                <p>No warning signs detected in this email.</p>
+            </div>
+        </div>
+        
+        <!-- Error State -->
+        <div id="error" class="error hidden">
+            <div class="error-icon">❌</div>
+            <p id="error-message">An error occurred.</p>
+            <button id="retry-btn" class="btn btn-primary">Retry</button>
+        </div>
+    </div>
+    <script src="taskpane.js"></script>
+</body>
+</html>
