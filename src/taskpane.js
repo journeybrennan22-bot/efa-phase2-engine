@@ -1,4 +1,5 @@
 // Email Fraud Detector - Outlook Web Add-in
+// Version 4.2.2 - Fixed brand impersonation false positives (tiered body-only detection)
 // Version 4.2.1 - Added fake TLD detection (IANA validated)
 // Version 4.2.0 - Phase 2 Phishing Pattern Detection Engine (Silent Mode)
 // Version 4.1.5 - Added crypto wallet scam keyword detection
@@ -1759,15 +1760,26 @@ function detectAuthFailure(headers, senderDomain) {
     return null;
 }
 
-function detectBrandImpersonation(subject, body, senderDomain) {
+function detectBrandImpersonation(subject, body, senderDomain, displayName) {
     console.log('BRAND CHECK CALLED - Domain:', senderDomain);
     
-    const contentLower = ((subject || '') + ' ' + (body || '')).toLowerCase();
+    const subjectLower = (subject || '').toLowerCase();
+    const bodyLower = (body || '').toLowerCase();
+    const displayNameLower = (displayName || '').toLowerCase();
     
     for (const [brandName, config] of Object.entries(BRAND_CONTENT_DETECTION)) {
-        const mentionsBrand = config.keywords.some(keyword => 
-            contentLower.includes(keyword.toLowerCase())
+        // Check each location separately: subject, display name, body
+        const inSubject = config.keywords.some(keyword => 
+            subjectLower.includes(keyword.toLowerCase())
         );
+        const inDisplayName = config.keywords.some(keyword => 
+            displayNameLower.includes(keyword.toLowerCase())
+        );
+        const inBody = config.keywords.some(keyword => 
+            bodyLower.includes(keyword.toLowerCase())
+        );
+        
+        const mentionsBrand = inSubject || inDisplayName || inBody;
         
         if (mentionsBrand) {
             if (!senderDomain) {
@@ -1787,16 +1799,64 @@ function detectBrandImpersonation(subject, body, senderDomain) {
             });
             
             if (!isLegitimate) {
-                return {
-                    brandName: formatEntityName(brandName),
-                    senderDomain: senderDomain,
-                    legitimateDomains: config.legitimateDomains
-                };
+                // TIER 1: Brand in subject or display name = email is claiming to BE this brand
+                // Flag immediately (same as before)
+                if (inSubject || inDisplayName) {
+                    return {
+                        brandName: formatEntityName(brandName),
+                        senderDomain: senderDomain,
+                        legitimateDomains: config.legitimateDomains
+                    };
+                }
+                
+                // TIER 2: Brand only in body = casual mention, require supporting signals
+                // to avoid false positives on emails that just reference a brand
+                const hasSupport = _brandBodyHasSupportingSignals(config, bodyLower, subjectLower, domainLower);
+                if (hasSupport) {
+                    return {
+                        brandName: formatEntityName(brandName),
+                        senderDomain: senderDomain,
+                        legitimateDomains: config.legitimateDomains
+                    };
+                }
+                
+                console.log('BRAND CHECK SKIPPED (body-only, no supporting signals) -', brandName, 'from', senderDomain);
             }
         }
     }
     
     return null;
+}
+
+// Helper: checks if a body-only brand mention has enough supporting context
+// to indicate actual impersonation rather than a casual reference
+function _brandBodyHasSupportingSignals(config, bodyLower, subjectLower, senderDomainLower) {
+    // Signal 1: Brand keyword appears 3+ times in body (email is themed around the brand)
+    let totalMentions = 0;
+    for (const keyword of config.keywords) {
+        const kw = keyword.toLowerCase();
+        let pos = 0;
+        while ((pos = bodyLower.indexOf(kw, pos)) !== -1) {
+            totalMentions++;
+            pos += kw.length;
+        }
+        if (totalMentions >= 3) return true;
+    }
+    
+    // Signal 2: Subject or body contains phishing urgency language
+    const combinedText = subjectLower + ' ' + bodyLower;
+    const hasUrgency = PHISHING_URGENCY_KEYWORDS.some(phrase => 
+        combinedText.includes(phrase.toLowerCase())
+    );
+    if (hasUrgency) return true;
+    
+    // Signal 3: Sender domain contains suspicious words (e.g. "secure-paypal-login.com")
+    const hasSuspiciousDomain = SUSPICIOUS_DOMAIN_WORDS.some(word => 
+        senderDomainLower.includes(word)
+    );
+    if (hasSuspiciousDomain) return true;
+    
+    return false;
 }
 
 function detectOrganizationImpersonation(displayName, senderDomain) {
@@ -2684,7 +2744,7 @@ function processEmail(emailData) {
         }
     }
     
-    const brandImpersonation = detectBrandImpersonation(emailData.subject, emailData.body, senderDomain);
+    const brandImpersonation = detectBrandImpersonation(emailData.subject, emailData.body, senderDomain, displayName);
     if (brandImpersonation) {
         warnings.push({
             type: 'brand-impersonation',
