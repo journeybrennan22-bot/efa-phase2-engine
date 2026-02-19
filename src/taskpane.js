@@ -1,4 +1,5 @@
 // Email Fraud Detector - Outlook Web Add-in
+// Version 4.2.5 - Added enterprise email security gateway whitelist (Proofpoint, Cisco, Barracuda, Symantec, Mimecast)
 // Version 4.2.4 - Added confirmed secondary sending domains (Airbnb, Spotify, Meta/Facebook, Instagram)
 // Version 4.2.3 - Added ESP whitelist to reduce reply-to mismatch false positives
 // Version 4.2.2 - Fixed brand impersonation false positives (tiered body-only detection)
@@ -1718,7 +1719,8 @@ function detectViaRouting(headers, senderDomain) {
         const legitServices = ['google', 'gmail', 'googlemail', 'microsoft', 'outlook', 'office365', 
                               'sendgrid', 'mailchimp', 'amazonses', 'mailgun', 'postmark', 'sparkpost',
                               'mailjet', 'sendinblue', 'constantcontact', 'hubspot', 'salesforce',
-                              'zoho', 'yahoo', 'aol', 'icloud', 'apple', 'protonmail'];
+                              'zoho', 'yahoo', 'aol', 'icloud', 'apple', 'protonmail',
+                              'ppops', 'ppe-hosted', 'iphmx', 'barracudanetworks', 'messagelabs', 'mimecast'];
         if (legitServices.some(s => relayDomain.includes(s))) continue;
         
         const domainParts = relayDomain.split('.');
