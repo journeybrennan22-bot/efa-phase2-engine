@@ -3238,4 +3238,56 @@ function displayResults(warnings) {
                     <div class="warning-emails">
                         <div class="warning-email-row">
                             <span class="warning-email-label">Sender:</span>
-                            <span class="warning-email-value">${formatEmailForDisplay(w.senderEm
+                            <span class="warning-email-value">${formatEmailForDisplay(w.senderEmail)}</span>
+                        </div>
+                        <div class="warning-email-row">
+                            <span class="warning-email-label">Routed via:</span>
+                            <span class="warning-email-value suspicious">${w.viaDomain}</span>
+                        </div>
+                    </div>
+                `;
+            } else if (w.type === 'auth-failure') {
+                emailHtml = `
+                    <div class="warning-emails">
+                        <div class="warning-email-row">
+                            <span class="warning-email-label">Sender:</span>
+                            <span class="warning-email-value suspicious">${formatEmailForDisplay(w.senderEmail)}</span>
+                        </div>
+                    </div>
+                    <div class="warning-advice">
+                        <strong>Why this matters:</strong> Every email goes through security checks to prove the sender is real. This email failed multiple checks. Legitimate senders almost always pass. Be cautious with any links, attachments, or requests in this email.
+                    </div>
+                `;
+            } else if (w.senderEmail && w.matchedEmail) {
+                const matchLabel = w.type === 'replyto-mismatch' ? 'Replies go to' : w.type === 'on-behalf-of' ? 'On behalf of' : w.type === 'gibberish-domain' ? 'Domain' : 'Similar to';
+                emailHtml = `
+                    <div class="warning-emails">
+                        <div class="warning-email-row">
+                            <span class="warning-email-label">Sender:</span>
+                            <span class="warning-email-value suspicious">${formatEmailForDisplay(w.senderEmail)}</span>
+                        </div>
+                        <div class="warning-email-row">
+                            <span class="warning-email-label">${matchLabel}:</span>
+                            <span class="warning-email-value ${w.type === 'gibberish-domain' ? 'suspicious' : 'known'}">${formatEmailForDisplay(w.matchedEmail)}</span>
+                        </div>
+                        ${w.reason ? `<div class="warning-reason">${w.reason}</div>` : ''}
+                    </div>
+                `;
+            } else if (w.detail) {
+                emailHtml = `<div class="warning-reason">${w.detail}</div>`;
+            }
+            
+            return `
+                <div class="warning-item ${w.severity}">
+                    <div class="warning-title">${w.title}</div>
+                    <div class="warning-description">${w.description}</div>
+                    ${emailHtml}
+                </div>
+            `;
+        }).join('');
+    } else {
+        warningsSection.classList.add('hidden');
+        warningsFooter.classList.add('hidden');
+        safeMessage.classList.remove('hidden');
+    }
+}
