@@ -1,4 +1,5 @@
 // Email Fraud Detector - Outlook Web Add-in
+// Version 4.2.6 - Fixed brand detection false positives for person names (e.g., "Jacob Norton" != Norton antivirus)
 // Version 4.2.5 - Added enterprise email security gateway whitelist (Proofpoint, Cisco, Barracuda, Symantec, Mimecast)
 // Version 4.2.4 - Added confirmed secondary sending domains (Airbnb, Spotify, Meta/Facebook, Instagram)
 // Version 4.2.3 - Added ESP whitelist to reduce reply-to mismatch false positives
@@ -1873,7 +1874,7 @@ function detectBrandImpersonation(subject, body, senderDomain, displayName) {
                 
                 // TIER 2: Brand only in body = casual mention, require supporting signals
                 // to avoid false positives on emails that just reference a brand
-                const hasSupport = _brandBodyHasSupportingSignals(config, bodyLower, subjectLower, domainLower);
+                const hasSupport = _brandBodyHasSupportingSignals(config, bodyLower, subjectLower, domainLower, body || '');
                 if (hasSupport) {
                     return {
                         brandName: formatEntityName(brandName),
@@ -1892,14 +1893,55 @@ function detectBrandImpersonation(subject, body, senderDomain, displayName) {
 
 // Helper: checks if a body-only brand mention has enough supporting context
 // to indicate actual impersonation rather than a casual reference
-function _brandBodyHasSupportingSignals(config, bodyLower, subjectLower, senderDomainLower) {
+function _brandBodyHasSupportingSignals(config, bodyLower, subjectLower, senderDomainLower, bodyOriginal) {
     // Signal 1: Brand keyword appears 3+ times in body (email is themed around the brand)
+    // Exclude instances where keyword is part of a person's name (e.g., "Jacob Norton")
+    // or an email address (e.g., "jacob.norton@invitedclubs.com")
     let totalMentions = 0;
     for (const keyword of config.keywords) {
         const kw = keyword.toLowerCase();
         let pos = 0;
         while ((pos = bodyLower.indexOf(kw, pos)) !== -1) {
-            totalMentions++;
+            let isProbablyPersonName = false;
+            
+            // Check 1: Is this keyword inside an email address? (word.keyword@ or word@...keyword)
+            const surroundingStart = Math.max(0, pos - 40);
+            const surroundingEnd = Math.min(bodyLower.length, pos + kw.length + 40);
+            const surrounding = bodyLower.substring(surroundingStart, surroundingEnd);
+            if (surrounding.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/)) {
+                isProbablyPersonName = true;
+            }
+            
+            // Check 2: In the original (non-lowered) text, is this keyword preceded by
+            // a capitalized word? e.g., "Jacob Norton" or "Coach Norton" = person name
+            // vs "your Norton subscription" or "Norton 360" = brand reference
+            // Exclude common sentence-starting words that happen to be capitalized
+            if (!isProbablyPersonName && bodyOriginal && pos >= 2) {
+                const origBefore = bodyOriginal.substring(Math.max(0, pos - 25), pos);
+                // Look for a Title Case word immediately before: "Jacob ", "Coach ", "Mr. "
+                const namePattern = origBefore.match(/([A-Z][a-z]+)\.?\s+$/);
+                if (namePattern) {
+                    const precedingWord = namePattern[1].toLowerCase();
+                    // These are common words that start sentences, not proper names
+                    const commonWords = ['the', 'this', 'that', 'your', 'our', 'my', 'his', 'her',
+                        'its', 'their', 'please', 'dear', 'new', 'free', 'get', 'buy', 'use',
+                        'how', 'why', 'what', 'when', 'where', 'who', 'which', 'with', 'from',
+                        'about', 'after', 'before', 'between', 'into', 'through', 'during',
+                        'each', 'every', 'all', 'any', 'both', 'few', 'more', 'most', 'some',
+                        'such', 'than', 'too', 'very', 'can', 'will', 'just', 'should', 'now',
+                        'also', 'not', 'only', 'then', 'but', 'and', 'for', 'are', 'was',
+                        'has', 'had', 'have', 'been', 'would', 'could', 'may', 'might',
+                        'call', 'visit', 'click', 'see', 'contact', 'email', 'download',
+                        'try', 'start', 'join', 'sign', 'log', 'update', 'renew'];
+                    if (!commonWords.includes(precedingWord)) {
+                        isProbablyPersonName = true;
+                    }
+                }
+            }
+            
+            if (!isProbablyPersonName) {
+                totalMentions++;
+            }
             pos += kw.length;
         }
         if (totalMentions >= 3) return true;
@@ -3196,56 +3238,4 @@ function displayResults(warnings) {
                     <div class="warning-emails">
                         <div class="warning-email-row">
                             <span class="warning-email-label">Sender:</span>
-                            <span class="warning-email-value">${formatEmailForDisplay(w.senderEmail)}</span>
-                        </div>
-                        <div class="warning-email-row">
-                            <span class="warning-email-label">Routed via:</span>
-                            <span class="warning-email-value suspicious">${w.viaDomain}</span>
-                        </div>
-                    </div>
-                `;
-            } else if (w.type === 'auth-failure') {
-                emailHtml = `
-                    <div class="warning-emails">
-                        <div class="warning-email-row">
-                            <span class="warning-email-label">Sender:</span>
-                            <span class="warning-email-value suspicious">${formatEmailForDisplay(w.senderEmail)}</span>
-                        </div>
-                    </div>
-                    <div class="warning-advice">
-                        <strong>Why this matters:</strong> Every email goes through security checks to prove the sender is real. This email failed multiple checks. Legitimate senders almost always pass. Be cautious with any links, attachments, or requests in this email.
-                    </div>
-                `;
-            } else if (w.senderEmail && w.matchedEmail) {
-                const matchLabel = w.type === 'replyto-mismatch' ? 'Replies go to' : w.type === 'on-behalf-of' ? 'On behalf of' : w.type === 'gibberish-domain' ? 'Domain' : 'Similar to';
-                emailHtml = `
-                    <div class="warning-emails">
-                        <div class="warning-email-row">
-                            <span class="warning-email-label">Sender:</span>
-                            <span class="warning-email-value suspicious">${formatEmailForDisplay(w.senderEmail)}</span>
-                        </div>
-                        <div class="warning-email-row">
-                            <span class="warning-email-label">${matchLabel}:</span>
-                            <span class="warning-email-value ${w.type === 'gibberish-domain' ? 'suspicious' : 'known'}">${formatEmailForDisplay(w.matchedEmail)}</span>
-                        </div>
-                        ${w.reason ? `<div class="warning-reason">${w.reason}</div>` : ''}
-                    </div>
-                `;
-            } else if (w.detail) {
-                emailHtml = `<div class="warning-reason">${w.detail}</div>`;
-            }
-            
-            return `
-                <div class="warning-item ${w.severity}">
-                    <div class="warning-title">${w.title}</div>
-                    <div class="warning-description">${w.description}</div>
-                    ${emailHtml}
-                </div>
-            `;
-        }).join('');
-    } else {
-        warningsSection.classList.add('hidden');
-        warningsFooter.classList.add('hidden');
-        safeMessage.classList.remove('hidden');
-    }
-}
+                            <span class="warning-email-value">${formatEmailForDisplay(w.senderEm
