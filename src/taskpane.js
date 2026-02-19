@@ -1,5 +1,5 @@
 // Email Fraud Detector - Outlook Web Add-in
-// Version 4.2.4 - Added brand sending domain whitelist (secondary/transactional email domains)
+// Version 4.2.4 - Added confirmed secondary sending domains (Airbnb, Spotify, Meta/Facebook, Instagram)
 // Version 4.2.3 - Added ESP whitelist to reduce reply-to mismatch false positives
 // Version 4.2.2 - Fixed brand impersonation false positives (tiered body-only detection)
 // Version 4.2.1 - Added fake TLD detection (IANA validated)
@@ -212,7 +212,7 @@ const BRAND_CONTENT_DETECTION = {
     },
     'microsoft': {
         keywords: ['microsoft 365', 'microsoft-365', 'office 365', 'office-365', 'sharepoint', 'onedrive', 'microsoft account', 'microsoft teams'],
-        legitimateDomains: ['microsoft.com', 'office.com', 'sharepoint.com', 'onedrive.com', 'live.com', 'outlook.com', 'office365.com', 'microsoftonline.com', 'microsoft365.com', 'teams.mail.microsoft']
+        legitimateDomains: ['microsoft.com', 'office.com', 'sharepoint.com', 'onedrive.com', 'live.com', 'outlook.com', 'office365.com', 'teams.mail.microsoft']
     },
     'google': {
         keywords: ['google drive', 'google docs', 'google account', 'google workspace'],
@@ -220,11 +220,11 @@ const BRAND_CONTENT_DETECTION = {
     },
     'amazon': {
         keywords: ['amazon prime', 'amazon account', 'amazon order', 'amazon.com order'],
-        legitimateDomains: ['amazon.com', 'amazon.co.uk', 'amazon.ca', 'amazonses.com', 'amazon.de', 'amazon.fr', 'amazon.es', 'amazon.it', 'amazon.co.jp', 'amazon.in', 'amazon.com.au', 'amazon.com.br', 'amazon.com.mx', 'amazon.sg', 'amazon.nl', 'amazon.pl', 'amazon.se', 'amazon.com.be', 'amazon.ae']
+        legitimateDomains: ['amazon.com', 'amazon.co.uk', 'amazon.ca', 'amazonses.com']
     },
     'paypal': {
         keywords: ['paypal'],
-        legitimateDomains: ['paypal.com', 'paypal.co.uk', 'paypal.de', 'paypal.fr', 'paypal.it', 'paypal.es', 'paypal.com.au', 'paypal.ca']
+        legitimateDomains: ['paypal.com']
     },
     'netflix': {
         keywords: ['netflix'],
@@ -244,7 +244,7 @@ const BRAND_CONTENT_DETECTION = {
     },
     'facebook': {
         keywords: ['facebook account', 'meta account', 'facebook security'],
-        legitimateDomains: ['facebook.com', 'meta.com', 'facebookmail.com']
+        legitimateDomains: ['facebook.com', 'meta.com', 'facebookmail.com', 'fb.com', 'metamail.com']
     },
     'linkedin': {
         keywords: ['linkedin account', 'linkedin invitation', 'linkedin message'],
@@ -264,7 +264,7 @@ const BRAND_CONTENT_DETECTION = {
     },
     'dhl': {
         keywords: ['dhl express', 'dhl shipment', 'dhl delivery', 'dhl package'],
-        legitimateDomains: ['dhl.com', 'dhl.de', 'dhl.co.uk', 'dhl.fr', 'dhl.nl', 'dpdhl.com']
+        legitimateDomains: ['dhl.com', 'dhl.de']
     },
     'fedex': {
         keywords: ['fedex', 'federal express'],
@@ -272,7 +272,7 @@ const BRAND_CONTENT_DETECTION = {
     },
     'ups': {
         keywords: ['ups package', 'ups delivery', 'ups shipment', 'united parcel'],
-        legitimateDomains: ['ups.com', 'upsemail.com']
+        legitimateDomains: ['ups.com']
     },
     'usps': {
         keywords: ['usps', 'postal service', 'usps delivery', 'usps package'],
@@ -292,7 +292,7 @@ const BRAND_CONTENT_DETECTION = {
     },
     'quickbooks': {
         keywords: ['quickbooks', 'intuit'],
-        legitimateDomains: ['intuit.com', 'quickbooks.com', 'intuitmail.com']
+        legitimateDomains: ['intuit.com', 'quickbooks.com']
     },
     'zoom': {
         keywords: ['zoom meeting', 'zoom invitation', 'zoom account'],
@@ -324,7 +324,7 @@ const BRAND_CONTENT_DETECTION = {
     },
     'ebay': {
         keywords: ['ebay'],
-        legitimateDomains: ['ebay.com', 'ebay.co.uk', 'ebay.de', 'ebay.fr', 'ebay.it', 'ebay.es', 'ebay.ca', 'ebay.com.au']
+        legitimateDomains: ['ebay.com']
     },
     'dmv': {
         keywords: ['department of motor vehicles', 'dmv service desk', 'dmv appointment', 'dmv registration'],
@@ -344,7 +344,7 @@ const BRAND_CONTENT_DETECTION = {
     },
     'verizon': {
         keywords: ['verizon', 'verizon wireless', 'verizon fios'],
-        legitimateDomains: ['verizon.com', 'verizonwireless.com', 'vzw.com', 'verizon.net']
+        legitimateDomains: ['verizon.com', 'verizonwireless.com']
     },
     'tmobile': {
         keywords: ['t-mobile', 'tmobile'],
@@ -364,7 +364,7 @@ const BRAND_CONTENT_DETECTION = {
     },
     'instagram': {
         keywords: ['instagram account', 'instagram security'],
-        legitimateDomains: ['instagram.com', 'mail.instagram.com']
+        legitimateDomains: ['instagram.com', 'mail.instagram.com', 'facebookmail.com', 'metamail.com']
     },
     'tiktok': {
         keywords: ['tiktok account', 'tiktok security'],
@@ -400,7 +400,7 @@ const BRAND_CONTENT_DETECTION = {
     },
     'spotify': {
         keywords: ['spotify', 'spotify premium', 'spotify account'],
-        legitimateDomains: ['spotify.com']
+        legitimateDomains: ['spotify.com', 'spotifymail.com']
     },
     'disney plus': {
         keywords: ['disney+', 'disney plus', 'disneyplus'],
@@ -568,7 +568,7 @@ const BRAND_CONTENT_DETECTION = {
     },
     'airbnb': {
         keywords: ['airbnb'],
-        legitimateDomains: ['airbnb.com']
+        legitimateDomains: ['airbnb.com', 'airbnbmail.com', 'airbnbaction.com', 'airbnblove.com']
     },
     'expedia': {
         keywords: ['expedia'],
@@ -712,7 +712,7 @@ const BRAND_CONTENT_DETECTION = {
     },
     'lyft': {
         keywords: ['lyft', 'lyft ride', 'lyft account'],
-        legitimateDomains: ['lyft.com', 'lyftmail.com', 'lyft.zendesk.com', 'lyft-new.zendesk.com']
+        legitimateDomains: ['lyft.com']
     },
     'etsy': {
         keywords: ['etsy', 'etsy shop', 'etsy order'],
@@ -881,7 +881,7 @@ const IMPERSONATION_TARGETS = {
     "boost mobile": ["boostmobile.com"],
     "whatsapp": ["whatsapp.com"],
     "whatsapp support": ["whatsapp.com"],
-    "instagram": ["instagram.com", "mail.instagram.com"],
+    "instagram": ["instagram.com", "mail.instagram.com", "facebookmail.com", "metamail.com"],
     "instagram support": ["instagram.com"],
     "tiktok": ["tiktok.com"],
     "tiktok support": ["tiktok.com"],
@@ -911,7 +911,7 @@ const IMPERSONATION_TARGETS = {
     "riot games": ["riotgames.com"],
     "blizzard": ["blizzard.com", "battle.net"],
     "battle.net": ["blizzard.com", "battle.net"],
-    "spotify": ["spotify.com"],
+    "spotify": ["spotify.com", "spotifymail.com"],
     "spotify support": ["spotify.com"],
     "disney+": ["disneyplus.com", "disney.com"],
     "disney plus": ["disneyplus.com", "disney.com"],
@@ -1000,7 +1000,7 @@ const IMPERSONATION_TARGETS = {
     "aaa roadside": ["aaa.com"],
     "aaa insurance": ["aaa.com"],
     "booking.com": ["booking.com"],
-    "airbnb": ["airbnb.com"],
+    "airbnb": ["airbnb.com", "airbnbmail.com", "airbnbaction.com", "airbnblove.com"],
     "airbnb support": ["airbnb.com"],
     "expedia": ["expedia.com"],
     "vrbo": ["vrbo.com"],
