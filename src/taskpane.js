@@ -1,4 +1,5 @@
 // Email Fraud Detector - Outlook Web Add-in
+// Version 4.2.3 - Added ESP whitelist to reduce reply-to mismatch false positives
 // Version 4.2.2 - Fixed brand impersonation false positives (tiered body-only detection)
 // Version 4.2.1 - Added fake TLD detection (IANA validated)
 // Version 4.2.0 - Phase 2 Phishing Pattern Detection Engine (Silent Mode)
@@ -16,6 +17,64 @@ const CONFIG = {
     scopes: ['User.Read', 'Contacts.Read'],
     trustedDomains: []
 };
+
+// ============================================
+// KNOWN EMAIL SERVICE PROVIDER (ESP) DOMAINS
+// These platforms send on behalf of businesses,
+// so reply-to mismatches are expected/legitimate.
+// ============================================
+const KNOWN_ESP_DOMAINS = [
+    // Constant Contact
+    'ccsend.com',
+    // Mailchimp / Intuit
+    'mailchimp.com', 'mandrillapp.com', 'mail.mailchimp.com', 'rsgsv.net', 'list-manage.com',
+    // SendGrid (Twilio)
+    'sendgrid.net', 'em.sendgrid.net',
+    // Amazon SES
+    'amazonses.com', 'us-east-1.amazonses.com', 'us-west-2.amazonses.com', 'eu-west-1.amazonses.com',
+    // Mailgun
+    'mailgun.org', 'mailgun.net',
+    // Campaign Monitor
+    'createsend.com', 'cmail19.com', 'cmail20.com',
+    // HubSpot
+    'hubspot.com', 'hubspotemail.net', 'hs-email.com',
+    // Salesforce Marketing Cloud / Pardot
+    'exacttarget.com', 'salesforce.com', 'pardot.com',
+    // Klaviyo
+    'klaviyo.com', 'klaviyomail.com',
+    // ActiveCampaign
+    'acsend.com', 'activehosted.com',
+    // ConvertKit
+    'convertkit.com', 'ck.page',
+    // Brevo (formerly Sendinblue)
+    'sendinblue.com', 'brevo.com',
+    // Postmark
+    'postmarkapp.com',
+    // SparkPost / MessageBird
+    'sparkpostmail.com', 'messagebird.com',
+    // GetResponse
+    'getresponse.com', 'gr8.com',
+    // AWeber
+    'aweber.com',
+    // Drip
+    'drip.com',
+    // Zoho Campaigns
+    'zohocampaigns.com', 'zoho.com',
+    // Marketo (Adobe)
+    'mktomail.com', 'marketo.com',
+    // MailerLite
+    'mailerlite.com',
+    // Benchmark Email
+    'benchmarkemail.com', 'bmetrack.com',
+    // iContact
+    'icontact.com', 'icptrack.com',
+    // Emma
+    'e2ma.net', 'myemma.com',
+    // Vertical Response
+    'verticalresponse.com',
+    // Keap / Infusionsoft
+    'infusionmail.com', 'keap-link.com'
+];
 
 // ============================================
 // COUNTRY CODE TLD LOOKUP
@@ -2718,14 +2777,21 @@ function processEmail(emailData) {
     if (replyTo && replyTo.toLowerCase() !== senderEmail) {
         const replyToDomain = replyTo.split('@')[1] || '';
         if (replyToDomain.toLowerCase() !== senderDomain) {
-            warnings.push({
-                type: 'replyto-mismatch',
-                severity: 'medium',
-                title: 'Reply-To Mismatch',
-                description: 'Replies will go to a different address than the sender.',
-                senderEmail: senderEmail,
-                matchedEmail: replyTo
-            });
+            // Check if sender domain is a known ESP (e.g., ccsend.com, mailchimp.com)
+            // ESPs always have reply-to mismatches because they send on behalf of businesses
+            const isKnownESP = KNOWN_ESP_DOMAINS.some(esp => 
+                senderDomain === esp || senderDomain.endsWith('.' + esp)
+            );
+            if (!isKnownESP) {
+                warnings.push({
+                    type: 'replyto-mismatch',
+                    severity: 'medium',
+                    title: 'Reply-To Mismatch',
+                    description: 'Replies will go to a different address than the sender.',
+                    senderEmail: senderEmail,
+                    matchedEmail: replyTo
+                });
+            }
         }
     }
     
