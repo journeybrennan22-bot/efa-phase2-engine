@@ -212,7 +212,7 @@ const BRAND_CONTENT_DETECTION = {
     },
     'microsoft': {
         keywords: ['microsoft 365', 'microsoft-365', 'office 365', 'office-365', 'sharepoint', 'onedrive', 'microsoft account', 'microsoft teams'],
-        legitimateDomains: ['microsoft.com', 'office.com', 'sharepoint.com', 'onedrive.com', 'live.com', 'outlook.com', 'office365.com', 'microsoftonline.com', 'microsoft365.com']
+        legitimateDomains: ['microsoft.com', 'office.com', 'sharepoint.com', 'onedrive.com', 'live.com', 'outlook.com', 'office365.com', 'microsoftonline.com', 'microsoft365.com', 'teams.mail.microsoft']
     },
     'google': {
         keywords: ['google drive', 'google docs', 'google account', 'google workspace'],
