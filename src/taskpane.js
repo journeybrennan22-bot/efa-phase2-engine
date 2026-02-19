@@ -1,4 +1,5 @@
 // Email Fraud Detector - Outlook Web Add-in
+// Version 4.2.4 - Added brand sending domain whitelist (secondary/transactional email domains)
 // Version 4.2.3 - Added ESP whitelist to reduce reply-to mismatch false positives
 // Version 4.2.2 - Fixed brand impersonation false positives (tiered body-only detection)
 // Version 4.2.1 - Added fake TLD detection (IANA validated)
@@ -211,7 +212,7 @@ const BRAND_CONTENT_DETECTION = {
     },
     'microsoft': {
         keywords: ['microsoft 365', 'microsoft-365', 'office 365', 'office-365', 'sharepoint', 'onedrive', 'microsoft account', 'microsoft teams'],
-        legitimateDomains: ['microsoft.com', 'office.com', 'sharepoint.com', 'onedrive.com', 'live.com', 'outlook.com', 'office365.com', 'teams.mail.microsoft']
+        legitimateDomains: ['microsoft.com', 'office.com', 'sharepoint.com', 'onedrive.com', 'live.com', 'outlook.com', 'office365.com', 'microsoftonline.com', 'microsoft365.com']
     },
     'google': {
         keywords: ['google drive', 'google docs', 'google account', 'google workspace'],
@@ -219,11 +220,11 @@ const BRAND_CONTENT_DETECTION = {
     },
     'amazon': {
         keywords: ['amazon prime', 'amazon account', 'amazon order', 'amazon.com order'],
-        legitimateDomains: ['amazon.com', 'amazon.co.uk', 'amazon.ca', 'amazonses.com']
+        legitimateDomains: ['amazon.com', 'amazon.co.uk', 'amazon.ca', 'amazonses.com', 'amazon.de', 'amazon.fr', 'amazon.es', 'amazon.it', 'amazon.co.jp', 'amazon.in', 'amazon.com.au', 'amazon.com.br', 'amazon.com.mx', 'amazon.sg', 'amazon.nl', 'amazon.pl', 'amazon.se', 'amazon.com.be', 'amazon.ae']
     },
     'paypal': {
         keywords: ['paypal'],
-        legitimateDomains: ['paypal.com']
+        legitimateDomains: ['paypal.com', 'paypal.co.uk', 'paypal.de', 'paypal.fr', 'paypal.it', 'paypal.es', 'paypal.com.au', 'paypal.ca']
     },
     'netflix': {
         keywords: ['netflix'],
@@ -263,7 +264,7 @@ const BRAND_CONTENT_DETECTION = {
     },
     'dhl': {
         keywords: ['dhl express', 'dhl shipment', 'dhl delivery', 'dhl package'],
-        legitimateDomains: ['dhl.com', 'dhl.de']
+        legitimateDomains: ['dhl.com', 'dhl.de', 'dhl.co.uk', 'dhl.fr', 'dhl.nl', 'dpdhl.com']
     },
     'fedex': {
         keywords: ['fedex', 'federal express'],
@@ -271,7 +272,7 @@ const BRAND_CONTENT_DETECTION = {
     },
     'ups': {
         keywords: ['ups package', 'ups delivery', 'ups shipment', 'united parcel'],
-        legitimateDomains: ['ups.com']
+        legitimateDomains: ['ups.com', 'upsemail.com']
     },
     'usps': {
         keywords: ['usps', 'postal service', 'usps delivery', 'usps package'],
@@ -291,7 +292,7 @@ const BRAND_CONTENT_DETECTION = {
     },
     'quickbooks': {
         keywords: ['quickbooks', 'intuit'],
-        legitimateDomains: ['intuit.com', 'quickbooks.com']
+        legitimateDomains: ['intuit.com', 'quickbooks.com', 'intuitmail.com']
     },
     'zoom': {
         keywords: ['zoom meeting', 'zoom invitation', 'zoom account'],
@@ -323,7 +324,7 @@ const BRAND_CONTENT_DETECTION = {
     },
     'ebay': {
         keywords: ['ebay'],
-        legitimateDomains: ['ebay.com']
+        legitimateDomains: ['ebay.com', 'ebay.co.uk', 'ebay.de', 'ebay.fr', 'ebay.it', 'ebay.es', 'ebay.ca', 'ebay.com.au']
     },
     'dmv': {
         keywords: ['department of motor vehicles', 'dmv service desk', 'dmv appointment', 'dmv registration'],
@@ -343,7 +344,7 @@ const BRAND_CONTENT_DETECTION = {
     },
     'verizon': {
         keywords: ['verizon', 'verizon wireless', 'verizon fios'],
-        legitimateDomains: ['verizon.com', 'verizonwireless.com']
+        legitimateDomains: ['verizon.com', 'verizonwireless.com', 'vzw.com', 'verizon.net']
     },
     'tmobile': {
         keywords: ['t-mobile', 'tmobile'],
@@ -711,7 +712,7 @@ const BRAND_CONTENT_DETECTION = {
     },
     'lyft': {
         keywords: ['lyft', 'lyft ride', 'lyft account'],
-        legitimateDomains: ['lyft.com']
+        legitimateDomains: ['lyft.com', 'lyftmail.com', 'lyft.zendesk.com', 'lyft-new.zendesk.com']
     },
     'etsy': {
         keywords: ['etsy', 'etsy shop', 'etsy order'],
