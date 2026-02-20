@@ -1,5 +1,5 @@
 // Email Fraud Detector - Outlook Web Add-in
-// Version 4.2.7 - Reply-To mismatch: suppress warning when sender/reply-to share parent-child subdomain relationship
+// Version 4.2.7 - Reply-To: parent-child subdomain suppression + GovDelivery brand impersonation exception (Viktor-tested)
 // Version 4.2.6 - Fixed brand detection false positives for person names (e.g., "Jacob Norton" != Norton antivirus)
 // Version 4.2.5 - Added enterprise email security gateway whitelist (Proofpoint, Cisco, Barracuda, Symantec, Mimecast)
 // Version 4.2.4 - Added confirmed secondary sending domains (Airbnb, Spotify, Meta/Facebook, Instagram)
@@ -77,7 +77,11 @@ const KNOWN_ESP_DOMAINS = [
     // Vertical Response
     'verticalresponse.com',
     // Keap / Infusionsoft
-    'infusionmail.com', 'keap-link.com'
+    'infusionmail.com', 'keap-link.com',
+    // GovDelivery (Granicus) - Official government email platform
+    // Verified-access only: requires confirmed government agency status to send.
+    // NOT a self-service ESP. Do NOT extend this pattern to commercial ESPs.
+    'govdelivery.com'
 ];
 
 // ============================================
@@ -2874,16 +2878,24 @@ function processEmail(emailData) {
     
     const brandImpersonation = detectBrandImpersonation(emailData.subject, emailData.body, senderDomain, displayName);
     if (brandImpersonation) {
-        warnings.push({
-            type: 'brand-impersonation',
-            severity: 'critical',
-            title: 'Brand Impersonation Suspected',
-            description: `This email references ${brandImpersonation.brandName} but was NOT sent from a verified ${brandImpersonation.brandName} domain.`,
-            senderEmail: senderEmail,
-            senderDomain: senderDomain,
-            brandClaimed: brandImpersonation.brandName,
-            legitimateDomains: brandImpersonation.legitimateDomains
-        });
+        // GovDelivery (Granicus) exception: This is the official government email platform.
+        // Only verified government agencies can send through it (not self-service).
+        // Brand references from govdelivery.com are legitimate government communications.
+        // Viktor test: Passed. Cannot sign up for govdelivery.com without government verification.
+        // Do NOT extend this pattern to commercial ESPs (Mailchimp, SendGrid, etc.)
+        const isGovDelivery = senderDomain === 'govdelivery.com' || senderDomain.endsWith('.govdelivery.com');
+        if (!isGovDelivery) {
+            warnings.push({
+                type: 'brand-impersonation',
+                severity: 'critical',
+                title: 'Brand Impersonation Suspected',
+                description: `This email references ${brandImpersonation.brandName} but was NOT sent from a verified ${brandImpersonation.brandName} domain.`,
+                senderEmail: senderEmail,
+                senderDomain: senderDomain,
+                brandClaimed: brandImpersonation.brandName,
+                legitimateDomains: brandImpersonation.legitimateDomains
+            });
+        }
     }
     
     if (!isTrustedDomain(senderDomain)) {
