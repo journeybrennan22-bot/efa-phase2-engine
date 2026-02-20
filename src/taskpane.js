@@ -2057,7 +2057,7 @@ function detectSuspiciousDomain(domain) {
     if (suspiciousGenericTLDs.includes(tld)) {
         return {
             pattern: tld,
-            reason: `This email was sent from a domain ending in <strong>${tld}</strong>. Domains ending in <strong>${tld}</strong> have been identified by Spamhaus and Symantec as frequently used in spam and phishing campaigns. Proceed with caution.`
+            reason: `This email was sent from a domain ending in <strong>${tld}</strong>. <strong>While some legitimate businesses use ${tld}</strong>, domains ending in ${tld} have been identified by Spamhaus and Symantec as frequently used in spam and phishing campaigns. If you don't recognize this sender, verify before clicking any links.`
         };
     }
     
