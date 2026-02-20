@@ -1,4 +1,5 @@
 // Email Fraud Detector - Outlook Web Add-in
+// Version 4.2.7 - Reply-To mismatch: suppress warning when sender/reply-to share parent-child subdomain relationship
 // Version 4.2.6 - Fixed brand detection false positives for person names (e.g., "Jacob Norton" != Norton antivirus)
 // Version 4.2.5 - Added enterprise email security gateway whitelist (Proofpoint, Cisco, Barracuda, Symantec, Mimecast)
 // Version 4.2.4 - Added confirmed secondary sending domains (Airbnb, Spotify, Meta/Facebook, Instagram)
@@ -2837,7 +2838,13 @@ function processEmail(emailData) {
             const isKnownESP = KNOWN_ESP_DOMAINS.some(esp => 
                 senderDomain === esp || senderDomain.endsWith('.' + esp)
             );
-            if (!isKnownESP) {
+            // Check for parent-child subdomain relationship (v4.2.7)
+            // e.g., newsletter.ocregister.com → ocregister.com is safe because
+            // only the owner of ocregister.com can create subdomains on it.
+            // An attacker cannot forge this DNS relationship.
+            const replyToDomainLower = replyToDomain.toLowerCase();
+            const isParentChild = senderDomain.endsWith('.' + replyToDomainLower) || replyToDomainLower.endsWith('.' + senderDomain);
+            if (!isKnownESP && !isParentChild) {
                 warnings.push({
                     type: 'replyto-mismatch',
                     severity: 'medium',
