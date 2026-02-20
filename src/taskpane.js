@@ -1522,9 +1522,19 @@ function escapeRegex(string) {
 }
 
 function formatEntityName(name) {
-    return name.split(' ').map(word => 
-        word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(' ');
+    const SPECIAL_CASE_NAMES = {
+        'aaa': 'AAA', 'usps': 'USPS', 'irs': 'IRS', 'ups': 'UPS', 'dhl': 'DHL',
+        'hsbc': 'HSBC', 'usaa': 'USAA', 'att': 'AT&T', 'hbo': 'HBO', 'bbb': 'BBB',
+        'ssa': 'SSA', 'sce': 'SCE', 'irs': 'IRS', 'fbi': 'FBI', 'doj': 'DOJ',
+        'dmv': 'DMV', 'edd': 'EDD', 'ftc': 'FTC'
+    };
+    const lower = name.toLowerCase();
+    if (SPECIAL_CASE_NAMES[lower]) return SPECIAL_CASE_NAMES[lower];
+    return name.split(' ').map(word => {
+        const wLower = word.toLowerCase();
+        if (SPECIAL_CASE_NAMES[wLower]) return SPECIAL_CASE_NAMES[wLower];
+        return word.charAt(0).toUpperCase() + word.slice(1);
+    }).join(' ');
 }
 
 function formatEmailForDisplay(email) {
