@@ -2829,6 +2829,23 @@ function processEmail(emailData) {
             failures: authFailure.failures
         });
     }
+    
+    // v4.2.7: Provider-flagged warning - surfaces Outlook's own determination
+    // This fires independently of EFA's auth scoring. If Microsoft says something is wrong,
+    // we make sure the user sees it. EFA is just the messenger.
+    if (emailData.headers) {
+        const hasCompAuthFail = /compauth\s*=\s*fail/i.test(emailData.headers);
+        const alreadyHasAuthWarning = authFailure !== null;
+        if (hasCompAuthFail && !alreadyHasAuthWarning) {
+            warnings.push({
+                type: 'provider-flagged',
+                severity: 'medium',
+                title: 'Flagged by Outlook',
+                description: 'Outlook has flagged this email as suspicious. If this email contains links or buttons, proceed with extreme caution.',
+                senderEmail: senderEmail
+            });
+        }
+    }
 
     // ============================================
     // EXISTING CHECKS
@@ -3127,14 +3144,15 @@ function displayResults(warnings) {
             'suspicious-domain': 9,
             'via-routing': 10,
             'auth-failure': 11,
-            'gibberish-domain': 12,
-            'lookalike-domain': 13,
-            'homoglyph': 14,
-            'display-name-suspicion': 15,
-            'international-sender': 16,
-            'mass-recipients': 17,
-            'wire-fraud': 18,
-            'phishing-urgency': 19
+            'provider-flagged': 12,
+            'gibberish-domain': 13,
+            'lookalike-domain': 14,
+            'homoglyph': 15,
+            'display-name-suspicion': 16,
+            'international-sender': 17,
+            'mass-recipients': 18,
+            'wire-fraud': 19,
+            'phishing-urgency': 20
         };
         warnings.sort((a, b) => (WARNING_PRIORITY[a.type] || 99) - (WARNING_PRIORITY[b.type] || 99));
         
@@ -3285,6 +3303,15 @@ function displayResults(warnings) {
                     </div>
                     <div class="warning-advice">
                         <strong>Why this matters:</strong> Every email goes through security checks to prove the sender is real. This email failed multiple checks. Legitimate senders almost always pass. Be cautious with any links, attachments, or requests in this email.
+                    </div>
+                `;
+            } else if (w.type === 'provider-flagged') {
+                emailHtml = `
+                    <div class="warning-emails">
+                        <div class="warning-email-row">
+                            <span class="warning-email-label">Sender:</span>
+                            <span class="warning-email-value suspicious">${formatEmailForDisplay(w.senderEmail)}</span>
+                        </div>
                     </div>
                 `;
             } else if (w.senderEmail && w.matchedEmail) {
