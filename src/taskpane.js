@@ -3010,14 +3010,21 @@ function processEmail(emailData) {
         const senderHeaderLower = senderHeader.toLowerCase();
         const senderHeaderDomain = senderHeaderLower.split('@')[1] || '';
         if (senderHeaderDomain && senderHeaderDomain !== senderDomain) {
-            warnings.push({
-                type: 'on-behalf-of',
-                severity: 'medium',
-                title: 'Sent On Behalf Of Another Domain',
-                description: 'This email was sent by one domain on behalf of a completely different domain. This is a common tactic used to disguise the true origin of an email.',
-                senderEmail: senderHeader,
-                matchedEmail: senderEmail
-            });
+            // Check for parent-child subdomain relationship
+            // e.g., mail.raziexchange.com sending on behalf of raziexchange.com is safe
+            // because only the owner of raziexchange.com can create subdomains on it.
+            // Viktor test: Passed. Cannot own mail.company.com without owning company.com.
+            const isParentChild = senderDomain.endsWith('.' + senderHeaderDomain) || senderHeaderDomain.endsWith('.' + senderDomain);
+            if (!isParentChild) {
+                warnings.push({
+                    type: 'on-behalf-of',
+                    severity: 'medium',
+                    title: 'Sent On Behalf Of Another Domain',
+                    description: 'This email was sent by one domain on behalf of a completely different domain. This is a common tactic used to disguise the true origin of an email.',
+                    senderEmail: senderHeader,
+                    matchedEmail: senderEmail
+                });
+            }
         }
     }
     
