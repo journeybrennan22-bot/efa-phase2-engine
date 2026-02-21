@@ -1,4 +1,8 @@
 // Email Fraud Detector - Outlook Web Add-in
+// Version 4.2.11 - Provider-flagged warning always fires and ranked #1 priority
+// Version 4.2.11 - Provider-flagged warning: removed auth suppression, promoted to top priority
+// Version 4.2.10 - Added gibberish sender username detection
+// Version 4.2.9 - Fixed contact-lookalike false positives on short domains (ratio-based threshold)
 // Version 4.2.8 - Added inheritance/lottery scam and advance fee scam keyword detection
 // Version 4.2.7 - Reply-To: parent-child subdomain suppression + GovDelivery brand impersonation exception (Viktor-tested)
 // Version 4.2.6 - Fixed brand detection false positives for person names (e.g., "Jacob Norton" != Norton antivirus)
@@ -1373,14 +1377,14 @@ let contactsFetched = false;
 // INITIALIZATION
 // ============================================
 Office.onReady(async (info) => {
-    console.log('Email Fraud Detector v4.2.8 (Phase 2 Silent) script loaded, host:', info.host);
+    console.log('Email Fraud Detector v4.2.11 (Phase 2 Silent) script loaded, host:', info.host);
     if (info.host === Office.HostType.Outlook) {
-        console.log('Email Fraud Detector v4.2.8 initializing for Outlook...');
+        console.log('Email Fraud Detector v4.2.11 initializing for Outlook...');
         await initializeMsal();
         setupEventHandlers();
         analyzeCurrentEmail();
         setupAutoScan();
-        console.log('Email Fraud Detector v4.2.8 ready');
+        console.log('Email Fraud Detector v4.2.11 ready');
     }
 });
 
@@ -1738,6 +1742,83 @@ function detectGibberishDomain(email) {
     if (suspicionScore >= 3) {
         return {
             domain: domain,
+            reasons: reasons
+        };
+    }
+    
+    return null;
+}
+
+// v4.2.10: Detect gibberish sender usernames
+// "techsjdsydybbheesdsd" and "shsjgdgsdddds" are obviously not real people
+function detectGibberishUsername(email) {
+    if (!email) return null;
+    
+    const parts = email.split('@');
+    if (parts.length !== 2) return null;
+    
+    const username = parts[0].toLowerCase();
+    
+    // Skip common automated/system usernames
+    const systemNames = ['noreply', 'no-reply', 'no.reply', 'donotreply', 'do-not-reply',
+        'do.not.reply', 'postmaster', 'mailer-daemon', 'mailerdaemon', 'bounce',
+        'admin', 'info', 'support', 'contact', 'help', 'sales', 'billing',
+        'service', 'newsletter', 'notifications', 'alert', 'alerts', 'news',
+        'updates', 'feedback', 'enquiries', 'hello', 'office', 'team', 'hr'];
+    if (systemNames.includes(username.replace(/[.\-_]/g, ''))) return null;
+    
+    // Strip dots, hyphens, underscores for analysis
+    const cleaned = username.replace(/[.\-_]/g, '');
+    
+    // Only check usernames with enough characters to judge
+    if (cleaned.length < 10) return null;
+    
+    let suspicionScore = 0;
+    const reasons = [];
+    
+    // Check 1: No vowels at all
+    const letters = cleaned.replace(/[^a-z]/gi, '');
+    const vowelCount = (letters.match(/[aeiou]/gi) || []).length;
+    if (letters.length >= 8 && vowelCount === 0) {
+        suspicionScore += 3;
+        reasons.push('no vowels in username');
+    }
+    
+    // Check 2: Low vowel ratio
+    if (letters.length >= 10 && vowelCount > 0) {
+        const vowelRatio = vowelCount / letters.length;
+        if (vowelRatio < 0.20) {
+            suspicionScore += 2;
+            reasons.push('unpronounceable username');
+        }
+    }
+    
+    // Check 3: Long consecutive consonant cluster (5+)
+    // Normal English maxes out at 3-4 consecutive consonants
+    const consonantCluster = letters.match(/[^aeiou]{5,}/gi);
+    if (consonantCluster) {
+        suspicionScore += 2;
+        reasons.push('consonant cluster (' + consonantCluster[0] + ')');
+    }
+    
+    // Check 4: Repeated characters (3+ of same char in a row)
+    if (/(.)\1{2,}/.test(cleaned)) {
+        suspicionScore += 1;
+        reasons.push('repeated characters');
+    }
+    
+    // Check 5: Excessive length
+    if (cleaned.length > 20) {
+        suspicionScore += 2;
+        reasons.push('very long username');
+    } else if (cleaned.length >= 15) {
+        suspicionScore += 1;
+        reasons.push('long username');
+    }
+    
+    if (suspicionScore >= 3) {
+        return {
+            username: username,
             reasons: reasons
         };
     }
@@ -2267,11 +2348,20 @@ function detectContactLookalike(senderEmail) {
         if (!bothPublicSameDomain || usernameDiff <= 4) {
             const domainDistance = levenshteinDistance(senderDomain, contactDomain);
             if (domainDistance > 0 && domainDistance <= 2) {
-                return {
-                    incomingEmail: senderEmail,
-                    matchedContact: contact,
-                    reason: `Domain is ${domainDistance} character${domainDistance > 1 ? 's' : ''} different`
-                };
+                // Ratio check: prevent false positives on short domains
+                // "sold.com" vs "aol.com" = 2 edits on 3-char name = 67% different (not a lookalike)
+                // "amazom.com" vs "amazon.com" = 1 edit on 6-char name = 17% different (real lookalike)
+                const senderName = senderDomain.substring(0, senderDomain.lastIndexOf('.'));
+                const contactName = contactDomain.substring(0, contactDomain.lastIndexOf('.'));
+                const shorterNameLen = Math.min(senderName.length, contactName.length);
+                const ratio = shorterNameLen > 0 ? domainDistance / shorterNameLen : 1;
+                if (ratio <= 0.35) {
+                    return {
+                        incomingEmail: senderEmail,
+                        matchedContact: contact,
+                        reason: `Domain is ${domainDistance} character${domainDistance > 1 ? 's' : ''} different`
+                    };
+                }
             }
         }
     }
@@ -2819,6 +2909,17 @@ function processEmail(emailData) {
         });
     }
     
+    const gibberishUsername = detectGibberishUsername(senderEmail);
+    if (gibberishUsername) {
+        warnings.push({
+            type: 'gibberish-username',
+            severity: 'critical',
+            title: 'Gibberish Sender Address',
+            description: `The sender's email username appears randomly generated (${gibberishUsername.reasons.join(', ')}). Real people and businesses don't use keyboard smashes as email addresses.`,
+            senderEmail: senderEmail
+        });
+    }
+    
     const fakeTLD = detectFakeTLD(senderDomain);
     if (fakeTLD) {
         warnings.push({
@@ -2859,13 +2960,14 @@ function processEmail(emailData) {
     // v4.2.7: Provider-flagged warning - surfaces Outlook's own determination
     // This fires independently of EFA's auth scoring. If Microsoft says something is wrong,
     // we make sure the user sees it. EFA is just the messenger.
+    // v4.2.11: Always show this warning regardless of other auth detections.
+    // Microsoft's determination and EFA's detection are independent signals - both matter.
     if (emailData.headers) {
         const hasCompAuthFail = /compauth\s*=\s*fail/i.test(emailData.headers);
-        const alreadyHasAuthWarning = authFailure !== null;
-        if (hasCompAuthFail && !alreadyHasAuthWarning) {
+        if (hasCompAuthFail) {
             warnings.push({
                 type: 'provider-flagged',
-                severity: 'medium',
+                severity: 'critical',
                 title: 'Flagged by Outlook',
                 description: 'Outlook has flagged this email as suspicious. If this email contains links or buttons, proceed with extreme caution.',
                 senderEmail: senderEmail
@@ -3159,26 +3261,27 @@ function displayResults(warnings) {
     if (warnings.length > 0) {
         const WARNING_PRIORITY = {
             'phase2-phishing-pattern': 0,
-            'replyto-mismatch': 1,
-            'on-behalf-of': 2,
-            'fake-tld': 3,
-            'impersonation': 4,
-            'recipient-spoof': 5,
-            'contact-lookalike': 6,
-            'brand-impersonation': 7,
-            'org-impersonation': 8,
-            'suspicious-domain': 9,
-            'via-routing': 10,
-            'auth-failure': 11,
-            'provider-flagged': 12,
+            'provider-flagged': 1,
+            'replyto-mismatch': 2,
+            'on-behalf-of': 3,
+            'fake-tld': 4,
+            'impersonation': 5,
+            'recipient-spoof': 6,
+            'contact-lookalike': 7,
+            'brand-impersonation': 8,
+            'org-impersonation': 9,
+            'suspicious-domain': 10,
+            'via-routing': 11,
+            'auth-failure': 12,
             'gibberish-domain': 13,
-            'lookalike-domain': 14,
-            'homoglyph': 15,
-            'display-name-suspicion': 16,
-            'international-sender': 17,
-            'mass-recipients': 18,
-            'wire-fraud': 19,
-            'phishing-urgency': 20
+            'gibberish-username': 14,
+            'lookalike-domain': 15,
+            'homoglyph': 16,
+            'display-name-suspicion': 17,
+            'international-sender': 18,
+            'mass-recipients': 19,
+            'wire-fraud': 20,
+            'phishing-urgency': 21
         };
         warnings.sort((a, b) => (WARNING_PRIORITY[a.type] || 99) - (WARNING_PRIORITY[b.type] || 99));
         
@@ -3331,7 +3434,7 @@ function displayResults(warnings) {
                         <strong>Why this matters:</strong> Every email goes through security checks to prove the sender is real. This email failed multiple checks. Legitimate senders almost always pass. Be cautious with any links, attachments, or requests in this email.
                     </div>
                 `;
-            } else if (w.type === 'provider-flagged') {
+            } else if (w.type === 'provider-flagged' || w.type === 'gibberish-username') {
                 emailHtml = `
                     <div class="warning-emails">
                         <div class="warning-email-row">
