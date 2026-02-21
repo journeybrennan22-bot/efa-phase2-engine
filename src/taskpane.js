@@ -646,8 +646,8 @@ const BRAND_CONTENT_DETECTION = {
         legitimateDomains: ['notion.so', 'notion.com']
     },
     'adobe': {
-        keywords: ['adobe account', 'adobe subscription', 'adobe creative cloud', 'adobe pdf'],
-        legitimateDomains: ['adobe.com', 'adobeid.services.adobe.com']
+        keywords: ['adobe', 'acrobat', 'adobe send', 'adobe files', 'adobe document', 'adobe account', 'adobe subscription', 'adobe creative cloud', 'adobe pdf'],
+        legitimateDomains: ['adobe.com', 'adobesign.com', 'echosign.com', 'acrobat.com', 'documentcloud.adobe.com']
     },
     'afterpay': {
         keywords: ['afterpay', 'after pay'],
