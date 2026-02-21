@@ -1,4 +1,5 @@
 // Email Fraud Detector - Outlook Web Add-in
+// Version 4.2.8 - Added inheritance/lottery scam and advance fee scam keyword detection
 // Version 4.2.7 - Reply-To: parent-child subdomain suppression + GovDelivery brand impersonation exception (Viktor-tested)
 // Version 4.2.6 - Fixed brand detection false positives for person names (e.g., "Jacob Norton" != Norton antivirus)
 // Version 4.2.5 - Added enterprise email security gateway whitelist (Proofpoint, Cisco, Barracuda, Symantec, Mimecast)
@@ -1106,7 +1107,9 @@ const KEYWORD_CATEGORIES = {
             'ach transfer', 'direct deposit',
             'zelle', 'venmo', 'cryptocurrency', 'bitcoin',
             'send funds', 'transfer funds', 'remit funds',
-            'wire to', 'remittance', 'wire payment'
+            'wire to', 'remittance', 'wire payment',
+            'western union', 'moneygram', 'money order',
+            'gift card payment', 'pay with gift cards', 'send gift cards'
         ],
         explanation: 'Emails requesting money transfers are prime targets for fraud. Always verify payment requests by calling a known number before sending funds.'
     },
@@ -1169,7 +1172,9 @@ const KEYWORD_CATEGORIES = {
             'act now', 'urgent action required', 'action required',
             'account suspended', 'account will be closed',
             'unusual activity', 'suspicious activity', 'unauthorized access',
-            'action required within', 'expires today', 'last chance'
+            'action required within', 'expires today', 'last chance',
+            'time is running out', 'final notice', 'respond within 24 hours',
+            'failure to respond', 'immediate action required'
         ],
         explanation: 'False urgency is a common fraud tactic designed to prevent you from verifying details. Legitimate requests allow time to confirm.'
     },
@@ -1184,6 +1189,27 @@ const KEYWORD_CATEGORIES = {
             'token airdrop', 'verify your wallet'
         ],
         explanation: 'Crypto wallet scams use fake airdrop claims and verification prompts to steal your digital assets. Never connect your wallet or sign transactions from email links.'
+    },
+    'Inheritance & Lottery Scams': {
+        keywords: [
+            'inheritance', 'unclaimed inheritance', 'unclaimed funds',
+            'next of kin', 'dormant account', 'claim your funds',
+            'deceased estate', 'estate settlement', 'unclaimed property',
+            'beneficiary notification', 'lottery winner',
+            'congratulations you\'ve won', 'prize notification',
+            'winning ticket', 'claim your prize', 'lucky winner',
+            'you have won', 'you\'ve been selected', 'award notification'
+        ],
+        explanation: 'Inheritance claims and lottery notifications from unknown senders are almost always scams. Real inheritances come from known attorneys, and legitimate lotteries never notify winners by email.'
+    },
+    'Advance Fee Scams': {
+        keywords: [
+            'release fee', 'clearance fee', 'advance fee',
+            'barrister', 'diplomatic courier', 'consignment box',
+            'compensation fund', 'atm card shipment',
+            'delivery charges required', 'customs charges', 'pay to release'
+        ],
+        explanation: 'Requests to pay upfront fees to release funds are a hallmark of advance fee fraud. No legitimate organization requires payment via email to release money owed to you.'
     }
 };
 
@@ -1347,14 +1373,14 @@ let contactsFetched = false;
 // INITIALIZATION
 // ============================================
 Office.onReady(async (info) => {
-    console.log('Email Fraud Detector v4.2.1 (Phase 2 Silent) script loaded, host:', info.host);
+    console.log('Email Fraud Detector v4.2.8 (Phase 2 Silent) script loaded, host:', info.host);
     if (info.host === Office.HostType.Outlook) {
-        console.log('Email Fraud Detector v4.2.1 initializing for Outlook...');
+        console.log('Email Fraud Detector v4.2.8 initializing for Outlook...');
         await initializeMsal();
         setupEventHandlers();
         analyzeCurrentEmail();
         setupAutoScan();
-        console.log('Email Fraud Detector v4.2.1 ready');
+        console.log('Email Fraud Detector v4.2.8 ready');
     }
 });
 
