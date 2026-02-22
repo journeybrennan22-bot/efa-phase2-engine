@@ -724,8 +724,7 @@ const BRAND_CONTENT_DETECTION = {
     },
     'lyft': {
         keywords: ['lyft', 'lyft ride', 'lyft account'],
-        legitimateDomains: ['lyft.com']
-    },
+        legitimateDomains: ['lyft.com', 'lyftmail.com']    },
     'etsy': {
         keywords: ['etsy', 'etsy shop', 'etsy order'],
         legitimateDomains: ['etsy.com']
@@ -1083,8 +1082,8 @@ const IMPERSONATION_TARGETS = {
     "instacart": ["instacart.com"],
     "uber": ["uber.com"],
     "uber support": ["uber.com"],
-    "lyft": ["lyft.com"],
-    "lyft support": ["lyft.com"],
+    "lyft": ["lyft.com", "lyftmail.com"],
+    "lyft support": ["lyft.com", "lyftmail.com"],
     "etsy": ["etsy.com"],
     "etsy support": ["etsy.com"],
     "wayfair": ["wayfair.com"],
@@ -1148,8 +1147,8 @@ const KEYWORD_CATEGORIES = {
     'Secrecy Tactics': {
         keywords: [
             'keep this confidential', 'keep this quiet',
-            'dont mention this', 'between us',
-            'dont tell anyone', 'private matter',
+            'dont mention this', 'dont tell anyone',
+            'private matter',
             'off the record', 'handle personally'
         ],
         explanation: "Requests for secrecy are a major red flag. Legitimate transactions don't require you to bypass normal verification procedures."
@@ -1305,7 +1304,7 @@ const BANKING_TOKENS = [
 ];
 
 const SECRECY_PHRASES = [
-    'keep this confidential', 'between us', 'do not tell',
+    'keep this confidential', 'do not tell',
     'dont tell', "don't tell", 'handle personally',
     'urgent and confidential', 'keep this quiet',
     'off the record', 'private matter',
