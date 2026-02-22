@@ -3252,7 +3252,7 @@ function displayResults(warnings) {
         document.body.classList.add('status-critical');
         statusBadge.className = 'status-badge danger';
         statusIcon.textContent = '\uD83D\uDEA8';
-        statusText.textContent = `${totalWarnings} Issue${totalWarnings > 1 ? 's' : ''} Found`;
+        statusText.textContent = totalWarnings > 4 ? `Showing 4 of ${totalWarnings} Issues` : `${totalWarnings} Issue${totalWarnings > 1 ? 's' : ''} Found`;
     } else {
         document.body.classList.add('status-safe');
         statusBadge.className = 'status-badge safe';
@@ -3477,9 +3477,6 @@ function displayResults(warnings) {
                 </div>
             `;
         }).join('');
-        if (warnings.length > 4) {
-            warningsList.innerHTML += `<div style="text-align:center;font-size:11px;color:#92400E;padding:8px 12px;font-weight:600;">Showing 4 of ${warnings.length} issues (highest priority first)</div>`;
-        }
     } else {
         warningsSection.classList.add('hidden');
         warningsFooter.classList.add('hidden');
