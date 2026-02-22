@@ -3271,19 +3271,19 @@ function displayResults(warnings) {
             'provider-flagged': 1,
             'replyto-mismatch': 2,
             'on-behalf-of': 3,
-            'fake-tld': 4,
-            'impersonation': 5,
-            'recipient-spoof': 6,
-            'contact-lookalike': 7,
-            'brand-impersonation': 8,
-            'org-impersonation': 9,
-            'suspicious-domain': 10,
-            'via-routing': 11,
-            'auth-failure': 12,
-            'gibberish-domain': 13,
-            'gibberish-username': 14,
-            'lookalike-domain': 15,
-            'homoglyph': 16,
+            'contact-lookalike': 4,
+            'auth-failure': 5,
+            'fake-tld': 6,
+            'impersonation': 7,
+            'recipient-spoof': 8,
+            'brand-impersonation': 9,
+            'org-impersonation': 10,
+            'lookalike-domain': 11,
+            'homoglyph': 12,
+            'suspicious-domain': 13,
+            'via-routing': 14,
+            'gibberish-domain': 15,
+            'gibberish-username': 16,
             'display-name-suspicion': 17,
             'international-sender': 18,
             'mass-recipients': 19,
@@ -3296,7 +3296,7 @@ function displayResults(warnings) {
         warningsFooter.classList.remove('hidden');
         safeMessage.classList.add('hidden');
         
-        warningsList.innerHTML = warnings.map(w => {
+        warningsList.innerHTML = warnings.slice(0, 4).map(w => {
             let emailHtml = '';
             
             // v4.2.0: Phase 2 merged warning rendering
@@ -3477,6 +3477,9 @@ function displayResults(warnings) {
                 </div>
             `;
         }).join('');
+        if (warnings.length > 4) {
+            warningsList.innerHTML += `<div style="text-align:center;font-size:11px;color:#92400E;padding:8px 12px;font-weight:600;">Showing 4 of ${warnings.length} issues (highest priority first)</div>`;
+        }
     } else {
         warningsSection.classList.add('hidden');
         warningsFooter.classList.add('hidden');
