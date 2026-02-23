@@ -1456,7 +1456,127 @@ const KNOWN_PLATFORM_DOMAINS = [
     // Miscellaneous SaaS
     'zapier.com', 'ifttt.com', 'make.com',
     'lattice.com', 'culture-amp.com', '15five.com',
-    'netlify.com', 'vercel.com', 'render.com'
+    'netlify.com', 'vercel.com', 'render.com',
+
+    // ===== INTERNATIONAL =====
+
+    // UK & Ireland - Banking
+    'barclays.co.uk', 'barclays.com', 'hsbc.co.uk', 'hsbc.com', 'lloydsbank.com',
+    'lloydsbankinggroup.com', 'natwest.com', 'rbs.co.uk', 'santander.co.uk', 'santander.com',
+    'nationwide.co.uk', 'halifax.co.uk', 'bankofscotland.co.uk', 'firstdirect.com',
+    'metrobankonline.co.uk', 'monzo.com', 'starlingbank.com', 'tsb.co.uk', 'virginmoney.com',
+    'coop.co.uk',
+    // UK - Telecom & Services
+    'vodafone.co.uk', 'vodafone.com', 'o2.co.uk', 'three.co.uk', 'ee.co.uk', 'bt.com',
+    'sky.com', 'talktalk.co.uk', 'virginmedia.com',
+    // UK - Real Estate & Retail
+    'rightmove.co.uk', 'zoopla.co.uk', 'onthemarket.com', 'purplebricks.co.uk',
+    'gumtree.com', 'autotrader.co.uk', 'tesco.com', 'sainsburys.co.uk', 'asda.com',
+    'marksandspencer.com', 'johnlewis.com', 'argos.co.uk', 'asos.com', 'boohoo.com',
+    'ocado.com', 'deliveroo.com', 'justeat.co.uk',
+
+    // Europe - Banking
+    'deutschebank.de', 'deutschebank.com', 'commerzbank.de', 'commerzbank.com',
+    'ing.com', 'ing.nl', 'rabobank.nl', 'rabobank.com',
+    'bnpparibas.com', 'societegenerale.com', 'creditagricole.com',
+    'unicredit.it', 'intesasanpaolo.com',
+    'n26.com', 'klarna.com', 'afterpay.com', 'adyen.com',
+    'swissquote.com', 'ubs.com', 'creditsuisse.com',
+    'nordea.com', 'dnb.no', 'seb.se', 'handelsbanken.se',
+    'bbva.com', 'bbva.es', 'caixabank.com', 'caixabank.es',
+    'bankofireland.com', 'aib.ie', 'permanenttsb.ie',
+    // Europe - Telecom
+    'vodafone.de', 'orange.com', 'orange.fr', 't-mobile.nl',
+    'telefonica.com', 'movistar.es', 'bouygues-telecom.fr',
+    'swisscom.ch', 'proximus.be', 'kpn.com',
+    // Europe - E-commerce & Travel
+    'zalando.com', 'zalando.de', 'otto.de', 'allegro.pl', 'bol.com',
+    'blablacar.com', 'flixbus.com', 'ryanair.com', 'easyjet.com',
+    'lufthansa.com', 'airfrance.com', 'klm.com', 'britishairways.com',
+    'iberia.com', 'vueling.com', 'trainline.com', 'sncf.com', 'eurostar.com',
+    // Europe - Food Delivery
+    'justeat.com', 'thuisbezorgd.nl', 'glovo.com', 'wolt.com', 'foodpanda.com',
+
+    // India - Banking
+    'sbi.co.in', 'hdfcbank.com', 'icicibank.com', 'axisbank.com',
+    'kotakbank.com', 'kotakmahindra.com', 'yesbank.in',
+    'pnbindia.in', 'bankofbaroda.in', 'canarabank.com',
+    'idfcfirstbank.com', 'federalbank.co.in', 'indusind.com',
+    // India - Fintech & E-commerce
+    'paytm.com', 'phonepe.com', 'gpay.in',
+    'flipkart.com', 'myntra.com', 'snapdeal.com', 'amazon.in',
+    'meesho.com', 'nykaa.com', 'zomato.com', 'swiggy.com',
+    'dunzo.com', 'bigbasket.com', 'olacabs.com',
+    'makemytrip.com', 'goibibo.com', 'cleartrip.com',
+    'policybazaar.com', 'zerodha.com', 'groww.in', 'cred.club',
+    'jio.com', 'airtel.in', 'vi.com', 'bsnl.co.in',
+
+    // Latin America - Banking & Fintech
+    'nubank.com.br', 'nubank.com', 'mercadolibre.com', 'mercadopago.com',
+    'bancodobrasil.com.br', 'bb.com.br', 'itau.com.br', 'bradesco.com.br',
+    'banorte.com', 'bbva.mx', 'santander.com.mx',
+    'bancodechile.cl', 'bancoestado.cl', 'bcp.com.pe', 'bancolombia.com',
+    // Latin America - E-commerce & Services
+    'rappi.com', 'ifood.com.br', '99app.com', 'cornershopapp.com',
+    'falabella.com', 'liverpool.com.mx', 'americanas.com.br', 'magazineluiza.com.br',
+    'latamairlines.com', 'avianca.com', 'volaris.com',
+
+    // Australia & NZ - Banking
+    'commbank.com.au', 'westpac.com.au', 'anz.com.au', 'nab.com.au',
+    'macquarie.com.au', 'suncorp.com.au', 'bendigo.com.au',
+    'ing.com.au', 'ubank.com.au', 'up.com.au',
+    'anz.co.nz', 'asb.co.nz', 'bnz.co.nz', 'westpac.co.nz',
+    // Australia & NZ - Services
+    'telstra.com.au', 'optus.com.au', 'vodafone.com.au', 'spark.co.nz',
+    'realestate.com.au', 'domain.com.au', 'carsales.com.au',
+    'seek.com.au', 'seek.co.nz', 'flybuys.com.au',
+    'qantas.com', 'airnewzealand.co.nz', 'afterpay.com.au', 'zip.co',
+
+    // Japan
+    'smbc.co.jp', 'mufg.jp', 'mizuhobank.co.jp',
+    'rakuten.co.jp', 'rakuten.com', 'mercari.com', 'mercari.jp',
+    'yahoo.co.jp', 'line.me', 'paypay.ne.jp', 'ana.co.jp', 'jal.co.jp',
+    // South Korea
+    'kbstar.com', 'shinhan.com', 'wooribank.com', 'hana.com',
+    'kakaocorp.com', 'kakaopay.com', 'coupang.com',
+    'naver.com', 'samsungcard.com', 'toss.im', 'koreanair.com', 'asiana.com',
+    // China (diaspora)
+    'alipay.com', 'wechat.com', 'jd.com', 'bankofchina.com', 'icbc.com.cn',
+
+    // Southeast Asia
+    'grab.com', 'gojek.com', 'shopee.com', 'lazada.com',
+    'gcash.com', 'maya.ph', 'bdo.com.ph', 'bpi.com.ph',
+    'dbs.com', 'dbs.com.sg', 'ocbc.com', 'uob.com',
+    'maybank.com', 'cimb.com', 'rhbgroup.com',
+    'bangkokbank.com', 'scb.co.th', 'kasikornbank.com',
+    'airasia.com', 'cebuair.com', 'garuda-indonesia.com',
+
+    // Middle East
+    'emirates.com', 'etihad.com', 'flydubai.com', 'qatarairways.com', 'saudia.com',
+    'emiratesnbd.com', 'adcb.com', 'mashreqbank.com',
+    'alrajhibank.com', 'sab.com', 'stcpay.com.sa',
+    'noon.com', 'namshi.com', 'careem.com', 'talabat.com',
+
+    // Africa
+    'safaricom.co.ke', 'mpesa.com', 'mtn.com', 'mtn.co.za',
+    'fnb.co.za', 'standardbank.co.za', 'nedbank.co.za', 'absa.co.za',
+    'capitecbank.co.za', 'discovery.co.za',
+    'flutterwave.com', 'paystack.com', 'interswitch.com',
+    'jumia.com', 'takealot.com',
+
+    // Canada - Banking
+    'rbc.com', 'td.com', 'scotiabank.com', 'bmo.com', 'cibc.com',
+    'desjardins.com', 'tangerine.ca', 'simplii.com', 'eqbank.ca',
+    'wealthsimple.com', 'questrade.com',
+    // Canada - Services
+    'shoppers.ca', 'canadapost.ca', 'bell.ca', 'rogers.com', 'telus.com',
+    'aircanada.com', 'westjet.com',
+
+    // Global Fintech & Crypto
+    'wise.com', 'transferwise.com', 'revolut.com',
+    'monese.com', 'remitly.com', 'worldremit.com',
+    'binance.com', 'kraken.com', 'gemini.com', 'bitfinex.com',
+    'blockchain.com', 'crypto.com', 'ledger.com'
 ];
 
 function getRootDomain(domain) {
