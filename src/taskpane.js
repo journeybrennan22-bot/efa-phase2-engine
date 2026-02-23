@@ -2939,7 +2939,7 @@ function processEmail(emailData) {
             type: 'free-hosting-sender',
             severity: 'critical',
             title: 'Sent from Free Hosting Platform',
-            description: `This email was sent from ${freeHosting.hostingPlatform}, a free web hosting service. No legitimate business sends email from a web hosting platform.`,
+            description: `This email was sent from ${freeHosting.hostingPlatform}, a free web hosting service. <b>No legitimate</b> business sends email from a web hosting platform.`,
             senderEmail: senderEmail,
             hostingPlatform: freeHosting.hostingPlatform
         });
