@@ -1839,8 +1839,11 @@ function detectViaRouting(headers, senderDomain) {
         if (senderDomain && relayDomain.includes(senderDomain.split('.')[0])) continue;
         
         const legitServices = ['google', 'gmail', 'googlemail', 'microsoft', 'outlook', 'office365', 
-                              'sendgrid', 'mailchimp', 'amazonses', 'mailgun', 'postmark', 'sparkpost',
-                              'mailjet', 'sendinblue', 'constantcontact', 'hubspot', 'salesforce',
+                              'sendgrid', 'mailchimp', 'mandrillapp', 'amazonses', 'mailgun', 'postmark', 'sparkpost',
+                              'mailjet', 'sendinblue', 'brevo', 'constantcontact', 'hubspot', 'salesforce', 'pardot',
+                              'klaviyo', 'activecampaign', 'campaignmonitor', 'createsend', 'marketo', 'customer.io',
+                              'convertkit', 'getresponse', 'aweber', 'omnisend', 'drip', 'govdelivery',
+                              'zendesk', 'intercom', 'freshdesk', 'helpscout',
                               'zoho', 'yahoo', 'aol', 'icloud', 'apple', 'protonmail',
                               'ppops', 'ppe-hosted', 'iphmx', 'barracudanetworks', 'messagelabs', 'mimecast'];
         if (legitServices.some(s => relayDomain.includes(s))) continue;
