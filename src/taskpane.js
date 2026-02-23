@@ -1317,6 +1317,25 @@ const KNOWN_PLATFORM_DOMAINS = [
     'wix.com', 'wix-forms.com', 'squarespace.com', 'typeform.com', 'jotform.com', 'godaddy.com'
 ];
 
+function getRootDomain(domain) {
+    if (!domain) return domain;
+    const d = domain.toLowerCase();
+    const compoundTlds = ['.co.uk', '.co.za', '.co.in', '.co.jp', '.co.kr', '.co.nz',
+                         '.com.ar', '.com.au', '.com.br', '.com.cn', '.com.co', '.com.mx',
+                         '.com.ng', '.com.pk', '.com.ph', '.com.tr', '.com.ua', '.com.ve', '.com.vn',
+                         '.net.br', '.net.co', '.org.br', '.org.co', '.org.uk'];
+    for (const tld of compoundTlds) {
+        if (d.endsWith(tld)) {
+            const withoutTld = d.slice(0, -tld.length);
+            const parts = withoutTld.split('.');
+            return parts[parts.length - 1] + tld;
+        }
+    }
+    const parts = d.split('.');
+    if (parts.length >= 2) return parts[parts.length - 2] + '.' + parts[parts.length - 1];
+    return d;
+}
+
 function isKnownPlatform(domain) {
     if (!domain) return false;
     const d = domain.toLowerCase();
@@ -3030,7 +3049,14 @@ function processEmail(emailData) {
             // An attacker cannot forge this DNS relationship.
             const replyToDomainLower = replyToDomain.toLowerCase();
             const isParentChild = senderDomain.endsWith('.' + replyToDomainLower) || replyToDomainLower.endsWith('.' + senderDomain);
-            if (!isKnownESP && !isParentChild && !isKnownPlatform(senderDomain)) {
+            // Check for sibling subdomains (v4.2.12)
+            // e.g., welcome.americanexpress.com → service.americanexpress.com is safe
+            // because both share the same root domain owned by the same entity.
+            // Excluded: free hosting platforms where anyone can get a subdomain.
+            const senderRoot = getRootDomain(senderDomain);
+            const replyRoot = getRootDomain(replyToDomainLower);
+            const isSibling = senderRoot === replyRoot && !SUSPICIOUS_FREE_HOSTING_DOMAINS.includes(senderRoot);
+            if (!isKnownESP && !isParentChild && !isSibling && !isKnownPlatform(senderDomain)) {
                 warnings.push({
                     type: 'replyto-mismatch',
                     severity: 'medium',
@@ -3052,7 +3078,10 @@ function processEmail(emailData) {
             // because only the owner of raziexchange.com can create subdomains on it.
             // Viktor test: Passed. Cannot own mail.company.com without owning company.com.
             const isParentChild = senderDomain.endsWith('.' + senderHeaderDomain) || senderHeaderDomain.endsWith('.' + senderDomain);
-            if (!isParentChild) {
+            const oboSenderRoot = getRootDomain(senderDomain);
+            const oboHeaderRoot = getRootDomain(senderHeaderDomain);
+            const isOboSibling = oboSenderRoot === oboHeaderRoot && !SUSPICIOUS_FREE_HOSTING_DOMAINS.includes(oboSenderRoot);
+            if (!isParentChild && !isOboSibling) {
                 warnings.push({
                     type: 'on-behalf-of',
                     severity: 'medium',
