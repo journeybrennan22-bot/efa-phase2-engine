@@ -1,4 +1,5 @@
 // Email Fraud Detector - Outlook Web Add-in
+// Version 4.3.0 - Global brand expansion: added 87 brands across Japan, UK, Australia, India, Canada, EU, South Korea, Brazil, Southeast Asia
 // Version 4.2.11 - Provider-flagged warning always fires and ranked #1 priority
 // Version 4.2.11 - Provider-flagged warning: removed auth suppression, promoted to top priority
 // Version 4.2.10 - Added gibberish sender username detection
@@ -752,6 +753,394 @@ const BRAND_CONTENT_DETECTION = {
     'jcpenney': {
         keywords: ['jcpenney', 'jc penney', 'penney\'s'],
         legitimateDomains: ['jcpenney.com']
+    },
+
+    // ============================================
+    // GLOBAL BRANDS (missing from phishing reports)
+    // ============================================
+    'telegram': {
+        keywords: ['telegram account', 'telegram security', 'telegram verification'],
+        legitimateDomains: ['telegram.org', 'telegram.me']
+    },
+    'sharefile': {
+        keywords: ['sharefile', 'citrix sharefile'],
+        legitimateDomains: ['sharefile.com', 'citrix.com', 'cloud.com']
+    },
+    'wetransfer': {
+        keywords: ['wetransfer', 'we transfer'],
+        legitimateDomains: ['wetransfer.com']
+    },
+
+    // ============================================
+    // JAPAN
+    // ============================================
+    'kddi': {
+        keywords: ['kddi', 'au account', 'au wallet', 'au pay'],
+        legitimateDomains: ['kddi.com', 'au.com']
+    },
+    'jr east': {
+        keywords: ['jr east', 'eki-net', 'suica'],
+        legitimateDomains: ['jreast.co.jp', 'eki-net.com']
+    },
+    'aeon': {
+        keywords: ['aeon card', 'aeon account', 'aeon pay', 'waon'],
+        legitimateDomains: ['aeon.co.jp', 'aeoncredit.co.jp', 'aeon.com']
+    },
+    'jcb': {
+        keywords: ['jcb card', 'jcb account', 'jcb payment'],
+        legitimateDomains: ['jcb.co.jp', 'jcb.com']
+    },
+    'mufg': {
+        keywords: ['mufg', 'mitsubishi ufj'],
+        legitimateDomains: ['mufg.jp', 'bk.mufg.jp']
+    },
+    'smbc': {
+        keywords: ['smbc', 'sumitomo mitsui', 'smbc card'],
+        legitimateDomains: ['smbc.co.jp', 'smbc-card.com']
+    },
+    'mizuho': {
+        keywords: ['mizuho bank', 'mizuho account'],
+        legitimateDomains: ['mizuhobank.co.jp', 'mizuho-fg.co.jp']
+    },
+    'rakuten': {
+        keywords: ['rakuten account', 'rakuten card', 'rakuten pay'],
+        legitimateDomains: ['rakuten.co.jp', 'rakuten.com', 'rakuten-card.co.jp']
+    },
+    'mercari': {
+        keywords: ['mercari account', 'mercari order'],
+        legitimateDomains: ['mercari.com', 'mercari.jp']
+    },
+    'japan post': {
+        keywords: ['japan post', 'yu-pack'],
+        legitimateDomains: ['japanpost.jp', 'post.japanpost.jp']
+    },
+    'yamato': {
+        keywords: ['yamato transport', 'kuroneko yamato', 'ta-q-bin'],
+        legitimateDomains: ['kuronekoyamato.co.jp', 'yamato-hd.co.jp']
+    },
+    'sagawa': {
+        keywords: ['sagawa express'],
+        legitimateDomains: ['sagawa-exp.co.jp']
+    },
+    'line': {
+        keywords: ['line account', 'line security', 'line pay'],
+        legitimateDomains: ['line.me', 'linecorp.com']
+    },
+    'ntt docomo': {
+        keywords: ['ntt docomo', 'docomo account', 'd account', 'd point'],
+        legitimateDomains: ['docomo.ne.jp', 'nttdocomo.co.jp']
+    },
+    'softbank jp': {
+        keywords: ['softbank account', 'softbank mobile', 'my softbank'],
+        legitimateDomains: ['softbank.jp', 'mb.softbank.jp']
+    },
+
+    // ============================================
+    // UNITED KINGDOM
+    // ============================================
+    'hsbc': {
+        keywords: ['hsbc account', 'hsbc security', 'hsbc online'],
+        legitimateDomains: ['hsbc.co.uk', 'hsbc.com', 'us.hsbc.com']
+    },
+    'barclays': {
+        keywords: ['barclays account', 'barclays security', 'barclays bank'],
+        legitimateDomains: ['barclays.co.uk', 'barclays.com']
+    },
+    'lloyds': {
+        keywords: ['lloyds bank', 'lloyds account', 'lloyds security'],
+        legitimateDomains: ['lloydsbank.co.uk', 'lloydsbank.com']
+    },
+    'natwest': {
+        keywords: ['natwest account', 'natwest security', 'natwest bank'],
+        legitimateDomains: ['natwest.com']
+    },
+    'santander': {
+        keywords: ['santander account', 'santander security', 'santander bank'],
+        legitimateDomains: ['santander.co.uk', 'santander.com']
+    },
+    'monzo': {
+        keywords: ['monzo account', 'monzo security'],
+        legitimateDomains: ['monzo.com']
+    },
+    'revolut': {
+        keywords: ['revolut account', 'revolut security', 'revolut payment'],
+        legitimateDomains: ['revolut.com']
+    },
+    'hmrc': {
+        keywords: ['hmrc', 'hm revenue', 'self assessment'],
+        legitimateDomains: ['gov.uk']
+    },
+    'nhs': {
+        keywords: ['nhs appointment', 'nhs account', 'nhs login'],
+        legitimateDomains: ['nhs.uk']
+    },
+    'dvla': {
+        keywords: ['dvla', 'vehicle tax', 'driving licence'],
+        legitimateDomains: ['gov.uk']
+    },
+    'bt': {
+        keywords: ['bt broadband', 'bt account', 'bt bill'],
+        legitimateDomains: ['bt.com']
+    },
+    'vodafone': {
+        keywords: ['vodafone account', 'vodafone security', 'vodafone bill'],
+        legitimateDomains: ['vodafone.co.uk', 'vodafone.com']
+    },
+    'o2': {
+        keywords: ['o2 account', 'o2 security', 'o2 bill'],
+        legitimateDomains: ['o2.co.uk']
+    },
+    'sky uk': {
+        keywords: ['sky account', 'sky bill', 'sky broadband'],
+        legitimateDomains: ['sky.com', 'sky.uk']
+    },
+    'royal mail': {
+        keywords: ['royal mail', 'royal mail delivery', 'royal mail parcel'],
+        legitimateDomains: ['royalmail.com']
+    },
+    'evri': {
+        keywords: ['evri delivery', 'evri parcel', 'hermes delivery'],
+        legitimateDomains: ['evri.com', 'myhermes.co.uk']
+    },
+
+    // ============================================
+    // AUSTRALIA
+    // ============================================
+    'commonwealth bank': {
+        keywords: ['commonwealth bank', 'commbank', 'netbank'],
+        legitimateDomains: ['commbank.com.au', 'cba.com.au']
+    },
+    'westpac': {
+        keywords: ['westpac account', 'westpac security'],
+        legitimateDomains: ['westpac.com.au']
+    },
+    'anz bank': {
+        keywords: ['anz bank', 'anz account', 'anz security'],
+        legitimateDomains: ['anz.com.au', 'anz.com']
+    },
+    'nab': {
+        keywords: ['nab account', 'national australia bank', 'nab security'],
+        legitimateDomains: ['nab.com.au']
+    },
+    'ato': {
+        keywords: ['australian taxation', 'ato refund', 'mygov', 'ato account'],
+        legitimateDomains: ['ato.gov.au', 'my.gov.au']
+    },
+    'services australia': {
+        keywords: ['centrelink', 'medicare australia', 'services australia'],
+        legitimateDomains: ['servicesaustralia.gov.au', 'humanservices.gov.au']
+    },
+    'telstra': {
+        keywords: ['telstra account', 'telstra bill', 'telstra security'],
+        legitimateDomains: ['telstra.com.au', 'telstra.com']
+    },
+    'optus': {
+        keywords: ['optus account', 'optus bill', 'optus security'],
+        legitimateDomains: ['optus.com.au']
+    },
+    'australia post': {
+        keywords: ['australia post', 'auspost delivery'],
+        legitimateDomains: ['auspost.com.au']
+    },
+
+    // ============================================
+    // INDIA
+    // ============================================
+    'sbi': {
+        keywords: ['sbi account', 'state bank of india', 'sbi security', 'yono sbi'],
+        legitimateDomains: ['sbi.co.in', 'onlinesbi.com']
+    },
+    'hdfc bank': {
+        keywords: ['hdfc bank', 'hdfc account', 'hdfc security', 'hdfc netbanking'],
+        legitimateDomains: ['hdfcbank.com']
+    },
+    'icici bank': {
+        keywords: ['icici bank', 'icici account', 'icici security'],
+        legitimateDomains: ['icicibank.com']
+    },
+    'paytm': {
+        keywords: ['paytm account', 'paytm wallet', 'paytm payment'],
+        legitimateDomains: ['paytm.com']
+    },
+    'phonepe': {
+        keywords: ['phonepe account', 'phonepe payment'],
+        legitimateDomains: ['phonepe.com']
+    },
+    'india post': {
+        keywords: ['india post', 'india post delivery', 'speed post'],
+        legitimateDomains: ['indiapost.gov.in']
+    },
+    'aadhaar': {
+        keywords: ['aadhaar', 'uidai', 'aadhaar update', 'aadhaar verification'],
+        legitimateDomains: ['uidai.gov.in']
+    },
+    'airtel india': {
+        keywords: ['airtel account', 'airtel bill', 'airtel recharge'],
+        legitimateDomains: ['airtel.in']
+    },
+    'jio': {
+        keywords: ['jio account', 'jio recharge', 'reliance jio'],
+        legitimateDomains: ['jio.com']
+    },
+
+    // ============================================
+    // CANADA
+    // ============================================
+    'rbc': {
+        keywords: ['rbc account', 'royal bank', 'rbc security'],
+        legitimateDomains: ['rbc.com', 'rbcroyalbank.com']
+    },
+    'td canada': {
+        keywords: ['td canada trust', 'td account', 'td security'],
+        legitimateDomains: ['td.com', 'tdcanadatrust.com']
+    },
+    'scotiabank': {
+        keywords: ['scotiabank account', 'scotiabank security'],
+        legitimateDomains: ['scotiabank.com']
+    },
+    'bmo': {
+        keywords: ['bmo account', 'bank of montreal', 'bmo security'],
+        legitimateDomains: ['bmo.com']
+    },
+    'cibc': {
+        keywords: ['cibc account', 'cibc security'],
+        legitimateDomains: ['cibc.com']
+    },
+    'canada post': {
+        keywords: ['canada post', 'canada post delivery', 'canada post parcel'],
+        legitimateDomains: ['canadapost.ca', 'canadapost-postescanada.ca']
+    },
+    'cra': {
+        keywords: ['canada revenue', 'cra refund', 'cra account', 'cra notice'],
+        legitimateDomains: ['canada.ca', 'gc.ca']
+    },
+    'interac': {
+        keywords: ['interac e-transfer', 'interac etransfer'],
+        legitimateDomains: ['interac.ca']
+    },
+
+    // ============================================
+    // EUROPE
+    // ============================================
+    'deutsche bank': {
+        keywords: ['deutsche bank account'],
+        legitimateDomains: ['deutsche-bank.de', 'db.com']
+    },
+    'bnp paribas': {
+        keywords: ['bnp paribas', 'bnp account'],
+        legitimateDomains: ['bnpparibas.com', 'bnpparibas.fr']
+    },
+    'ing bank': {
+        keywords: ['ing bank', 'ing account', 'ing security'],
+        legitimateDomains: ['ing.com', 'ing.nl', 'ing.de']
+    },
+    'rabobank': {
+        keywords: ['rabobank account'],
+        legitimateDomains: ['rabobank.nl', 'rabobank.com']
+    },
+    'credit agricole': {
+        keywords: ['credit agricole'],
+        legitimateDomains: ['credit-agricole.fr', 'ca-group.com']
+    },
+    'postnl': {
+        keywords: ['postnl', 'postnl delivery', 'postnl parcel'],
+        legitimateDomains: ['postnl.nl', 'postnl.com']
+    },
+    'deutsche post': {
+        keywords: ['deutsche post', 'dhl paket'],
+        legitimateDomains: ['deutschepost.de', 'dhl.de']
+    },
+    'la poste': {
+        keywords: ['la poste', 'colissimo'],
+        legitimateDomains: ['laposte.fr', 'laposte.net']
+    },
+    'correos': {
+        keywords: ['correos delivery'],
+        legitimateDomains: ['correos.es']
+    },
+    'poste italiane': {
+        keywords: ['poste italiane'],
+        legitimateDomains: ['poste.it', 'posteitaliane.it']
+    },
+    'orange': {
+        keywords: ['orange mobile', 'orange account', 'orange bill'],
+        legitimateDomains: ['orange.fr', 'orange.com']
+    },
+    'deutsche telekom': {
+        keywords: ['deutsche telekom', 'telekom account', 'telekom bill'],
+        legitimateDomains: ['telekom.de', 'telekom.com']
+    },
+    'swisscom': {
+        keywords: ['swisscom account', 'swisscom bill'],
+        legitimateDomains: ['swisscom.ch', 'swisscom.com']
+    },
+    'klarna eu': {
+        keywords: ['klarna payment', 'klarna account', 'klarna invoice'],
+        legitimateDomains: ['klarna.com']
+    },
+
+    // ============================================
+    // SOUTH KOREA
+    // ============================================
+    'kakaobank': {
+        keywords: ['kakaobank', 'kakao bank', 'kakao account'],
+        legitimateDomains: ['kakaobank.com', 'kakaocorp.com']
+    },
+    'naver': {
+        keywords: ['naver account', 'naver security', 'naver pay'],
+        legitimateDomains: ['naver.com']
+    },
+    'coupang': {
+        keywords: ['coupang order', 'coupang delivery'],
+        legitimateDomains: ['coupang.com']
+    },
+
+    // ============================================
+    // BRAZIL / LATIN AMERICA
+    // ============================================
+    'mercado libre': {
+        keywords: ['mercado libre', 'mercadolibre', 'mercado pago'],
+        legitimateDomains: ['mercadolibre.com', 'mercadopago.com', 'mercadolivre.com.br']
+    },
+    'nubank': {
+        keywords: ['nubank account', 'nu account'],
+        legitimateDomains: ['nubank.com.br']
+    },
+    'banco do brasil': {
+        keywords: ['banco do brasil'],
+        legitimateDomains: ['bb.com.br']
+    },
+    'itau': {
+        keywords: ['itau account', 'itau bank'],
+        legitimateDomains: ['itau.com.br']
+    },
+    'bradesco': {
+        keywords: ['bradesco account'],
+        legitimateDomains: ['bradesco.com.br']
+    },
+    'correios': {
+        keywords: ['correios delivery', 'correios rastreamento'],
+        legitimateDomains: ['correios.com.br']
+    },
+
+    // ============================================
+    // SOUTHEAST ASIA
+    // ============================================
+    'grab': {
+        keywords: ['grab account', 'grabpay', 'grab ride'],
+        legitimateDomains: ['grab.com']
+    },
+    'shopee': {
+        keywords: ['shopee order', 'shopee delivery', 'shopee account'],
+        legitimateDomains: ['shopee.com', 'shopee.sg', 'shopee.co.id']
+    },
+    'lazada': {
+        keywords: ['lazada order', 'lazada delivery', 'lazada account'],
+        legitimateDomains: ['lazada.com', 'lazada.sg', 'lazada.co.id']
+    },
+    'gcash': {
+        keywords: ['gcash account', 'gcash payment'],
+        legitimateDomains: ['gcash.com']
     }
 };
 
@@ -1095,7 +1484,111 @@ const IMPERSONATION_TARGETS = {
     "kohl's": ["kohls.com"],
     "kohls": ["kohls.com"],
     "jcpenney": ["jcpenney.com"],
-    "jc penney": ["jcpenney.com"]
+    "jc penney": ["jcpenney.com"],
+
+    // Japan
+    "kddi": ["kddi.com", "au.com"], "au": ["au.com", "kddi.com"],
+    "jr east": ["jreast.co.jp"], "eki-net": ["jreast.co.jp", "eki-net.com"],
+    "aeon": ["aeon.co.jp", "aeoncredit.co.jp"], "aeon card": ["aeon.co.jp", "aeoncredit.co.jp"],
+    "jcb": ["jcb.co.jp", "jcb.com"], "jcb card": ["jcb.co.jp", "jcb.com"],
+    "mufg": ["mufg.jp", "bk.mufg.jp"], "mitsubishi ufj": ["mufg.jp", "bk.mufg.jp"],
+    "smbc": ["smbc.co.jp", "smbc-card.com"], "sumitomo mitsui": ["smbc.co.jp"],
+    "mizuho bank": ["mizuhobank.co.jp", "mizuho-fg.co.jp"],
+    "rakuten": ["rakuten.co.jp", "rakuten.com"], "rakuten card": ["rakuten.co.jp", "rakuten-card.co.jp"],
+    "mercari": ["mercari.com", "mercari.jp"],
+    "japan post": ["japanpost.jp", "post.japanpost.jp"],
+    "yamato transport": ["kuronekoyamato.co.jp"], "kuroneko": ["kuronekoyamato.co.jp"],
+    "sagawa express": ["sagawa-exp.co.jp"],
+    "line": ["line.me", "linecorp.com"], "line account": ["line.me"],
+    "docomo": ["docomo.ne.jp", "nttdocomo.co.jp"], "ntt docomo": ["docomo.ne.jp", "nttdocomo.co.jp"],
+    "softbank": ["softbank.jp", "mb.softbank.jp"],
+
+    // United Kingdom
+    "hsbc": ["hsbc.co.uk", "hsbc.com"], "hsbc bank": ["hsbc.co.uk", "hsbc.com"],
+    "barclays": ["barclays.co.uk", "barclays.com"], "barclays bank": ["barclays.co.uk"],
+    "lloyds bank": ["lloydsbank.co.uk", "lloydsbank.com"], "lloyds": ["lloydsbank.co.uk"],
+    "natwest": ["natwest.com"], "natwest bank": ["natwest.com"],
+    "santander": ["santander.co.uk", "santander.com"],
+    "monzo": ["monzo.com"], "monzo bank": ["monzo.com"],
+    "revolut": ["revolut.com"],
+    "hmrc": ["gov.uk"], "hm revenue": ["gov.uk"],
+    "dvla": ["gov.uk"],
+    "nhs": ["nhs.uk"],
+    "royal mail": ["royalmail.com"],
+    "evri": ["evri.com"], "hermes": ["evri.com", "myhermes.co.uk"],
+    "bt": ["bt.com"], "bt broadband": ["bt.com"],
+    "vodafone": ["vodafone.co.uk", "vodafone.com"],
+    "o2": ["o2.co.uk"],
+    "sky": ["sky.com", "sky.uk"],
+    "three mobile": ["three.co.uk"],
+
+    // Australia
+    "commonwealth bank": ["commbank.com.au", "cba.com.au"], "commbank": ["commbank.com.au"],
+    "westpac": ["westpac.com.au"], "westpac bank": ["westpac.com.au"],
+    "anz": ["anz.com.au", "anz.com"], "anz bank": ["anz.com.au"],
+    "nab": ["nab.com.au"], "national australia bank": ["nab.com.au"],
+    "australia post": ["auspost.com.au"], "auspost": ["auspost.com.au"],
+    "ato": ["ato.gov.au"], "australian taxation": ["ato.gov.au"],
+    "mygov": ["my.gov.au"],
+    "centrelink": ["servicesaustralia.gov.au"],
+    "telstra": ["telstra.com.au", "telstra.com"],
+    "optus": ["optus.com.au"],
+
+    // India
+    "state bank of india": ["sbi.co.in", "onlinesbi.com"], "sbi": ["sbi.co.in", "onlinesbi.com"],
+    "hdfc bank": ["hdfcbank.com"], "hdfc": ["hdfcbank.com"],
+    "icici bank": ["icicibank.com"], "icici": ["icicibank.com"],
+    "paytm": ["paytm.com"],
+    "phonepe": ["phonepe.com"],
+    "india post": ["indiapost.gov.in"],
+    "aadhaar": ["uidai.gov.in"], "uidai": ["uidai.gov.in"],
+    "airtel": ["airtel.in"],
+    "jio": ["jio.com"], "reliance jio": ["jio.com"],
+
+    // Canada
+    "rbc": ["rbc.com", "rbcroyalbank.com"], "royal bank of canada": ["rbc.com"],
+    "td canada trust": ["td.com", "tdcanadatrust.com"], "td bank": ["td.com"],
+    "scotiabank": ["scotiabank.com"],
+    "bmo": ["bmo.com"], "bank of montreal": ["bmo.com"],
+    "cibc": ["cibc.com"],
+    "canada post": ["canadapost.ca", "canadapost-postescanada.ca"],
+    "canada revenue": ["canada.ca", "gc.ca"], "cra": ["canada.ca", "gc.ca"],
+    "interac": ["interac.ca"], "interac e-transfer": ["interac.ca"],
+
+    // Europe
+    "deutsche bank": ["deutsche-bank.de", "db.com"],
+    "bnp paribas": ["bnpparibas.com", "bnpparibas.fr"],
+    "ing": ["ing.com", "ing.nl", "ing.de"], "ing bank": ["ing.com", "ing.nl"],
+    "rabobank": ["rabobank.nl", "rabobank.com"],
+    "credit agricole": ["credit-agricole.fr"],
+    "postnl": ["postnl.nl", "postnl.com"],
+    "deutsche post": ["deutschepost.de", "dhl.de"],
+    "la poste": ["laposte.fr", "laposte.net"],
+    "correos": ["correos.es"],
+    "poste italiane": ["poste.it", "posteitaliane.it"],
+    "orange": ["orange.fr", "orange.com"],
+    "deutsche telekom": ["telekom.de", "telekom.com"],
+    "swisscom": ["swisscom.ch", "swisscom.com"],
+
+    // South Korea
+    "kakaobank": ["kakaobank.com", "kakaocorp.com"], "kakao bank": ["kakaobank.com"],
+    "naver": ["naver.com"],
+    "coupang": ["coupang.com"],
+
+    // Brazil / Latin America
+    "mercado libre": ["mercadolibre.com", "mercadopago.com"], "mercadolibre": ["mercadolibre.com"],
+    "mercado pago": ["mercadopago.com", "mercadolibre.com"],
+    "nubank": ["nubank.com.br"],
+    "banco do brasil": ["bb.com.br"],
+    "itau": ["itau.com.br"],
+    "bradesco": ["bradesco.com.br"],
+    "correios": ["correios.com.br"],
+
+    // Southeast Asia
+    "grab": ["grab.com"], "grabpay": ["grab.com"],
+    "shopee": ["shopee.com", "shopee.sg", "shopee.co.id"],
+    "lazada": ["lazada.com", "lazada.sg", "lazada.co.id"],
+    "gcash": ["gcash.com"]
 };
 
 // ============================================
