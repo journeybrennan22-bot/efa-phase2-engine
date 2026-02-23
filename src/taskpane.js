@@ -2311,6 +2311,17 @@ function detectWireFraudKeywords(content) {
     return found;
 }
 
+function detectFreeHostingSender(senderDomain) {
+    if (!senderDomain) return null;
+    const domainLower = senderDomain.toLowerCase();
+    for (const hosting of SUSPICIOUS_FREE_HOSTING_DOMAINS) {
+        if (domainLower === hosting || domainLower.endsWith('.' + hosting)) {
+            return { senderDomain: domainLower, hostingPlatform: hosting };
+        }
+    }
+    return null;
+}
+
 function detectContactLookalike(senderEmail) {
     const parts = senderEmail.toLowerCase().split('@');
     if (parts.length !== 2) return null;
@@ -2921,6 +2932,18 @@ function processEmail(emailData) {
             senderEmail: senderEmail
         });
     }
+
+    const freeHosting = senderDomain ? detectFreeHostingSender(senderDomain) : null;
+    if (freeHosting) {
+        warnings.push({
+            type: 'free-hosting-sender',
+            severity: 'critical',
+            title: 'Sent from Free Hosting Platform',
+            description: `This email was sent from ${freeHosting.hostingPlatform}, a free web hosting service. No legitimate business sends email from a web hosting platform.`,
+            senderEmail: senderEmail,
+            hostingPlatform: freeHosting.hostingPlatform
+        });
+    }
     
     const fakeTLD = detectFakeTLD(senderDomain);
     if (fakeTLD) {
@@ -3282,15 +3305,16 @@ function displayResults(warnings) {
             'org-impersonation': 10,
             'lookalike-domain': 11,
             'homoglyph': 12,
-            'suspicious-domain': 13,
-            'via-routing': 14,
-            'gibberish-domain': 15,
-            'gibberish-username': 16,
-            'display-name-suspicion': 17,
-            'international-sender': 18,
-            'mass-recipients': 19,
-            'wire-fraud': 20,
-            'phishing-urgency': 21
+            'free-hosting-sender': 13,
+            'suspicious-domain': 14,
+            'via-routing': 15,
+            'gibberish-domain': 16,
+            'gibberish-username': 17,
+            'display-name-suspicion': 18,
+            'international-sender': 19,
+            'mass-recipients': 20,
+            'wire-fraud': 21,
+            'phishing-urgency': 22
         };
         warnings.sort((a, b) => (WARNING_PRIORITY[a.type] || 99) - (WARNING_PRIORITY[b.type] || 99));
         
@@ -3428,6 +3452,19 @@ function displayResults(warnings) {
                         <div class="warning-email-row">
                             <span class="warning-email-label">Routed via:</span>
                             <span class="warning-email-value suspicious">${w.viaDomain}</span>
+                        </div>
+                    </div>
+                `;
+            } else if (w.type === 'free-hosting-sender') {
+                emailHtml = `
+                    <div class="warning-emails">
+                        <div class="warning-email-row">
+                            <span class="warning-email-label">Sender:</span>
+                            <span class="warning-email-value suspicious">${formatEmailForDisplay(w.senderEmail)}</span>
+                        </div>
+                        <div class="warning-email-row">
+                            <span class="warning-email-label">Platform:</span>
+                            <span class="warning-email-value suspicious">${w.hostingPlatform}</span>
                         </div>
                     </div>
                 `;
