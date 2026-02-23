@@ -1313,12 +1313,13 @@ const SECRECY_PHRASES = [
 
 const KNOWN_PLATFORM_DOMAINS = [
     // Project Management & Collaboration
-    'upwork.com', 'github.com', 'linkedin.com', 'atlassian.net', 'jira.com',
-    'slack.com', 'asana.com', 'trello.com', 'notion.so', 'figma.com', 'basecamp.com',
+    'upwork.com', 'github.com', 'linkedin.com', 'atlassian.net', 'atlassian.com', 'jira.com',
+    'slack.com', 'asana.com', 'trello.com', 'notion.so', 'notion.com', 'makenotion.com',
+    'figma.com', 'basecamp.com',
     'monday.com', 'clickup.com', 'smartsheet.com', 'teamwork.com', 'wrike.com',
     'airtable.com', 'todoist.com', 'linear.app', 'shortcut.com', 'height.app',
     // Website Builders & Forms
-    'wix.com', 'wix-forms.com', 'squarespace.com', 'typeform.com', 'jotform.com',
+    'wix.com', 'wix-forms.com', 'wixforms.com', 'squarespace.com', 'typeform.com', 'jotform.com',
     'godaddy.com', 'webflow.com', 'wordpress.com', 'formstack.com',
     'surveymonkey.com', 'qualtrics.com', 'google.com', 'cognitoforms.com',
     // Developer Tools & DevOps
@@ -1327,15 +1328,17 @@ const KNOWN_PLATFORM_DOMAINS = [
     'launchdarkly.com', 'circleci.com', 'snyk.io', 'sonarcloud.io',
     // Communication & Video
     'zoom.us', 'zoom.com', 'webex.com', 'calendly.com', 'intercom.io',
-    'drift.com', 'discord.com', 'loom.com', 'ringcentral.com', 'goto.com',
+    'drift.com', 'discord.com', 'discordapp.com', 'loom.com', 'ringcentral.com', 'goto.com',
     'dialpad.com', 'vonage.com', 'twilio.com',
     // CRM & Customer Support
-    'salesforce.com', 'hubspot.com', 'pipedrive.com', 'zoho.com', 'freshworks.com',
+    'salesforce.com', 'exacttarget.com', 'hubspot.com', 'hubspotemail.net',
+    'pipedrive.com', 'zoho.com', 'freshworks.com',
     'freshdesk.com', 'zendesk.com', 'helpscout.com', 'front.com', 'gorgias.com',
     'copper.com', 'close.com', 'freshsales.io',
     // Invoicing, Billing & Payments
-    'intuit.com', 'xero.com', 'freshbooks.com', 'stripe.com', 'square.com',
-    'paypal.com', 'braintreepayments.com', 'chargebee.com', 'recurly.com',
+    'intuit.com', 'quickbooks.com', 'xero.com', 'freshbooks.com', 'stripe.com',
+    'square.com', 'squareup.com',
+    'paypal.com', 'paypal.co.uk', 'braintreepayments.com', 'chargebee.com', 'recurly.com',
     'paddle.com', 'bill.com', 'harvest.com', 'invoiceninja.com', 'wave.com',
     // Documents & E-Signature
     'docusign.com', 'docusign.net', 'hellosign.com', 'pandadoc.com', 'adobe.com',
@@ -1348,7 +1351,9 @@ const KNOWN_PLATFORM_DOMAINS = [
     'closewise.com', 'snapdocs.com', 'dotloop.com', 'skyslope.com', 'qualia.com',
     'notarize.com', 'pavaso.com', 'docutech.com', 'softprocorp.com', 'ramquest.com',
     'resware.com', 'snapclose.com', 'atclose.com', 'settlor.com', 'certifid.com',
-    'zillow.com', 'realtor.com', 'redfin.com', 'compass.com', 'kw.com',
+    'zillow.com', 'trulia.com', 'streeteasy.com', 'hotpads.com',
+    'showingtime.com', 'followupboss.com',
+    'realtor.com', 'redfin.com', 'compass.com', 'kw.com',
     'mls.com', 'corelogic.com', 'fnf.com', 'firstam.com', 'oldrepublictitle.com',
     'stewarttrustservices.com', 'stewart.com', 'fidelitynational.com',
     // Mortgage & Lending
@@ -1363,18 +1368,67 @@ const KNOWN_PLATFORM_DOMAINS = [
     'canva.com', 'hootsuite.com', 'buffer.com', 'semrush.com', 'moz.com',
     'hotjar.com', 'mixpanel.com', 'amplitude.com', 'segment.com', 'optimizely.com',
     // Ecommerce
-    'shopify.com', 'bigcommerce.com', 'etsy.com', 'amazon.com', 'ebay.com',
+    'shopify.com', 'shopifyemail.com', 'myshopify.com', 'bigcommerce.com', 'etsy.com',
+    'amazon.com', 'amazon.co.uk', 'amazon.ca', 'amazon.de', 'amazon.fr',
+    'amazon.co.jp', 'amazon.com.au', 'amazonses.com', 'ebay.com',
     // Scheduling & Booking
     'acuityscheduling.com', 'schedulicity.com', 'mindbodyonline.com', 'vagaro.com',
     'booksy.com', 'setmore.com',
+    // Events & Invitations
+    'evite.com', 'eventbrite.com', 'meetup.com', 'paperlesspost.com', 'punchbowl.com',
+    'rsvpify.com', 'partiful.com', 'splash.events', 'lu.ma',
     // Social Media
-    'facebook.com', 'facebookmail.com', 'instagram.com', 'twitter.com', 'x.com',
-    'pinterest.com', 'tiktok.com', 'reddit.com', 'nextdoor.com',
+    'facebook.com', 'facebookmail.com', 'meta.com', 'instagram.com',
+    'twitter.com', 'x.com',
+    'pinterest.com', 'tiktok.com', 'reddit.com', 'redditmail.com',
+    'nextdoor.com',
+    'snapchat.com', 'whatsapp.com', 'telegram.org', 'threads.net',
+    // Newsletter & Content Platforms
+    'substack.com', 'beehiiv.com', 'medium.com', 'ghost.org', 'patreon.com',
+    'gumroad.com', 'ko-fi.com',
     // Travel & Delivery
-    'airbnb.com', 'booking.com', 'expedia.com', 'uber.com', 'lyft.com',
+    'airbnb.com', 'airbnbmail.com', 'booking.com', 'expedia.com', 'uber.com', 'lyft.com',
     'lyftmail.com', 'doordash.com', 'grubhub.com', 'instacart.com',
+    'vrbo.com', 'tripadvisor.com', 'kayak.com', 'hopper.com', 'turo.com',
+    'southwest.com', 'delta.com', 'united.com', 'aa.com', 'jetblue.com',
+    // Food & Restaurant
+    'opentable.com', 'resy.com', 'yelp.com', 'toasttab.com', 'caviar.com',
+    'ubereats.com', 'postmates.com', 'seamless.com',
+    // Fitness & Wellness
+    'peloton.com', 'classpass.com', 'myfitnesspal.com', 'strava.com',
+    'fitbit.com',
+    // Auto & Insurance Carriers
+    'geico.com', 'progressive.com', 'statefarm.com', 'allstate.com', 'usaa.com',
+    'libertymutual.com', 'nationwide.com', 'farmers.com', 'travelers.com',
+    'carvana.com', 'carmax.com', 'tesla.com', 'carfax.com',
+    // Home Services
+    'thumbtack.com', 'angi.com', 'homeadvisor.com', 'taskrabbit.com',
+    'rover.com', 'care.com', 'handy.com',
+    // Banking & Financial Institutions
+    'chase.com', 'jpmorgan.com', 'bankofamerica.com', 'bofa.com',
+    'wellsfargo.com', 'wf.com', 'citi.com', 'citibank.com', 'citicards.com',
+    'capitalone.com', 'ally.com', 'sofi.com', 'marcus.com', 'discover.com',
+    'americanexpress.com', 'amex.com', 'aexp.com', 'usbank.com', 'pnc.com', 'tdbank.com',
+    // Entertainment & Streaming
+    'spotify.com', 'netflix.com', 'hulu.com', 'disneyplus.com',
+    'youtube.com', 'twitch.tv', 'audible.com', 'kindle.com',
+    // Retail & Shopping
+    'target.com', 'costco.com', 'walmart.com', 'bestbuy.com', 'wayfair.com',
+    'ikea.com', 'chewy.com', 'nordstrom.com', 'macys.com', 'homedepot.com',
+    'lowes.com',
+    // Parking & Tolls
+    'parkmobile.com', 'spothero.com',
+    // Notary & Signing Services
+    'nationalnotary.org', 'notaryrotary.com', 'signingorder.com',
+    // Wire & Payment Verification
+    'earnnest.com', 'payjunction.com',
+    // Cloud Fax
+    'efax.com', 'hellofax.com',
+    // Dating
+    'tinder.com', 'bumble.com', 'hinge.co', 'match.com',
     // Cloud & Enterprise
-    'amazonaws.com', 'microsoft.com', 'apple.com',
+    'amazonaws.com', 'microsoft.com', 'microsoft365.com', 'office.com', 'office365.com',
+    'outlook.com', 'live.com', 'hotmail.com', 'apple.com', 'icloud.com',
     // Security & IT
     '1password.com', 'lastpass.com', 'okta.com', 'auth0.com',
     // Shipping
@@ -1385,7 +1439,8 @@ const KNOWN_PLATFORM_DOMAINS = [
     'coursera.org', 'udemy.com', 'teachable.com', 'thinkific.com',
     // Financial
     'plaid.com', 'robinhood.com', 'coinbase.com', 'venmo.com',
-    'wealthfront.com', 'betterment.com', 'fidelity.com', 'schwab.com',
+    'zellepay.com', 'zelle.com', 'cash.app',
+    'wealthfront.com', 'betterment.com', 'fidelity.com', 'fidelityinvestments.com', 'schwab.com',
     'vanguard.com', 'creditkarma.com', 'experian.com', 'equifax.com', 'transunion.com',
     // Legal
     'clio.com', 'mycase.com', 'smokeball.com', 'lawpay.com', 'practicepanther.com',
