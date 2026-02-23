@@ -1311,6 +1311,17 @@ const SECRECY_PHRASES = [
     'do not share', 'do not discuss'
 ];
 
+const KNOWN_PLATFORM_DOMAINS = [
+    'upwork.com', 'github.com', 'linkedin.com', 'atlassian.net', 'jira.com',
+    'slack.com', 'asana.com', 'trello.com', 'notion.so', 'figma.com', 'basecamp.com'
+];
+
+function isKnownPlatform(domain) {
+    if (!domain) return false;
+    const d = domain.toLowerCase();
+    return KNOWN_PLATFORM_DOMAINS.some(p => d === p || d.endsWith('.' + p));
+}
+
 const SUSPICIOUS_FREE_HOSTING_DOMAINS = [
     'netlify.app', 'vercel.app', 'github.io', 'pages.dev',
     'firebaseapp.com', 'web.app', 'workers.dev', 'glitch.me',
@@ -2923,7 +2934,7 @@ function processEmail(emailData) {
     }
     
     const gibberishUsername = detectGibberishUsername(senderEmail);
-    if (gibberishUsername) {
+    if (gibberishUsername && !isKnownPlatform(senderDomain)) {
         warnings.push({
             type: 'gibberish-username',
             severity: 'critical',
@@ -3018,7 +3029,7 @@ function processEmail(emailData) {
             // An attacker cannot forge this DNS relationship.
             const replyToDomainLower = replyToDomain.toLowerCase();
             const isParentChild = senderDomain.endsWith('.' + replyToDomainLower) || replyToDomainLower.endsWith('.' + senderDomain);
-            if (!isKnownESP && !isParentChild) {
+            if (!isKnownESP && !isParentChild && !isKnownPlatform(senderDomain)) {
                 warnings.push({
                     type: 'replyto-mismatch',
                     severity: 'medium',
