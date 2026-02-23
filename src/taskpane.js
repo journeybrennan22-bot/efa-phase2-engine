@@ -1,7 +1,9 @@
 // Email Fraud Detector - Outlook Web Add-in
+// Version 4.3.0 - Global SaaS platform expansion: 328 new domains across 30+ countries (healthcare, real estate, education, salon, restaurant, sports platforms)
 // Version 4.3.0 - Global brand expansion: added 87 brands across Japan, UK, Australia, India, Canada, EU, South Korea, Brazil, Southeast Asia
 // Version 4.3.0 - Reply-to self suppression: no warning when reply-to is user's own email (zero attack value)
 // Version 4.3.0 - Keyword-only suppression on legitimate domains: banks say "account number", suppress when sender IS the brand and no other warnings fired
+// Version 4.3.0 - Calendar infrastructure on-behalf-of suppression: Google Calendar, Outlook Calendar etc. set Sender header from their own servers, not spoofing
 // Version 4.2.11 - Provider-flagged warning always fires and ranked #1 priority
 // Version 4.2.11 - Provider-flagged warning: removed auth suppression, promoted to top priority
 // Version 4.2.10 - Added gibberish sender username detection
@@ -90,6 +92,31 @@ const KNOWN_ESP_DOMAINS = [
     // Verified-access only: requires confirmed government agency status to send.
     // NOT a self-service ESP. Do NOT extend this pattern to commercial ESPs.
     'govdelivery.com'
+];
+
+// v4.3.0: Email infrastructure providers whose Sender header is set by their own servers.
+// These providers use the Sender header for calendar invites and notifications sent
+// on behalf of their users. Unlike ESPs, no third party can trigger sends through these.
+// Viktor: "I can't forge a Sender header from these without sending through their infrastructure."
+// This list is ONLY used for on-behalf-of suppression, NOT for trust decisions.
+// Criteria: Provider owns the infrastructure. No self-service API sending.
+const CALENDAR_INFRASTRUCTURE_DOMAINS = [
+    // Global
+    'google.com', 'microsoft.com', 'outlook.com', 'apple.com', 'yahoo.com',
+    // Japan
+    'yahoo.co.jp',
+    // Russia / CIS
+    'yandex.ru', 'yandex.com', 'mail.ru',
+    // India / Global
+    'zoho.com',
+    // Switzerland / Global
+    'protonmail.com', 'proton.me',
+    // Germany / Global
+    'gmx.net', 'gmx.com', 'web.de',
+    // South Korea
+    'naver.com', 'daum.net',
+    // China
+    '163.com', '126.com', 'qq.com'
 ];
 
 // ============================================
@@ -2075,7 +2102,171 @@ const KNOWN_PLATFORM_DOMAINS = [
     'wise.com', 'transferwise.com', 'revolut.com',
     'monese.com', 'remitly.com', 'worldremit.com',
     'binance.com', 'kraken.com', 'gemini.com', 'bitfinex.com',
-    'blockchain.com', 'crypto.com', 'ledger.com'
+    'blockchain.com', 'crypto.com', 'ledger.com',
+
+    // ===== V4.3.0 SaaS PLATFORM EXPANSION (328 domains) =====
+
+    // Transactional Email Services
+    'mailjet.com', 'mailersend.com', 'smtp2go.com', 'socketlabs.com', 'elasticemail.com',
+    'sendpulse.com', 'resend.com', 'mailtrap.io', 'sendlayer.com', 'customer.io',
+    'courier.com', 'loops.so', 'sidemail.io', 'smtp.com', 'moosend.com',
+    'sendy.co', 'mailpace.com', 'turbosmtp.com', 'pepipost.com', 'netcorecloud.com',
+    // Global ESPs
+    'sendinblue.co.uk', 'mailup.com', 'mailup.it', 'acumbamail.com', 'rapidmail.com',
+    'cleverreach.com', 'newsletter2go.com', 'mailify.com', 'zohomail.com', 'freshmarketer.com',
+    'mapp.com', 'emarsys.com', 'selligent.com', 'dotdigital.com', 'omnisend.com',
+
+    // Real Estate Platforms - US
+    'bombbomb.com', 'bbsv2.net', 'insiderealestate.com', 'kvcore.com', 'boomtownroi.com',
+    'liondesk.com', 'wisageninc.com', 'topproducer.com', 'realgeeks.com', 'sierrainteractive.com',
+    'agentlegend.com', 'verse.ai', 'propertybase.com', 'lofty.com', 'chime.house',
+    'chimeinc.com', 'ixactcontact.com', 'cloze.com', 'contactually.com', 'moxiworks.com',
+    'circlepix.com', 'homeactions.net',
+
+    // Sports / Youth Organizations
+    'bluesombrero.com', 'sportsconnect.com', 'stacksports.com', 'teamsnap.com',
+    'sportsengine.com', 'leagueapps.com', 'jerseywatch.com', 'teampages.com',
+    'playmetrics.com', 'activenetwork.com', 'active.com', 'demosphere.com',
+
+    // Healthcare Patient Communication - US
+    'phreesia.com', 'phreesia-mail.com', 'solutionreach.com', 'demandforce.com',
+    'patientpop.com', 'tebra.com', 'weave.com', 'updox.com', 'rectanglehealth.com',
+    'clearwaveinc.com', 'curogram.com', 'klara.com', 'luma-health.com', 'nexhealth.com',
+    'doctible.com', 'srhealth.com', 'advancedmd.com', 'modmed.com', 'eclinicalworks.com',
+    'getweave.com',
+    // Dental - US
+    'dentrix.com', 'opendentalsoft.com', 'revenuewell.com', 'lighthouse360.com',
+    'yapi.com', 'patientconnect365.com',
+
+    // Streaming / Entertainment
+    'peacocktv.com', 'paramountplus.com', 'max.com', 'crunchyroll.com',
+    'funimation.com', 'discoveryplus.com', 'espn.com', 'sling.com',
+
+    // Restaurant / Hospitality
+    'touchbistro.com', 'lightspeedhq.com', 'chownow.com', 'olo.com',
+    'popmenu.com', 'bentobox.com', 'seven-rooms.com', 'wisely.com',
+    'thefork.com', 'quandoo.com', 'tablecheck.com', 'covermanager.com',
+
+    // Salon / Beauty / Wellness
+    'fresha.com', 'glossgenius.com', 'boulevard.io', 'zenoti.com',
+    'mangomint.com', 'salonbiz.com', 'meevo.com', 'phorest.com',
+    'timely.com', 'treatwell.co.uk', 'shedul.com',
+
+    // Veterinary / Pet
+    'vetsource.com', 'petdesk.com', 'allydvm.com', 'weconnect.vet',
+
+    // Auto Dealership
+    'cdk.com', 'dealertrack.com', 'dealersocket.com', 'vinconnect.com',
+    'autosoftdms.com', 'elead-crm.com', 'tekion.com',
+
+    // Education - US
+    'schoolmessenger.com', 'parentsquare.com', 'classdojo.com', 'remind.com',
+    'finalsite.com', 'blackbaud.com', 'bloomz.net', 'smore.com', 'schoology.com',
+
+    // Church / Nonprofit
+    'planningcenteronline.com', 'pushpay.com', 'faithlife.com', 'breezechms.com',
+    'tithe.ly', 'bloomerang.com', 'classy.org', 'neoncrm.com',
+
+    // Property Management - US
+    'appfolio.com', 'buildium.com', 'rentmanager.com', 'propertyware.com',
+    'innago.com', 'tenantcloud.com',
+
+    // Fitness / Gym
+    'marianatek.com', 'clubready.com', 'perfectgym.com', 'gymmaster.com',
+    'wodify.com', 'zen-planner.com', 'glofox.com', 'pike13.com',
+
+    // HOA / Community
+    'caliber.com', 'smartwebs.com', 'townsq.io', 'pilera.com',
+
+    // Global Booking / Scheduling
+    'simplybook.me', 'appointy.com',
+    // Global Property Management / Vacation Rental
+    'guesty.com', 'lodgify.com', 'hostaway.com', 'tokeet.com',
+
+    // ===== UK =====
+    // UK - Healthcare / Patient Engagement
+    'drdoctor.co.uk', 'swiftqueue.com', 'bookinglab.co.uk', 'bookinglive.com',
+    'herohealth.net', 'patchs.com', 'accurx.com', 'mjog.com',
+    // UK - School / Parent Communication
+    'parentmail.co.uk', 'arbor-education.com', 'bromcom.com', 'reachmoreparents.com',
+    'schoolcomms.com', 'parentpay.com', 'schoolcloud.co.uk', 'classcharts.com',
+    // UK - Real Estate (additions)
+    'openrent.com', 'estate-agents.co.uk',
+
+    // ===== EUROPE =====
+    // Europe - Healthcare Booking
+    'doctolib.fr', 'doctolib.de', 'doctolib.it', 'doctena.com', 'jameda.de',
+    'miodottore.it', 'doctoralia.com', 'qare.fr', 'kry.se', 'doktor.se',
+    // Europe - Real Estate Portals
+    'seloger.com', 'leboncoin.fr', 'immobilienscout24.de', 'immowelt.de',
+    'idealista.com', 'idealista.pt', 'funda.nl', 'hemnet.se',
+    'finn.no', 'boliga.dk', 'daft.ie', 'myhome.ie',
+    // Europe - Education
+    'itslearning.com', 'untis.at', 'sdui.de',
+    // Europe - General Business SaaS
+    'jimdo.com', 'teamleader.eu', 'billomat.com', 'lexoffice.de', 'weclapp.com', 'fortnox.se',
+
+    // ===== AUSTRALIA / NEW ZEALAND =====
+    // AU/NZ - Healthcare
+    'cliniko.com', 'hotdoc.com.au', 'healthengine.com.au', 'nookal.com', 'zanda.com',
+    'gotohealth.com.au',
+    // AU/NZ - Real Estate (additions)
+    'allhomes.com.au', 'trademe.co.nz', 'realestate.co.nz', 'propertyguru.com.au',
+    // AU/NZ - Education
+    'compass.education', 'sentral.com.au', 'edval.education', 'schoolbox.com.au',
+    // AU/NZ - Salon
+    'nabooki.com', 'kitomba.com',
+
+    // ===== JAPAN =====
+    // Japan - Real Estate / Property
+    'suumo.jp', 'homes.co.jp', 'athome.co.jp', 'chintai.net', 'ouchi.jp',
+    'realestate.yahoo.co.jp',
+    // Japan - Booking / Reservations
+    'hotpepper.jp', 'tabelog.com', 'gurunavi.com', 'gnavi.co.jp', 'ikyu.com', 'yelp.co.jp',
+    // Japan - Healthcare / Beauty
+    'hotpepper-beauty.com', 'minimo.app', 'epark.jp', 'caloo.jp',
+
+    // ===== SOUTH KOREA =====
+    'zigbang.com', 'dabangapp.com', 'land.naver.com', 'realestate114.com', 'peterpanz.com',
+    'baemin.com',
+
+    // ===== INDIA =====
+    // India - Healthcare
+    'practo.com', '1mg.com', 'lybrate.com', 'medibuddy.in', 'netmeds.com',
+    'apolloio.com', 'apollo247.com', 'pristyncare.com',
+    // India - Real Estate
+    'magicbricks.com', '99acres.com', 'housing.com', 'nobroker.in',
+    'commonfloor.com', 'proptiger.com',
+    // India - Education
+    'byjus.com', 'vedantu.com', 'unacademy.com', 'extramarks.com',
+    // India - Business SaaS
+    'zoho.in', 'leadsquared.com', 'sell.do',
+
+    // ===== BRAZIL =====
+    // Brazil - Real Estate
+    'vivareal.com.br', 'zapimoveis.com.br', 'imovelweb.com.br',
+    'quintoandar.com.br', 'olx.com.br', 'wimoveis.com.br',
+    // Brazil - Healthcare
+    'doctoralia.com.br', 'conexasaude.com.br', 'iclinic.com.br', 'shosp.com.br',
+
+    // ===== MIDDLE EAST =====
+    // Middle East - Real Estate
+    'bayut.com', 'propertyfinder.ae', 'dubizzle.com', 'aqar.fm',
+    'zameen.com', 'opensooq.com', 'olx.com.eg', 'bproperty.com',
+    // Middle East - Healthcare
+    'vezeeta.com', 'altibbi.com', 'cura.healthcare', 'okadoc.com',
+
+    // ===== SOUTHEAST ASIA =====
+    'propertyguru.com.sg', 'propertyguru.com.my', 'ddproperty.com', '99.co',
+    'rumah123.com', 'batdongsan.com.vn', 'lamudi.co.id', 'dotproperty.com.th',
+    'chope.co', 'eatigo.com',
+
+    // ===== CANADA =====
+    'realtor.ca', 'zolo.ca', 'housesigma.com', 'condos.ca',
+    'jane.app', 'clinicaid.ca', 'inputhealth.com',
+
+    // ===== AFRICA =====
+    'property24.com', 'privateproperty.co.za', 'jiji.com'
 ];
 
 function getRootDomain(domain) {
@@ -3939,14 +4130,23 @@ function processEmail(emailData) {
             const oboHeaderRoot = getRootDomain(senderHeaderDomain);
             const isOboSibling = oboSenderRoot === oboHeaderRoot && !SUSPICIOUS_FREE_HOSTING_DOMAINS.includes(oboSenderRoot);
             if (!isParentChild && !isOboSibling) {
-                warnings.push({
-                    type: 'on-behalf-of',
-                    severity: 'medium',
-                    title: 'Sent On Behalf Of Another Domain',
-                    description: 'This email was sent by one domain on behalf of a completely different domain. This is a common tactic used to disguise the true origin of an email.',
-                    senderEmail: senderHeader,
-                    matchedEmail: senderEmail
-                });
+                // v4.3.0: Suppress when Sender header domain is a calendar/notification infrastructure provider.
+                // These providers set the Sender header from their own servers for calendar invites
+                // and notifications. This is not spoofing - it's how Google Calendar, Outlook Calendar, etc. work.
+                // Viktor: "Can't forge a Sender header of google.com without sending through Google's servers."
+                const isCalendarInfra = CALENDAR_INFRASTRUCTURE_DOMAINS.some(cid =>
+                    senderHeaderDomain === cid || senderHeaderDomain.endsWith('.' + cid)
+                );
+                if (!isCalendarInfra) {
+                    warnings.push({
+                        type: 'on-behalf-of',
+                        severity: 'medium',
+                        title: 'Sent On Behalf Of Another Domain',
+                        description: 'This email was sent by one domain on behalf of a completely different domain. This is a common tactic used to disguise the true origin of an email.',
+                        senderEmail: senderHeader,
+                        matchedEmail: senderEmail
+                    });
+                }
             }
         }
     }
