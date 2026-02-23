@@ -352,7 +352,7 @@ const BRAND_CONTENT_DETECTION = {
     },
     'att': {
         keywords: ['at&t', 'att account', 'att wireless'],
-        legitimateDomains: ['att.com', 'att.net']
+        legitimateDomains: ['att.com', 'att.net', 'att-mail.com']
     },
     'verizon': {
         keywords: ['verizon', 'verizon wireless', 'verizon fios'],
@@ -1354,11 +1354,15 @@ const KNOWN_PLATFORM_DOMAINS = [
     'zillow.com', 'trulia.com', 'streeteasy.com', 'hotpads.com',
     'showingtime.com', 'followupboss.com',
     'realtor.com', 'redfin.com', 'compass.com', 'kw.com',
-    'mls.com', 'corelogic.com', 'fnf.com', 'firstam.com', 'oldrepublictitle.com',
+    'mls.com', 'mlsmatrix.com', 'flexmls.com', 'paragonmls.com', 'brightmls.com',
+    'matrixmls.com', 'connectmls.com', 'stellarmls.com', 'ctmls.com',
+    'corelogic.com', 'fnf.com', 'firstam.com', 'oldrepublictitle.com',
     'stewarttrustservices.com', 'stewart.com', 'fidelitynational.com',
     // Mortgage & Lending
     'encompass.com', 'elliemae.com', 'icemortgagetechnology.com', 'calyxsoftware.com',
     'bytesoftware.com', 'lendingpad.com', 'blend.com', 'mortgagecadence.com',
+    'mortgage-email.com', 'topofmind.com', 'surefire.com', 'aboramedia.com',
+    'mortgagecoach.com', 'totalexpert.com', 'homebot.ai', 'lodasoft.com',
     'bluesagetech.com', 'meridianlink.com', 'optimalblue.com', 'loanlogics.com',
     // Insurance
     'appliedsystems.com', 'hawksoft.com', 'vertafore.com', 'ezlynx.com',
@@ -2132,6 +2136,7 @@ function detectViaRouting(headers, senderDomain) {
         // v4.3.0: Improved sender-brand matching - extract registrable domain, not first subdomain
         if (senderDomain) {
             const senderParts = senderDomain.split('.');
+            const relayParts = relayDomain.split('.');
             const ccSLDs = ['co', 'com', 'org', 'net', 'ac', 'gov', 'edu'];
             let senderSLD;
             if (senderParts.length >= 3 && ccSLDs.includes(senderParts[senderParts.length - 2])) {
@@ -2139,7 +2144,16 @@ function detectViaRouting(headers, senderDomain) {
             } else if (senderParts.length >= 2) {
                 senderSLD = senderParts[senderParts.length - 2];
             }
+            let relaySLD;
+            if (relayParts.length >= 3 && ccSLDs.includes(relayParts[relayParts.length - 2])) {
+                relaySLD = relayParts[relayParts.length - 3];
+            } else if (relayParts.length >= 2) {
+                relaySLD = relayParts[relayParts.length - 2];
+            }
+            // Forward check: sender SLD appears in relay domain (e.g., "pinterest" in "pinterestmail.com")
             if (senderSLD && senderSLD.length >= 4 && relayDomain.includes(senderSLD)) continue;
+            // Reverse check: relay SLD appears in sender domain (e.g., "att" from att.com in "att-mail.com")
+            if (relaySLD && relaySLD.length >= 3 && senderDomain.includes(relaySLD)) continue;
         }
         
         const legitServices = ['google', 'gmail', 'googlemail', 'microsoft', 'outlook', 'office365', 
@@ -2281,16 +2295,21 @@ function detectBrandImpersonation(subject, body, senderDomain, displayName) {
     const displayNameLower = (displayName || '').toLowerCase();
     
     for (const [brandName, config] of Object.entries(BRAND_CONTENT_DETECTION)) {
+        // v4.3.0: Use word boundary matching to avoid substring false positives
+        // e.g. "Sofia" should not trigger "Sofi" brand detection
+        const keywordMatchesText = (text) => config.keywords.some(keyword => {
+            const kw = keyword.toLowerCase();
+            // For keywords with special chars like "at&t", use includes
+            if (/[^a-z0-9\s]/.test(kw)) return text.includes(kw);
+            // For normal keywords, use word boundary regex
+            const re = new RegExp('\\b' + kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i');
+            return re.test(text);
+        });
+        
         // Check each location separately: subject, display name, body
-        const inSubject = config.keywords.some(keyword => 
-            subjectLower.includes(keyword.toLowerCase())
-        );
-        const inDisplayName = config.keywords.some(keyword => 
-            displayNameLower.includes(keyword.toLowerCase())
-        );
-        const inBody = config.keywords.some(keyword => 
-            bodyLower.includes(keyword.toLowerCase())
-        );
+        const inSubject = keywordMatchesText(subjectLower);
+        const inDisplayName = keywordMatchesText(displayNameLower);
+        const inBody = keywordMatchesText(bodyLower);
         
         const mentionsBrand = inSubject || inDisplayName || inBody;
         
@@ -2324,6 +2343,50 @@ function detectBrandImpersonation(subject, body, senderDomain, displayName) {
                 
                 // TIER 2: Brand only in body = casual mention, require supporting signals
                 // to avoid false positives on emails that just reference a brand
+                
+                // v4.3.0: If the sender is itself a recognized brand, skip body-only detection.
+                // Legitimate companies mention other brands all the time (resellers, partnerships,
+                // cross-promotions). GoDaddy mentioning Microsoft, Alaska Airlines mentioning Lyft, etc.
+                let senderIsKnownBrand = false;
+                // Check 1: Sender matches another brand in BRAND_CONTENT_DETECTION
+                for (const [otherBrand, otherConfig] of Object.entries(BRAND_CONTENT_DETECTION)) {
+                    if (otherBrand === brandName) continue; // Skip self
+                    if (otherConfig.legitimateDomains.some(legit => {
+                        if (legit.startsWith('.')) return domainLower.endsWith(legit);
+                        return domainLower === legit || domainLower.endsWith('.' + legit);
+                    })) {
+                        senderIsKnownBrand = true;
+                        break;
+                    }
+                }
+                // Check 2: Sender matches an entity in IMPERSONATION_TARGETS
+                if (!senderIsKnownBrand) {
+                    for (const [, legDomains] of Object.entries(IMPERSONATION_TARGETS)) {
+                        if (legDomains.some(legit => {
+                            if (legit.startsWith('.')) return domainLower.endsWith(legit);
+                            return domainLower === legit || domainLower.endsWith('.' + legit);
+                        })) {
+                            senderIsKnownBrand = true;
+                            break;
+                        }
+                    }
+                }
+                // Check 3: Sender is a known platform domain
+                if (!senderIsKnownBrand && typeof KNOWN_PLATFORM_DOMAINS !== 'undefined') {
+                    const senderRootParts = domainLower.split('.');
+                    // Extract root domain for platform check (e.g., "e.godaddy.com" -> "godaddy.com")
+                    const senderRoot = senderRootParts.slice(-2).join('.');
+                    const senderRootCC = senderRootParts.length >= 3 ? senderRootParts.slice(-3).join('.') : '';
+                    if (KNOWN_PLATFORM_DOMAINS.includes(senderRoot) || 
+                        (senderRootCC && KNOWN_PLATFORM_DOMAINS.includes(senderRootCC))) {
+                        senderIsKnownBrand = true;
+                    }
+                }
+                if (senderIsKnownBrand) {
+                    console.log('BRAND CHECK SKIPPED (sender is known brand) -', brandName, 'mentioned in body from', senderDomain);
+                    continue;
+                }
+                
                 const hasSupport = _brandBodyHasSupportingSignals(config, bodyLower, subjectLower, domainLower, body || '');
                 if (hasSupport) {
                     return {
