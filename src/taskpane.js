@@ -1,5 +1,7 @@
 // Email Fraud Detector - Outlook Web Add-in
 // Version 4.3.0 - Global brand expansion: added 87 brands across Japan, UK, Australia, India, Canada, EU, South Korea, Brazil, Southeast Asia
+// Version 4.3.0 - Reply-to self suppression: no warning when reply-to is user's own email (zero attack value)
+// Version 4.3.0 - Keyword-only suppression on legitimate domains: banks say "account number", suppress when sender IS the brand and no other warnings fired
 // Version 4.2.11 - Provider-flagged warning always fires and ranked #1 priority
 // Version 4.2.11 - Provider-flagged warning: removed auth suppression, promoted to top priority
 // Version 4.2.10 - Added gibberish sender username detection
@@ -3888,7 +3890,11 @@ function processEmail(emailData) {
     
     if (replyTo && replyTo.toLowerCase() !== senderEmail) {
         const replyToDomain = replyTo.split('@')[1] || '';
-        if (replyToDomain.toLowerCase() !== senderDomain) {
+        // v4.3.0: Suppress when reply-to is the user's own email address.
+        // If replies go back to the recipient, there is zero attack value.
+        // Viktor: "I need replies to come to ME. If they go back to the victim, I get nothing."
+        const isReplyToSelf = currentUserEmail && replyTo.toLowerCase() === currentUserEmail.toLowerCase();
+        if (!isReplyToSelf && replyToDomain.toLowerCase() !== senderDomain) {
             // Check if sender domain is a known ESP (e.g., ccsend.com, mailchimp.com)
             // ESPs always have reply-to mismatches because they send on behalf of businesses
             const isKnownESP = KNOWN_ESP_DOMAINS.some(esp => 
@@ -4114,7 +4120,29 @@ function processEmail(emailData) {
     
     const phase2Result = runPhase2Engine(phase2EmailData, warnings);
     const finalWarnings = phase2Result.finalWarnings;
+    
     // ============================================
+    // v4.3.0: KEYWORD-ONLY SUPPRESSION ON LEGITIMATE DOMAINS
+    // If the sender domain is a verified legitimate domain (from BRAND_CONTENT_DETECTION
+    // or KNOWN_PLATFORM_DOMAINS) AND keyword warnings are the ONLY warnings present,
+    // suppress them. Banks say "account number." That's what banks do.
+    // Viktor: "If I'm impersonating Wells Fargo, I'm sending from a domain I registered.
+    // EFA catches me on brand impersonation, lookalike, or auth failure. The keywords
+    // pile on top. But if the email is FROM wellsfargo.com, Wells Fargo sent it."
+    // Safety: Only suppresses when keywords are the sole warning. If ANY other detection
+    // fires alongside keywords, they stay. Viktor can't send from domains he doesn't own.
+    // ============================================
+    const keywordTypes = ['wire-fraud', 'phishing-urgency'];
+    const nonKeywordWarnings = finalWarnings.filter(w => !keywordTypes.includes(w.type));
+    if (nonKeywordWarnings.length === 0 && finalWarnings.length > 0) {
+        // All warnings are keyword-only. Check if sender is a legitimate domain.
+        const isLegitBrandDomain = Object.values(BRAND_CONTENT_DETECTION).some(config =>
+            config.legitimateDomains.some(ld => senderDomain === ld || senderDomain.endsWith('.' + ld))
+        );
+        if (isLegitBrandDomain || isKnownPlatform(senderDomain)) {
+            finalWarnings.length = 0; // Clear all keyword warnings
+        }
+    }
     
     displayResults(finalWarnings);
 }
