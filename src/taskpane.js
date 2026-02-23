@@ -1312,9 +1312,96 @@ const SECRECY_PHRASES = [
 ];
 
 const KNOWN_PLATFORM_DOMAINS = [
+    // Project Management & Collaboration
     'upwork.com', 'github.com', 'linkedin.com', 'atlassian.net', 'jira.com',
     'slack.com', 'asana.com', 'trello.com', 'notion.so', 'figma.com', 'basecamp.com',
-    'wix.com', 'wix-forms.com', 'squarespace.com', 'typeform.com', 'jotform.com', 'godaddy.com'
+    'monday.com', 'clickup.com', 'smartsheet.com', 'teamwork.com', 'wrike.com',
+    'airtable.com', 'todoist.com', 'linear.app', 'shortcut.com', 'height.app',
+    // Website Builders & Forms
+    'wix.com', 'wix-forms.com', 'squarespace.com', 'typeform.com', 'jotform.com',
+    'godaddy.com', 'webflow.com', 'wordpress.com', 'formstack.com',
+    'surveymonkey.com', 'qualtrics.com', 'google.com', 'cognitoforms.com',
+    // Developer Tools & DevOps
+    'gitlab.com', 'bitbucket.org', 'stackoverflow.com', 'digitalocean.com',
+    'cloudflare.com', 'sentry.io', 'datadog.com', 'pagerduty.com', 'newrelic.com',
+    'launchdarkly.com', 'circleci.com', 'snyk.io', 'sonarcloud.io',
+    // Communication & Video
+    'zoom.us', 'zoom.com', 'webex.com', 'calendly.com', 'intercom.io',
+    'drift.com', 'discord.com', 'loom.com', 'ringcentral.com', 'goto.com',
+    'dialpad.com', 'vonage.com', 'twilio.com',
+    // CRM & Customer Support
+    'salesforce.com', 'hubspot.com', 'pipedrive.com', 'zoho.com', 'freshworks.com',
+    'freshdesk.com', 'zendesk.com', 'helpscout.com', 'front.com', 'gorgias.com',
+    'copper.com', 'close.com', 'freshsales.io',
+    // Invoicing, Billing & Payments
+    'intuit.com', 'xero.com', 'freshbooks.com', 'stripe.com', 'square.com',
+    'paypal.com', 'braintreepayments.com', 'chargebee.com', 'recurly.com',
+    'paddle.com', 'bill.com', 'harvest.com', 'invoiceninja.com', 'wave.com',
+    // Documents & E-Signature
+    'docusign.com', 'docusign.net', 'hellosign.com', 'pandadoc.com', 'adobe.com',
+    'dropbox.com', 'dropboxmail.com', 'box.com', 'sharepoint.com', 'onedrive.com',
+    // HR & Recruiting
+    'greenhouse.io', 'lever.co', 'bamboohr.com', 'gusto.com', 'rippling.com',
+    'adp.com', 'workday.com', 'namely.com', 'justworks.com', 'deel.com',
+    'paychex.com', 'paylocity.com', 'paycom.com', 'indeed.com', 'ziprecruiter.com',
+    // Real Estate & Title/Escrow
+    'closewise.com', 'snapdocs.com', 'dotloop.com', 'skyslope.com', 'qualia.com',
+    'notarize.com', 'pavaso.com', 'docutech.com', 'softprocorp.com', 'ramquest.com',
+    'resware.com', 'snapclose.com', 'atclose.com', 'settlor.com', 'certifid.com',
+    'zillow.com', 'realtor.com', 'redfin.com', 'compass.com', 'kw.com',
+    'mls.com', 'corelogic.com', 'fnf.com', 'firstam.com', 'oldrepublictitle.com',
+    'stewarttrustservices.com', 'stewart.com', 'fidelitynational.com',
+    // Mortgage & Lending
+    'encompass.com', 'elliemae.com', 'icemortgagetechnology.com', 'calyxsoftware.com',
+    'bytesoftware.com', 'lendingpad.com', 'blend.com', 'mortgagecadence.com',
+    'bluesagetech.com', 'meridianlink.com', 'optimalblue.com', 'loanlogics.com',
+    // Insurance
+    'appliedsystems.com', 'hawksoft.com', 'vertafore.com', 'ezlynx.com',
+    'agencybloc.com', 'bindhq.com', 'ams360.com', 'lemonade.com',
+    'policygenius.com', 'goosehead.com', 'boldrisk.com',
+    // Marketing & Analytics
+    'canva.com', 'hootsuite.com', 'buffer.com', 'semrush.com', 'moz.com',
+    'hotjar.com', 'mixpanel.com', 'amplitude.com', 'segment.com', 'optimizely.com',
+    // Ecommerce
+    'shopify.com', 'bigcommerce.com', 'etsy.com', 'amazon.com', 'ebay.com',
+    // Scheduling & Booking
+    'acuityscheduling.com', 'schedulicity.com', 'mindbodyonline.com', 'vagaro.com',
+    'booksy.com', 'setmore.com',
+    // Social Media
+    'facebook.com', 'facebookmail.com', 'instagram.com', 'twitter.com', 'x.com',
+    'pinterest.com', 'tiktok.com', 'reddit.com', 'nextdoor.com',
+    // Travel & Delivery
+    'airbnb.com', 'booking.com', 'expedia.com', 'uber.com', 'lyft.com',
+    'lyftmail.com', 'doordash.com', 'grubhub.com', 'instacart.com',
+    // Cloud & Enterprise
+    'amazonaws.com', 'microsoft.com', 'apple.com',
+    // Security & IT
+    '1password.com', 'lastpass.com', 'okta.com', 'auth0.com',
+    // Shipping
+    'fedex.com', 'ups.com', 'shipstation.com', 'shippo.com',
+    // Customer Feedback
+    'trustpilot.com', 'g2.com', 'canny.io', 'productboard.com',
+    // Education
+    'coursera.org', 'udemy.com', 'teachable.com', 'thinkific.com',
+    // Financial
+    'plaid.com', 'robinhood.com', 'coinbase.com', 'venmo.com',
+    'wealthfront.com', 'betterment.com', 'fidelity.com', 'schwab.com',
+    'vanguard.com', 'creditkarma.com', 'experian.com', 'equifax.com', 'transunion.com',
+    // Legal
+    'clio.com', 'mycase.com', 'smokeball.com', 'lawpay.com', 'practicepanther.com',
+    'rocketlawyer.com', 'legalzoom.com', 'docassemble.org',
+    // Accounting & Tax
+    'bench.co', 'pilot.com', 'taxact.com', 'hrblock.com', 'turbotax.com',
+    'nerdwallet.com', 'expensify.com', 'brex.com', 'ramp.com', 'divvy.com',
+    // Healthcare
+    'zocdoc.com', 'athenahealth.com', 'practicefusion.com', 'simplepractice.com',
+    'kareo.com', 'drchrono.com', 'healthgrades.com',
+    // Telecom & Utilities
+    'comcast.net', 'xfinity.com', 'att.com', 'verizon.com', 'tmobile.com',
+    // Miscellaneous SaaS
+    'zapier.com', 'ifttt.com', 'make.com',
+    'lattice.com', 'culture-amp.com', '15five.com',
+    'netlify.com', 'vercel.com', 'render.com'
 ];
 
 function getRootDomain(domain) {
