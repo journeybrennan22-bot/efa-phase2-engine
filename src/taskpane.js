@@ -1313,7 +1313,8 @@ const SECRECY_PHRASES = [
 
 const KNOWN_PLATFORM_DOMAINS = [
     'upwork.com', 'github.com', 'linkedin.com', 'atlassian.net', 'jira.com',
-    'slack.com', 'asana.com', 'trello.com', 'notion.so', 'figma.com', 'basecamp.com'
+    'slack.com', 'asana.com', 'trello.com', 'notion.so', 'figma.com', 'basecamp.com',
+    'wix.com', 'wix-forms.com', 'squarespace.com', 'typeform.com', 'jotform.com', 'godaddy.com'
 ];
 
 function isKnownPlatform(domain) {
