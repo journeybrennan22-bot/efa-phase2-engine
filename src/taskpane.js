@@ -1,26 +1,4 @@
 // Email Fraud Detector - Outlook Web Add-in
-// Version 4.3.0 - Global SaaS platform expansion: 328 new domains across 30+ countries (healthcare, real estate, education, salon, restaurant, sports platforms)
-// Version 4.3.0 - Global brand expansion: added 87 brands across Japan, UK, Australia, India, Canada, EU, South Korea, Brazil, Southeast Asia
-// Version 4.3.0 - Reply-to self suppression: no warning when reply-to is user's own email (zero attack value)
-// Version 4.3.0 - Keyword-only suppression on legitimate domains: banks say "account number", suppress when sender IS the brand and no other warnings fired
-// Version 4.3.0 - Calendar infrastructure on-behalf-of suppression: Google Calendar, Outlook Calendar etc. set Sender header from their own servers, not spoofing
-// Version 4.2.11 - Provider-flagged warning always fires and ranked #1 priority
-// Version 4.2.11 - Provider-flagged warning: removed auth suppression, promoted to top priority
-// Version 4.2.10 - Added gibberish sender username detection
-// Version 4.2.9 - Fixed contact-lookalike false positives on short domains (ratio-based threshold)
-// Version 4.2.8 - Added inheritance/lottery scam and advance fee scam keyword detection
-// Version 4.2.7 - Reply-To: parent-child subdomain suppression + GovDelivery brand impersonation exception (Viktor-tested)
-// Version 4.2.6 - Fixed brand detection false positives for person names (e.g., "Jacob Norton" != Norton antivirus)
-// Version 4.2.5 - Added enterprise email security gateway whitelist (Proofpoint, Cisco, Barracuda, Symantec, Mimecast)
-// Version 4.2.4 - Added confirmed secondary sending domains (Airbnb, Spotify, Meta/Facebook, Instagram)
-// Version 4.2.3 - Added ESP whitelist to reduce reply-to mismatch false positives
-// Version 4.2.2 - Fixed brand impersonation false positives (tiered body-only detection)
-// Version 4.2.1 - Added fake TLD detection (IANA validated)
-// Version 4.2.0 - Phase 2 Phishing Pattern Detection Engine (Silent Mode)
-// Version 4.1.5 - Added crypto wallet scam keyword detection
-// Version 4.1.4 - Added email authentication failure detection (DMARC/DKIM/compauth)
-// Version 4.1.3 - Added via routing detection for gibberish relay domains
-// Version 4.1.2 - Fixed SCE false positive (requires context words)
 
 // ============================================
 // CONFIGURATION
@@ -446,7 +424,7 @@ const BRAND_CONTENT_DETECTION = {
     },
     'disney plus': {
         keywords: ['disney+', 'disney plus', 'disneyplus'],
-        legitimateDomains: ['disneyplus.com', 'disney.com', 'go.com']
+        legitimateDomains: ['disneyplus.com', 'disney.com', 'go.com', 'd23.com']
     },
     'hulu': {
         keywords: ['hulu account', 'hulu subscription'],
@@ -1342,8 +1320,8 @@ const IMPERSONATION_TARGETS = {
     "battle.net": ["blizzard.com", "battle.net"],
     "spotify": ["spotify.com", "spotifymail.com"],
     "spotify support": ["spotify.com"],
-    "disney+": ["disneyplus.com", "disney.com"],
-    "disney plus": ["disneyplus.com", "disney.com"],
+    "disney+": ["disneyplus.com", "disney.com", "d23.com"],
+    "disney plus": ["disneyplus.com", "disney.com", "d23.com"],
     "hulu": ["hulu.com"],
     "hulu support": ["hulu.com"],
     "hbo max": ["max.com", "hbomax.com"],
@@ -4137,7 +4115,14 @@ function processEmail(emailData) {
                 const isCalendarInfra = CALENDAR_INFRASTRUCTURE_DOMAINS.some(cid =>
                     senderHeaderDomain === cid || senderHeaderDomain.endsWith('.' + cid)
                 );
-                if (!isCalendarInfra) {
+                // v4.3.1: Suppress when Sender header domain is a known ESP (Constant Contact, Mailchimp, etc.)
+                // ESPs send on behalf of businesses - the Sender header mismatch is expected infrastructure.
+                // The ESP is in the Sender header (senderHeaderDomain), not the From (senderDomain).
+                // Viktor: "ccsend.com sending on behalf of mortgageeducators.com is just Constant Contact doing its job."
+                const isKnownESP = KNOWN_ESP_DOMAINS.some(esp =>
+                    senderHeaderDomain === esp || senderHeaderDomain.endsWith('.' + esp)
+                );
+                if (!isCalendarInfra && !isKnownESP) {
                     warnings.push({
                         type: 'on-behalf-of',
                         severity: 'medium',
