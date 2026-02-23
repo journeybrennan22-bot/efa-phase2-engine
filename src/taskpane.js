@@ -2129,7 +2129,18 @@ function detectViaRouting(headers, senderDomain) {
         
         const relayDomain = domainMatch[1].toLowerCase();
         
-        if (senderDomain && relayDomain.includes(senderDomain.split('.')[0])) continue;
+        // v4.3.0: Improved sender-brand matching - extract registrable domain, not first subdomain
+        if (senderDomain) {
+            const senderParts = senderDomain.split('.');
+            const ccSLDs = ['co', 'com', 'org', 'net', 'ac', 'gov', 'edu'];
+            let senderSLD;
+            if (senderParts.length >= 3 && ccSLDs.includes(senderParts[senderParts.length - 2])) {
+                senderSLD = senderParts[senderParts.length - 3];
+            } else if (senderParts.length >= 2) {
+                senderSLD = senderParts[senderParts.length - 2];
+            }
+            if (senderSLD && senderSLD.length >= 4 && relayDomain.includes(senderSLD)) continue;
+        }
         
         const legitServices = ['google', 'gmail', 'googlemail', 'microsoft', 'outlook', 'office365', 
                               'sendgrid', 'mailchimp', 'mandrillapp', 'amazonses', 'mailgun', 'postmark', 'sparkpost',
@@ -2138,10 +2149,32 @@ function detectViaRouting(headers, senderDomain) {
                               'convertkit', 'getresponse', 'aweber', 'omnisend', 'drip', 'govdelivery',
                               'zendesk', 'intercom', 'freshdesk', 'helpscout',
                               'zoho', 'yahoo', 'aol', 'icloud', 'apple', 'protonmail',
-                              'ppops', 'ppe-hosted', 'iphmx', 'barracudanetworks', 'messagelabs', 'mimecast'];
+                              'ppops', 'ppe-hosted', 'pphosted', 'iphmx', 'barracudanetworks', 'messagelabs', 'mimecast',
+                              'serverpod', 'emailsrvr', 'rackspace', 'fireeyecloud', 'trellix'];
         if (legitServices.some(s => relayDomain.includes(s))) continue;
         
         const domainParts = relayDomain.split('.');
+        
+        // v4.3.0: Check if relay's root domain (SLD) is a recognizable brand name
+        // Server IDs as subdomains (mx0b-00191d01, p1-024085, outbound-216-24-61-192) are normal
+        // for legitimate companies - only flag if the root domain ITSELF looks gibberish
+        const relayCCSLDs = ['co', 'com', 'org', 'net', 'ac', 'gov', 'edu'];
+        let relaySLDIndex;
+        if (domainParts.length >= 3 && relayCCSLDs.includes(domainParts[domainParts.length - 2])) {
+            relaySLDIndex = domainParts.length - 3;
+        } else {
+            relaySLDIndex = domainParts.length - 2;
+        }
+        if (relaySLDIndex >= 0) {
+            const relaySLD = domainParts[relaySLDIndex];
+            if (relaySLD.length >= 4) {
+                const sldLetters = (relaySLD.match(/[a-z]/gi) || []).length;
+                const sldDigits = (relaySLD.match(/\d/g) || []).length;
+                const sldVowels = (relaySLD.match(/[aeiou]/gi) || []).length;
+                // If root domain is all letters and pronounceable, it's a real brand
+                if (sldLetters >= 4 && sldDigits === 0 && sldVowels / sldLetters >= 0.15) continue;
+            }
+        }
         const mainPart = domainParts[0];
         
         if (mainPart.length < 8) continue;
