@@ -3730,6 +3730,41 @@ function detectRecipientSpoofing(displayName, senderEmail) {
     return null;
 }
 
+// Recipient-domain impersonation: display name claims to be the recipient's own organization.
+// Example: Display name "Purelogicescrow" from cosmetokyo.jp sent to info@purelogicescrow.com.
+// The scammer is pretending to BE your company's email system.
+// Critical severity - very high confidence, very low false positive risk.
+function detectRecipientDomainImpersonation(displayName, senderDomain) {
+    if (!displayName || !senderDomain || !currentUserEmail) return null;
+    
+    const recipientDomain = currentUserEmail.toLowerCase().split('@')[1];
+    if (!recipientDomain) return null;
+    
+    // If sender IS the recipient's domain, this is internal mail - skip
+    if (senderDomain.toLowerCase() === recipientDomain) return null;
+    if (senderDomain.toLowerCase().endsWith('.' + recipientDomain)) return null;
+    
+    // Extract registrable name from recipient domain (e.g., "purelogicescrow" from purelogicescrow.com)
+    const recipientName = getRegistrableDomainName(recipientDomain);
+    if (!recipientName || recipientName.length < 5) return null; // Too short = too many false positives
+    
+    // Check if display name contains the recipient's domain name
+    const displayLower = displayName.toLowerCase().replace(/[\.\-_\s]/g, '');
+    
+    if (displayLower.includes(recipientName)) {
+        // Confirmed: display name impersonates the recipient's organization
+        console.log('RECIPIENT DOMAIN IMPERSONATION - Display "' + displayName + '" contains "' + recipientName + '" but sent from ' + senderDomain);
+        return {
+            displayName: displayName,
+            senderDomain: senderDomain,
+            recipientDomain: recipientDomain,
+            recipientOrgName: recipientName
+        };
+    }
+    
+    return null;
+}
+
 function detectPhishingUrgency(bodyText, subject) {
     if (!bodyText && !subject) return null;
     
@@ -4471,6 +4506,134 @@ function detectDisplayNameImpersonation(displayName, senderDomain) {
     return null;
 }
 
+// Path 2: Display-name-vs-domain detection
+// Catches brand impersonation for brands NOT in our detection lists.
+// Logic: If display name looks organizational (not a personal name) and
+// zero words from the display name appear in the sender domain, flag it.
+// Viktor approved: buildable as supporting signal. Catches every brand
+// the scammer puts in the display name, without needing a predefined list.
+function detectDisplayNameDomainMismatch(displayName, senderDomain) {
+    if (!displayName || !senderDomain) return null;
+    
+    // Skip trusted, platform, and ESP domains
+    if (isTrustedDomain(senderDomain)) return null;
+    if (isKnownPlatform(senderDomain)) return null;
+    const domainLower = senderDomain.toLowerCase();
+    if (KNOWN_ESP_DOMAINS.some(esp => domainLower === esp || domainLower.endsWith('.' + esp))) return null;
+    
+    // Skip if sender domain is a known brand's legitimate domain
+    for (const [, config] of Object.entries(BRAND_CONTENT_DETECTION)) {
+        if (config.legitimateDomains.some(legit => {
+            if (legit.startsWith('.')) return domainLower.endsWith(legit);
+            return domainLower === legit || domainLower.endsWith('.' + legit);
+        })) return null;
+    }
+    for (const [, legDomains] of Object.entries(IMPERSONATION_TARGETS)) {
+        if (Array.isArray(legDomains) && legDomains.some(legit => {
+            if (legit.startsWith('.')) return domainLower.endsWith(legit);
+            return domainLower === legit || domainLower.endsWith('.' + legit);
+        })) return null;
+    }
+    
+    // Skip free email providers (personal use, not organizational)
+    const freeProviders = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'aol.com',
+        'icloud.com', 'mail.com', 'protonmail.com', 'zoho.com', 'yandex.com',
+        'live.com', 'msn.com', 'me.com', 'inbox.com', 'gmx.com', 'fastmail.com'];
+    if (freeProviders.includes(domainLower)) return null;
+    
+    // Skip if display name contains an email address (handled by other detections)
+    if (/[\w.-]+@[\w.-]+\.\w+/.test(displayName)) return null;
+    
+    // Extract words from display name
+    const cleanedName = displayName.replace(/[^\w\s]/g, ' ');
+    const words = cleanedName.split(/\s+/).filter(w => w.length > 0);
+    if (words.length < 2) return null; // Single word: too ambiguous
+    
+    // Filler words to ignore
+    const fillerWords = new Set(['the', 'to', 'from', 'for', 'a', 'an', 'at', 'in', 'of',
+        'on', 'by', 'and', 'or', 'is', 'it', 'be', 'as', 'do', 'no', 'so',
+        'your', 'you', 'our', 'my', 'we', 'us', 'me', 'he', 'she',
+        'this', 'that', 'with', 'has', 'have', 'will', 'was', 'are', 'been',
+        'not', 'but', 'all', 'can', 'had', 'her', 'his', 'one', 'new',
+        'now', 'get', 'may', 'who', 'did', 'its', 'let', 'say',
+        'there', 'here', 'where', 'when', 'how', 'what', 'why',
+        'greetings', 'hello', 'dear', 'welcome', 'welcomes', 'hi']);
+    
+    // Corporate/generic keywords: indicate organizational identity AND commonly appear
+    // in scam domains (so they should NOT count as domain overlap evidence).
+    const corporateKeywords = new Set(['inc', 'corp', 'corporation', 'llc', 'ltd', 'limited',
+        'team', 'support', 'official', 'service', 'services', 'customer',
+        'rewards', 'notification', 'notifications', 'alert', 'alerts',
+        'billing', 'account', 'department', 'division', 'group', 'center', 'centre',
+        'administration', 'office', 'helpdesk', 'security', 'verification',
+        'delivery', 'shipping', 'logistics', 'express',
+        'membership', 'loyalty', 'program', 'club',
+        'foundation', 'institute', 'association', 'society',
+        'bank', 'insurance', 'financial', 'credit', 'solutions',
+        'update', 'updates', 'confirm', 'confirmation', 'notice',
+        'deals', 'promo', 'offers', 'free', 'gift', 'gifts',
+        'online', 'digital', 'portal', 'access', 'login', 'signin',
+        'track', 'tracking', 'verify', 'secure', 'info', 'global',
+        'direct', 'premium', 'plus', 'pro', 'enterprise', 'business']);
+    
+    // Get significant words (non-filler, 3+ chars)
+    const significantWords = words.filter(w => {
+        const lower = w.toLowerCase();
+        if (fillerWords.has(lower)) return false;
+        if (w.length < 3) return false;
+        return true;
+    });
+    
+    if (significantWords.length === 0) return null;
+    
+    // Check if display name looks like a personal name (2-3 title-case words, no corporate keywords)
+    // "John Smith" → personal name. "Michael James Chen" → personal name.
+    // "Greetings To Marriot" → NOT a personal name (filler words present).
+    const hasCorporateKeyword = words.some(w => corporateKeywords.has(w.toLowerCase()));
+    
+    if (!hasCorporateKeyword && words.length <= 3 && significantWords.length <= 3) {
+        // Original display name is short (2-3 words) and all significant words are title-case?
+        const allTitleCase = significantWords.every(w => /^[A-Z][a-z]+$/.test(w));
+        // Also check: did we filter out filler words? If so, original was NOT "First Last" pattern.
+        const fillerCount = words.length - significantWords.length;
+        if (allTitleCase && fillerCount === 0) return null; // "John Smith", "Sarah Jane Wilson"
+    }
+    
+    // Extract registrable domain name for comparison
+    const registrableName = getRegistrableDomainName(domainLower);
+    
+    // Check word overlap: does ANY brand-specific word appear in the domain?
+    // Corporate keywords (rewards, account, services, etc.) are excluded from overlap check
+    // because scammers buy domains containing these generic words.
+    let hasOverlap = false;
+    for (const word of significantWords) {
+        const wordLower = word.toLowerCase();
+        if (wordLower.length < 4) continue; // Skip very short words for domain matching
+        if (corporateKeywords.has(wordLower)) continue; // Skip generic corporate words
+        
+        // Check if word appears as substring of registrable domain name
+        if (registrableName.includes(wordLower)) {
+            hasOverlap = true;
+            break;
+        }
+        // Also check full domain (catches subdomains like e.marriott.com)
+        if (domainLower.includes(wordLower)) {
+            hasOverlap = true;
+            break;
+        }
+    }
+    
+    if (hasOverlap) return null; // Domain has relationship to display name
+    
+    // Zero overlap: display name claims organizational identity but domain is unrelated
+    console.log('PATH 2 MATCH - Display name "' + displayName + '" has zero word overlap with domain ' + senderDomain);
+    return {
+        displayName: displayName,
+        senderDomain: senderDomain,
+        significantWords: significantWords.slice(0, 4).map(w => w.toLowerCase())
+    };
+}
+
 function detectHomoglyphs(email) {
     let found = [];
     for (const [homoglyph, latin] of Object.entries(HOMOGLYPHS)) {
@@ -5087,6 +5250,22 @@ function processEmail(emailData) {
         });
     }
     
+    // Recipient-domain impersonation: display name claims to be recipient's organization
+    const recipientDomainSpoof = detectRecipientDomainImpersonation(displayName, senderDomain);
+    if (recipientDomainSpoof) {
+        warnings.push({
+            type: 'recipient-domain-impersonation',
+            severity: 'critical',
+            title: 'Impersonating Your Organization',
+            description: `This sender is pretending to be ${recipientDomainSpoof.recipientOrgName} but is actually sending from ${recipientDomainSpoof.senderDomain}. This is a credential harvesting attack designed to steal your login credentials.`,
+            senderEmail: senderEmail,
+            senderDomain: recipientDomainSpoof.senderDomain,
+            recipientDomain: recipientDomainSpoof.recipientDomain,
+            recipientOrgName: recipientDomainSpoof.recipientOrgName,
+            displayName: recipientDomainSpoof.displayName
+        });
+    }
+    
     const phishingUrgency = detectPhishingUrgency(emailData.body, emailData.subject);
     if (phishingUrgency) {
         warnings.push({
@@ -5342,8 +5521,24 @@ function processEmail(emailData) {
     }
     
     const hasStrongerIdentityWarning = warnings.some(w => 
-        ['brand-impersonation', 'recipient-spoof', 'org-impersonation', 'impersonation'].includes(w.type)
+        ['brand-impersonation', 'recipient-spoof', 'recipient-domain-impersonation', 'org-impersonation', 'impersonation'].includes(w.type)
     );
+    
+    // Path 2: Display-name-vs-domain mismatch (safety net for unlisted brands)
+    const displayDomainMismatch = hasStrongerIdentityWarning ? null : detectDisplayNameDomainMismatch(displayName, senderDomain);
+    if (displayDomainMismatch) {
+        warnings.push({
+            type: 'display-domain-mismatch',
+            severity: 'medium',
+            title: 'Sender Identity Mismatch',
+            description: `The sender\'s display name "${displayDomainMismatch.displayName}" appears to represent an organization, but the sending domain ${displayDomainMismatch.senderDomain} has no connection to that name. Legitimate organizations send from domains that match their name.`,
+            senderEmail: senderEmail,
+            senderDomain: displayDomainMismatch.senderDomain,
+            displayName: displayDomainMismatch.displayName,
+            significantWords: displayDomainMismatch.significantWords
+        });
+    }
+    
     const displaySuspicion = hasStrongerIdentityWarning ? null : detectSuspiciousDisplayName(displayName, senderDomain);
     if (displaySuspicion) {
         warnings.push({
@@ -5544,20 +5739,22 @@ function displayResults(warnings) {
             'fake-tld': 6,
             'impersonation': 7,
             'recipient-spoof': 8,
-            'brand-impersonation': 9,
-            'org-impersonation': 10,
-            'lookalike-domain': 11,
-            'homoglyph': 12,
-            'free-hosting-sender': 13,
-            'suspicious-domain': 14,
-            'via-routing': 15,
-            'gibberish-domain': 16,
-            'gibberish-username': 17,
-            'display-name-suspicion': 18,
-            'international-sender': 19,
-            'mass-recipients': 20,
-            'wire-fraud': 21,
-            'phishing-urgency': 22
+            'recipient-domain-impersonation': 9,
+            'brand-impersonation': 10,
+            'org-impersonation': 11,
+            'display-domain-mismatch': 12,
+            'lookalike-domain': 13,
+            'homoglyph': 14,
+            'free-hosting-sender': 15,
+            'suspicious-domain': 16,
+            'via-routing': 17,
+            'gibberish-domain': 18,
+            'gibberish-username': 19,
+            'display-name-suspicion': 20,
+            'international-sender': 21,
+            'mass-recipients': 22,
+            'wire-fraud': 23,
+            'phishing-urgency': 24
         };
         warnings.sort((a, b) => (WARNING_PRIORITY[a.type] || 99) - (WARNING_PRIORITY[b.type] || 99));
         
@@ -5631,6 +5828,22 @@ function displayResults(warnings) {
                         </div>
                     </div>
                 `;
+            } else if (w.type === 'display-domain-mismatch') {
+                emailHtml = `
+                    <div class="warning-emails">
+                        <div class="warning-email-row">
+                            <span class="warning-email-label">Display name:</span>
+                            <span class="warning-email-value known">${w.displayName}</span>
+                        </div>
+                        <div class="warning-email-row">
+                            <span class="warning-email-label">Sender domain:</span>
+                            <span class="warning-email-value suspicious">${wrapDomain(w.senderDomain)}</span>
+                        </div>
+                        <div class="warning-email-row">
+                            <span class="warning-email-label" style="font-size: 11px; margin-top: 4px;">Legitimate organizations send from domains that match their name. This domain has no connection to the sender's claimed identity.</span>
+                        </div>
+                    </div>
+                `;
             } else if (w.type === 'international-sender') {
                 if (w.genericUse && w.genericMessage) {
                     emailHtml = `
@@ -5676,6 +5889,26 @@ function displayResults(warnings) {
                         <div class="warning-email-row">
                             <span class="warning-email-label">But actually from:</span>
                             <span class="warning-email-value suspicious">${formatEmailForDisplay(w.senderEmail)}</span>
+                        </div>
+                    </div>
+                `;
+            } else if (w.type === 'recipient-domain-impersonation') {
+                emailHtml = `
+                    <div class="warning-emails">
+                        <div class="warning-email-row">
+                            <span class="warning-email-label">Claims to be:</span>
+                            <span class="warning-email-value known">${w.displayName}</span>
+                        </div>
+                        <div class="warning-email-row">
+                            <span class="warning-email-label">Your organization:</span>
+                            <span class="warning-email-value known">${w.recipientDomain}</span>
+                        </div>
+                        <div class="warning-email-row">
+                            <span class="warning-email-label">Actually from:</span>
+                            <span class="warning-email-value suspicious">${wrapDomain(w.senderDomain)}</span>
+                        </div>
+                        <div class="warning-email-row">
+                            <span class="warning-email-label" style="font-size: 11px; margin-top: 4px;">Do NOT click any links. This email is impersonating your organization to steal your login credentials.</span>
                         </div>
                     </div>
                 `;
