@@ -5356,17 +5356,48 @@ function processEmail(emailData) {
     // we make sure the user sees it. EFA is just the messenger.
     // v4.2.11: Always show this warning regardless of other auth detections.
     // Microsoft's determination and EFA's detection are independent signals - both matter.
+    let providerFlagged = false;
+    
+    // Check 1: Transport header compauth=fail
     if (emailData.headers) {
         const hasCompAuthFail = /compauth\s*=\s*fail/i.test(emailData.headers);
         if (hasCompAuthFail) {
-            warnings.push({
-                type: 'provider-flagged',
-                severity: 'critical',
-                title: 'Flagged by Outlook',
-                description: 'Outlook has flagged this email as suspicious. If this email contains links or buttons, proceed with extreme caution.',
-                senderEmail: senderEmail
-            });
+            providerFlagged = true;
         }
+    }
+    
+    // Check 2: Microsoft safety tip banners injected into email body
+    // Microsoft injects HTML banners with specific warning text for phishing, spam, etc.
+    // These are visible to users but EFA should amplify them so they're not ignored.
+    if (!providerFlagged && emailData.body) {
+        const bodyLower = emailData.body.toLowerCase();
+        const microsoftSafetyPatterns = [
+            'potential phishing warning',
+            'this email looks like it could trick you',
+            'this message was identified as phishing',
+            'this sender failed our fraud checks',
+            'this message looks suspicious',
+            'we could not verify the identity of the sender',
+            'this message was identified as junk',
+            'this email was detected as spam'
+        ];
+        for (const pattern of microsoftSafetyPatterns) {
+            if (bodyLower.includes(pattern)) {
+                providerFlagged = true;
+                console.log('PROVIDER FLAGGED (body banner) - Pattern: "' + pattern + '"');
+                break;
+            }
+        }
+    }
+    
+    if (providerFlagged) {
+        warnings.push({
+            type: 'provider-flagged',
+            severity: 'critical',
+            title: 'Flagged by Outlook',
+            description: 'Outlook has flagged this email as suspicious. If this email contains links or buttons, proceed with extreme caution.',
+            senderEmail: senderEmail
+        });
     }
 
     // ============================================
