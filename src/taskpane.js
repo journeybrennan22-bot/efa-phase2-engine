@@ -6,7 +6,7 @@
 const CONFIG = {
     clientId: '622f0452-d622-45d1-aab3-3a2026389dd3',
     redirectUri: 'https://journeybrennan22-bot.github.io/outlook-fraud-detector/src/taskpane.html',
-    scopes: ['User.Read', 'Contacts.Read'],
+    scopes: ['User.Read', 'Contacts.Read', 'Mail.ReadBasic'],
     trustedDomains: []
 };
 
@@ -1686,7 +1686,2762 @@ const BRAND_CONTENT_DETECTION = {
     'hopper': { keywords: ['hopper'], legitimateDomains: ['hopper.com'] },
     'kayak': { keywords: ['kayak'], legitimateDomains: ['kayak.com'] },
     'travelocity': { keywords: ['travelocity'], legitimateDomains: ['travelocity.com'] },
-    'orbitz': { keywords: ['orbitz'], legitimateDomains: ['orbitz.com'] }
+    'orbitz': { keywords: ['orbitz'], legitimateDomains: ['orbitz.com'] },
+    // ============================================
+    // CLOUDFLARE TOP 50 GAP FILL
+    // ============================================
+    'caixa': {
+        keywords: ['caixa economica', 'caixa federal', 'caixa conta', 'caixa poupanca'],
+        legitimateDomains: ['caixa.gov.br', 'caixa.com.br']
+    },
+    'bank millennium': {
+        keywords: ['bank millennium', 'millennium bank', 'millenet'],
+        legitimateDomains: ['bankmillennium.pl', 'millenniumbm.pl']
+    },
+    'inpost': {
+        keywords: ['inpost', 'paczkomat', 'inpost paczka'],
+        legitimateDomains: ['inpost.pl', 'inpost.eu', 'inpost.co.uk']
+    },
+    'dpd': {
+        keywords: ['dpd parcel', 'dpd delivery', 'dpd package', 'dpd shipment'],
+        legitimateDomains: ['dpd.com', 'dpd.de', 'dpd.co.uk', 'dpd.fr', 'dpd.com.pl']
+    },
+    'lexisnexis': {
+        keywords: ['lexisnexis', 'lexis nexis', 'lexis advance'],
+        legitimateDomains: ['lexisnexis.com', 'lexis.com']
+    },
+    'nicos': {
+        keywords: ['nicos card', 'nicos credit', 'mitsubishi ufj nicos'],
+        legitimateDomains: ['nicos.co.jp', 'cr.mufg.jp']
+    },
+    'banco de la nación argentina': {
+        keywords: ['banco de la nación argentina'],
+        legitimateDomains: ['bna.com.ar']
+    },
+    'afip': {
+        keywords: ['afip'],
+        legitimateDomains: ['afip.gob.ar']
+    },
+    'university of buenos aires': {
+        keywords: ['university of buenos aires', 'uba'],
+        legitimateDomains: ['uba.ar']
+    },
+    'bank australia': {
+        keywords: ['bank australia'],
+        legitimateDomains: ['bankaust.com.au']
+    },
+    'ing australia': {
+        keywords: ['ing australia'],
+        legitimateDomains: ['ing.com.au']
+    },
+    'macquarie bank': {
+        keywords: ['macquarie bank'],
+        legitimateDomains: ['macquarie.com.au']
+    },
+    'australian federal police': {
+        keywords: ['australian federal police'],
+        legitimateDomains: ['afp.gov.au']
+    },
+    'department of home affairs': {
+        keywords: ['department of home affairs'],
+        legitimateDomains: ['homeaffairs.gov.au']
+    },
+    'australian national university': {
+        keywords: ['australian national university', 'anu'],
+        legitimateDomains: ['anu.edu.au']
+    },
+    'monash university': {
+        keywords: ['monash university'],
+        legitimateDomains: ['monash.edu']
+    },
+    'university of melbourne': {
+        keywords: ['university of melbourne'],
+        legitimateDomains: ['unimelb.edu.au']
+    },
+    'university of new south wales': {
+        keywords: ['university of new south wales', 'unsw'],
+        legitimateDomains: ['unsw.edu.au']
+    },
+    'university of queensland': {
+        keywords: ['university of queensland'],
+        legitimateDomains: ['uq.edu.au']
+    },
+    'university of sydney': {
+        keywords: ['university of sydney'],
+        legitimateDomains: ['sydney.edu.au']
+    },
+    'agl': {
+        keywords: ['agl'],
+        legitimateDomains: ['agl.com.au']
+    },
+    'energyaustralia': {
+        keywords: ['energyaustralia'],
+        legitimateDomains: ['energyaustralia.com.au']
+    },
+    'origin energy': {
+        keywords: ['origin energy'],
+        legitimateDomains: ['originenergy.com.au']
+    },
+    'erste bank': {
+        keywords: ['erste bank'],
+        legitimateDomains: ['erstebank.at']
+    },
+    'raiffeisen bank international': {
+        keywords: ['raiffeisen bank international'],
+        legitimateDomains: ['rbinternational.com']
+    },
+    'unicredit bank austria': {
+        keywords: ['unicredit bank austria'],
+        legitimateDomains: ['bankaustria.at']
+    },
+    'finanzonline': {
+        keywords: ['finanzonline'],
+        legitimateDomains: ['finanzonline.bmf.gv.at']
+    },
+    'oesterreich.gv.at': {
+        keywords: ['oesterreich.gv.at'],
+        legitimateDomains: ['oesterreich.gv.at']
+    },
+    'a1 telekom austria': {
+        keywords: ['a1 telekom austria'],
+        legitimateDomains: ['a1.net']
+    },
+    'tu wien': {
+        keywords: ['tu wien'],
+        legitimateDomains: ['tuwien.at']
+    },
+    'university of vienna': {
+        keywords: ['university of vienna'],
+        legitimateDomains: ['univie.ac.at']
+    },
+    'bnp paribas fortis': {
+        keywords: ['bnp paribas fortis'],
+        legitimateDomains: ['bnpparibasfortis.be']
+    },
+    'belfius': {
+        keywords: ['belfius'],
+        legitimateDomains: ['belfius.be']
+    },
+    'ing belgium': {
+        keywords: ['ing belgium'],
+        legitimateDomains: ['ing.be']
+    },
+    'kbc': {
+        keywords: ['kbc'],
+        legitimateDomains: ['kbc.com']
+    },
+    'belgian federal police': {
+        keywords: ['belgian federal police'],
+        legitimateDomains: ['police.be']
+    },
+    'fps finance': {
+        keywords: ['fps finance', 'spf finances'],
+        legitimateDomains: ['finance.belgium.be']
+    },
+    'orange belgium': {
+        keywords: ['orange belgium'],
+        legitimateDomains: ['orange.be']
+    },
+    'proximus': {
+        keywords: ['proximus'],
+        legitimateDomains: ['proximus.be']
+    },
+    'telenet': {
+        keywords: ['telenet'],
+        legitimateDomains: ['telenet.be']
+    },
+    'ghent university': {
+        keywords: ['ghent university'],
+        legitimateDomains: ['ugent.be']
+    },
+    'ku leuven': {
+        keywords: ['ku leuven'],
+        legitimateDomains: ['kuleuven.be']
+    },
+    'caixa econômica federal': {
+        keywords: ['caixa econômica federal'],
+        legitimateDomains: ['caixa.gov.br']
+    },
+    'santander brasil': {
+        keywords: ['santander brasil'],
+        legitimateDomains: ['santander.com.br']
+    },
+    'detran': {
+        keywords: ['detran'],
+        legitimateDomains: ['gov.br']
+    },
+    'detran-sp': {
+        keywords: ['detran-sp'],
+        legitimateDomains: ['detran.sp.gov.br']
+    },
+    'inss': {
+        keywords: ['inss'],
+        legitimateDomains: ['gov.br/inss']
+    },
+    'polícia federal': {
+        keywords: ['polícia federal'],
+        legitimateDomains: ['gov.br/pf']
+    },
+    'receita federal do brasil': {
+        keywords: ['receita federal do brasil'],
+        legitimateDomains: ['gov.br/receitafederal']
+    },
+    'gov.br': {
+        keywords: ['gov.br'],
+        legitimateDomains: ['gov.br']
+    },
+    'university of sao paulo': {
+        keywords: ['university of sao paulo', 'usp'],
+        legitimateDomains: ['usp.br']
+    },
+    'eletrobras': {
+        keywords: ['eletrobras'],
+        legitimateDomains: ['eletrobras.com']
+    },
+    'enel brasil': {
+        keywords: ['enel brasil'],
+        legitimateDomains: ['enel.com.br']
+    },
+    'itaipu binacional': {
+        keywords: ['itaipu binacional'],
+        legitimateDomains: ['itaipu.gov.br']
+    },
+    'sabesp': {
+        keywords: ['sabesp'],
+        legitimateDomains: ['sabesp.com.br']
+    },
+    'eq bank': {
+        keywords: ['eq bank'],
+        legitimateDomains: ['eqbank.ca']
+    },
+    'national bank of canada': {
+        keywords: ['national bank of canada'],
+        legitimateDomains: ['nbc.ca']
+    },
+    'tangerine': {
+        keywords: ['tangerine'],
+        legitimateDomains: ['tangerine.ca']
+    },
+    'atb financial': {
+        keywords: ['atb financial'],
+        legitimateDomains: ['atb.com']
+    },
+    'affinity credit union': {
+        keywords: ['affinity credit union'],
+        legitimateDomains: ['affinitycu.ca']
+    },
+    'coast capital savings': {
+        keywords: ['coast capital savings'],
+        legitimateDomains: ['coastcapitalsavings.com']
+    },
+    'desjardins': {
+        keywords: ['desjardins'],
+        legitimateDomains: ['desjardins.com']
+    },
+    'first west credit union': {
+        keywords: ['first west credit union'],
+        legitimateDomains: ['firstwestcu.ca']
+    },
+    'meridian credit union': {
+        keywords: ['meridian credit union'],
+        legitimateDomains: ['meridiancu.ca']
+    },
+    'servus credit union': {
+        keywords: ['servus credit union'],
+        legitimateDomains: ['servus.ca']
+    },
+    'vancity': {
+        keywords: ['vancity'],
+        legitimateDomains: ['vancity.com']
+    },
+    'canada revenue agency': {
+        keywords: ['canada revenue agency', 'cra'],
+        legitimateDomains: ['cra-arc.gc.ca']
+    },
+    'revenu québec': {
+        keywords: ['revenu québec'],
+        legitimateDomains: ['revenuquebec.ca']
+    },
+    'serviceontario': {
+        keywords: ['serviceontario'],
+        legitimateDomains: ['ontario.ca']
+    },
+    'bell': {
+        keywords: ['bell'],
+        legitimateDomains: ['bell.ca']
+    },
+    'mcgill university': {
+        keywords: ['mcgill university'],
+        legitimateDomains: ['mcgill.ca']
+    },
+    'university of alberta': {
+        keywords: ['university of alberta'],
+        legitimateDomains: ['ualberta.ca']
+    },
+    'university of british columbia': {
+        keywords: ['university of british columbia'],
+        legitimateDomains: ['ubc.ca']
+    },
+    'university of toronto': {
+        keywords: ['university of toronto'],
+        legitimateDomains: ['utoronto.ca']
+    },
+    'university of waterloo': {
+        keywords: ['university of waterloo'],
+        legitimateDomains: ['uwaterloo.ca']
+    },
+    'bc hydro': {
+        keywords: ['bc hydro'],
+        legitimateDomains: ['bchydro.com']
+    },
+    'enbridge gas': {
+        keywords: ['enbridge gas'],
+        legitimateDomains: ['enbridgegas.com']
+    },
+    'hydro-québec': {
+        keywords: ['hydro-québec'],
+        legitimateDomains: ['hydroquebec.com']
+    },
+    'ontario power generation': {
+        keywords: ['ontario power generation'],
+        legitimateDomains: ['opg.com']
+    },
+    'toronto hydro': {
+        keywords: ['toronto hydro'],
+        legitimateDomains: ['torontohydro.com']
+    },
+    'banco de chile': {
+        keywords: ['banco de chile'],
+        legitimateDomains: ['bancochile.cl']
+    },
+    'sii': {
+        keywords: ['sii'],
+        legitimateDomains: ['sii.cl']
+    },
+    'universidad de chile': {
+        keywords: ['universidad de chile'],
+        legitimateDomains: ['uchile.cl']
+    },
+    'agricultural bank of china': {
+        keywords: ['agricultural bank of china', 'abc'],
+        legitimateDomains: ['abchina.com']
+    },
+    'bank of china': {
+        keywords: ['bank of china'],
+        legitimateDomains: ['boc.cn']
+    },
+    'china construction bank': {
+        keywords: ['china construction bank', 'ccb'],
+        legitimateDomains: ['ccb.com']
+    },
+    'china merchants bank': {
+        keywords: ['china merchants bank'],
+        legitimateDomains: ['cmbchina.com']
+    },
+    'industrial and commercial bank of china': {
+        keywords: ['industrial and commercial bank of china', 'icbc'],
+        legitimateDomains: ['icbc.com.cn']
+    },
+    'webank': {
+        keywords: ['webank'],
+        legitimateDomains: ['webank.com']
+    },
+    'ministry of public security': {
+        keywords: ['ministry of public security'],
+        legitimateDomains: ['mps.gov.cn']
+    },
+    'national immigration administration': {
+        keywords: ['national immigration administration'],
+        legitimateDomains: ['nia.gov.cn']
+    },
+    'state taxation administration': {
+        keywords: ['state taxation administration'],
+        legitimateDomains: ['chinatax.gov.cn']
+    },
+    'fudan university': {
+        keywords: ['fudan university'],
+        legitimateDomains: ['fudan.edu.cn']
+    },
+    'hong kong university of science and technology': {
+        keywords: ['hong kong university of science and technology', 'hkust'],
+        legitimateDomains: ['hkust.edu.hk']
+    },
+    'peking university': {
+        keywords: ['peking university'],
+        legitimateDomains: ['pku.edu.cn']
+    },
+    'shanghai jiao tong university': {
+        keywords: ['shanghai jiao tong university'],
+        legitimateDomains: ['sjtu.edu.cn']
+    },
+    'tsinghua university': {
+        keywords: ['tsinghua university'],
+        legitimateDomains: ['tsinghua.edu.cn']
+    },
+    'university of hong kong': {
+        keywords: ['university of hong kong'],
+        legitimateDomains: ['hku.hk']
+    },
+    'china southern power grid': {
+        keywords: ['china southern power grid'],
+        legitimateDomains: ['csg.cn']
+    },
+    'state grid corporation of china': {
+        keywords: ['state grid corporation of china'],
+        legitimateDomains: ['sgcc.com.cn']
+    },
+    'banco de la república': {
+        keywords: ['banco de la república', 'colombia'],
+        legitimateDomains: ['banrep.gov.co']
+    },
+    'dian': {
+        keywords: ['dian'],
+        legitimateDomains: ['dian.gov.co']
+    },
+    'national university of colombia': {
+        keywords: ['national university of colombia'],
+        legitimateDomains: ['unal.edu.co']
+    },
+    'česká spořitelna': {
+        keywords: ['česká spořitelna'],
+        legitimateDomains: ['csas.cz']
+    },
+    'finanční správa': {
+        keywords: ['finanční správa'],
+        legitimateDomains: ['financnisprava.cz']
+    },
+    'danske bank': {
+        keywords: ['danske bank'],
+        legitimateDomains: ['danskebank.com']
+    },
+    'nykredit': {
+        keywords: ['nykredit'],
+        legitimateDomains: ['nykredit.dk']
+    },
+    'postnord denmark': {
+        keywords: ['postnord denmark'],
+        legitimateDomains: ['postnord.dk']
+    },
+    'borger.dk': {
+        keywords: ['borger.dk'],
+        legitimateDomains: ['borger.dk']
+    },
+    'danish police': {
+        keywords: ['danish police'],
+        legitimateDomains: ['politi.dk']
+    },
+    'skat': {
+        keywords: ['skat'],
+        legitimateDomains: ['skat.dk']
+    },
+    'technical university of denmark': {
+        keywords: ['technical university of denmark', 'dtu'],
+        legitimateDomains: ['dtu.dk']
+    },
+    'university of copenhagen': {
+        keywords: ['university of copenhagen'],
+        legitimateDomains: ['ku.dk']
+    },
+    'national bank of egypt': {
+        keywords: ['national bank of egypt'],
+        legitimateDomains: ['nbe.com.eg']
+    },
+    'egyptian national post organization': {
+        keywords: ['egyptian national post organization'],
+        legitimateDomains: ['egyptpost.org']
+    },
+    'egypt passport/immigration': {
+        keywords: ['egypt passport/immigration', 'moi portal'],
+        legitimateDomains: ['moi.gov.eg']
+    },
+    'egyptian tax authority': {
+        keywords: ['egyptian tax authority'],
+        legitimateDomains: ['eta.gov.eg']
+    },
+    'aalto university': {
+        keywords: ['aalto university'],
+        legitimateDomains: ['aalto.fi']
+    },
+    'university of helsinki': {
+        keywords: ['university of helsinki'],
+        legitimateDomains: ['helsinki.fi']
+    },
+    'boursorama banque': {
+        keywords: ['boursorama banque'],
+        legitimateDomains: ['boursorama.com']
+    },
+    'crédit agricole': {
+        keywords: ['crédit agricole'],
+        legitimateDomains: ['credit-agricole.com']
+    },
+    'crédit lyonnais': {
+        keywords: ['crédit lyonnais', 'lcl'],
+        legitimateDomains: ['lcl.fr']
+    },
+    'crédit mutuel': {
+        keywords: ['crédit mutuel'],
+        legitimateDomains: ['creditmutuel.fr']
+    },
+    'groupe bpce': {
+        keywords: ['groupe bpce'],
+        legitimateDomains: ['bpce.fr']
+    },
+    'la banque postale': {
+        keywords: ['la banque postale'],
+        legitimateDomains: ['labanquepostale.fr']
+    },
+    'chronopost': {
+        keywords: ['chronopost'],
+        legitimateDomains: ['chronopost.fr']
+    },
+    'ants': {
+        keywords: ['ants'],
+        legitimateDomains: ['ants.gouv.fr']
+    },
+    'assurance maladie': {
+        keywords: ['assurance maladie'],
+        legitimateDomains: ['ameli.fr']
+    },
+    'caf': {
+        keywords: ['caf', 'caisse d\'allocations familiales'],
+        legitimateDomains: ['caf.fr']
+    },
+    'french national police': {
+        keywords: ['french national police'],
+        legitimateDomains: ['police-nationale.interieur.gouv.fr']
+    },
+    'service-public.fr': {
+        keywords: ['service-public.fr'],
+        legitimateDomains: ['service-public.fr']
+    },
+    'impots.gouv.fr': {
+        keywords: ['impots.gouv.fr'],
+        legitimateDomains: ['impots.gouv.fr']
+    },
+    'bredin prat': {
+        keywords: ['bredin prat'],
+        legitimateDomains: ['bredinprat.com']
+    },
+    'gide loyrette nouel': {
+        keywords: ['gide loyrette nouel'],
+        legitimateDomains: ['gide.com']
+    },
+    'free': {
+        keywords: ['free', 'iliad'],
+        legitimateDomains: ['free.fr']
+    },
+    'sorbonne université': {
+        keywords: ['sorbonne université'],
+        legitimateDomains: ['sorbonne-universite.fr']
+    },
+    'université psl': {
+        keywords: ['université psl'],
+        legitimateDomains: ['psl.eu']
+    },
+    'école polytechnique': {
+        keywords: ['école polytechnique'],
+        legitimateDomains: ['polytechnique.edu']
+    },
+    'edf': {
+        keywords: ['edf'],
+        legitimateDomains: ['edf.fr']
+    },
+    'engie': {
+        keywords: ['engie'],
+        legitimateDomains: ['engie.com']
+    },
+    'rte': {
+        keywords: ['rte', 'france transmission'],
+        legitimateDomains: ['rte-france.com']
+    },
+    'veolia': {
+        keywords: ['veolia'],
+        legitimateDomains: ['veolia.com']
+    },
+    'commerzbank': {
+        keywords: ['commerzbank'],
+        legitimateDomains: ['commerzbank.com']
+    },
+    'dz bank': {
+        keywords: ['dz bank'],
+        legitimateDomains: ['dzbank.com']
+    },
+    'kfw': {
+        keywords: ['kfw'],
+        legitimateDomains: ['kfw.de']
+    },
+    'n26': {
+        keywords: ['n26'],
+        legitimateDomains: ['n26.com']
+    },
+    'bvg': {
+        keywords: ['bvg'],
+        legitimateDomains: ['bvg.de']
+    },
+    'bundesportal': {
+        keywords: ['bundesportal'],
+        legitimateDomains: ['bund.de']
+    },
+    'bundeszentralamt für steuern': {
+        keywords: ['bundeszentralamt für steuern', 'bzst'],
+        legitimateDomains: ['bzst.de']
+    },
+    'deutsche rentenversicherung': {
+        keywords: ['deutsche rentenversicherung'],
+        legitimateDomains: ['deutsche-rentenversicherung.de']
+    },
+    'federal employment agency': {
+        keywords: ['federal employment agency', 'bundesagentur für arbeit'],
+        legitimateDomains: ['arbeitsagentur.de']
+    },
+    'federal police': {
+        keywords: ['federal police', 'bundespolizei'],
+        legitimateDomains: ['bundespolizei.de']
+    },
+    'kraftfahrt-bundesamt': {
+        keywords: ['kraftfahrt-bundesamt', 'kba'],
+        legitimateDomains: ['kba.de']
+    },
+    'zoll': {
+        keywords: ['zoll', 'german customs'],
+        legitimateDomains: ['zoll.de']
+    },
+    'gleiss lutz': {
+        keywords: ['gleiss lutz'],
+        legitimateDomains: ['gleisslutz.com']
+    },
+    'hengeler mueller': {
+        keywords: ['hengeler mueller'],
+        legitimateDomains: ['hengeler.com']
+    },
+    'noerr': {
+        keywords: ['noerr'],
+        legitimateDomains: ['noerr.com']
+    },
+    'vodafone germany': {
+        keywords: ['vodafone germany'],
+        legitimateDomains: ['vodafone.de']
+    },
+    'heidelberg university': {
+        keywords: ['heidelberg university'],
+        legitimateDomains: ['uni-heidelberg.de']
+    },
+    'lmu munich': {
+        keywords: ['lmu munich'],
+        legitimateDomains: ['lmu.de']
+    },
+    'rwth aachen university': {
+        keywords: ['rwth aachen university'],
+        legitimateDomains: ['rwth-aachen.de']
+    },
+    'technical university of munich': {
+        keywords: ['technical university of munich', 'tum'],
+        legitimateDomains: ['tum.de']
+    },
+    'e.on': {
+        keywords: ['e.on'],
+        legitimateDomains: ['eon.com']
+    },
+    'enbw': {
+        keywords: ['enbw'],
+        legitimateDomains: ['enbw.com']
+    },
+    'rwe': {
+        keywords: ['rwe'],
+        legitimateDomains: ['rwe.com']
+    },
+    'stadtwerke münchen': {
+        keywords: ['stadtwerke münchen'],
+        legitimateDomains: ['swm.de']
+    },
+    'vattenfall germany': {
+        keywords: ['vattenfall germany'],
+        legitimateDomains: ['vattenfall.de']
+    },
+    'bdo': {
+        keywords: ['bdo'],
+        legitimateDomains: ['bdo.com']
+    },
+    'bdo uk': {
+        keywords: ['bdo uk'],
+        legitimateDomains: ['bdo.co.uk']
+    },
+    'bdo usa': {
+        keywords: ['bdo usa'],
+        legitimateDomains: ['bdo.com']
+    },
+    'baker tilly': {
+        keywords: ['baker tilly'],
+        legitimateDomains: ['bakertilly.com']
+    },
+    'crowe': {
+        keywords: ['crowe'],
+        legitimateDomains: ['crowe.com']
+    },
+    'crowe uk': {
+        keywords: ['crowe uk'],
+        legitimateDomains: ['crowe.co.uk']
+    },
+    'deloitte': {
+        keywords: ['deloitte'],
+        legitimateDomains: ['deloitte.com']
+    },
+    'ey': {
+        keywords: ['ey'],
+        legitimateDomains: ['ey.com']
+    },
+    'grant thornton': {
+        keywords: ['grant thornton'],
+        legitimateDomains: ['grantthornton.global']
+    },
+    'grant thornton us': {
+        keywords: ['grant thornton us'],
+        legitimateDomains: ['grantthornton.com']
+    },
+    'hlb': {
+        keywords: ['hlb'],
+        legitimateDomains: ['hlb.global']
+    },
+    'kpmg': {
+        keywords: ['kpmg'],
+        legitimateDomains: ['kpmg.com']
+    },
+    'kreston global': {
+        keywords: ['kreston global'],
+        legitimateDomains: ['kreston.com']
+    },
+    'mazars': {
+        keywords: ['mazars'],
+        legitimateDomains: ['mazars.com']
+    },
+    'moore global': {
+        keywords: ['moore global'],
+        legitimateDomains: ['moore-global.com']
+    },
+    'nexia': {
+        keywords: ['nexia'],
+        legitimateDomains: ['nexia.com']
+    },
+    'pkf': {
+        keywords: ['pkf'],
+        legitimateDomains: ['pkf.com']
+    },
+    'primeglobal': {
+        keywords: ['primeglobal'],
+        legitimateDomains: ['primeglobal.net']
+    },
+    'pwc': {
+        keywords: ['pwc'],
+        legitimateDomains: ['pwc.com']
+    },
+    'rsm': {
+        keywords: ['rsm'],
+        legitimateDomains: ['rsm.global']
+    },
+    'rsm us': {
+        keywords: ['rsm us'],
+        legitimateDomains: ['rsmus.com']
+    },
+    'gls': {
+        keywords: ['gls'],
+        legitimateDomains: ['gls-group.com']
+    },
+    'alpha bank': {
+        keywords: ['alpha bank'],
+        legitimateDomains: ['alpha.gr']
+    },
+    'aade': {
+        keywords: ['aade'],
+        legitimateDomains: ['aade.gr']
+    },
+    'otp bank': {
+        keywords: ['otp bank'],
+        legitimateDomains: ['otpbank.hu']
+    },
+    'nav': {
+        keywords: ['nav'],
+        legitimateDomains: ['nav.gov.hu']
+    },
+    'indusind bank': {
+        keywords: ['indusind bank'],
+        legitimateDomains: ['indusind.com']
+    },
+    'kotak mahindra bank': {
+        keywords: ['kotak mahindra bank'],
+        legitimateDomains: ['kotak.com']
+    },
+    'digilocker': {
+        keywords: ['digilocker'],
+        legitimateDomains: ['digilocker.gov.in']
+    },
+    'epfo': {
+        keywords: ['epfo'],
+        legitimateDomains: ['epfindia.gov.in']
+    },
+    'gst portal': {
+        keywords: ['gst portal'],
+        legitimateDomains: ['gst.gov.in']
+    },
+    'income tax department': {
+        keywords: ['income tax department'],
+        legitimateDomains: ['incometax.gov.in']
+    },
+    'npci': {
+        keywords: ['npci'],
+        legitimateDomains: ['npci.org.in']
+    },
+    'passport seva': {
+        keywords: ['passport seva'],
+        legitimateDomains: ['passportindia.gov.in']
+    },
+    'iit bombay': {
+        keywords: ['iit bombay'],
+        legitimateDomains: ['iitb.ac.in']
+    },
+    'iit delhi': {
+        keywords: ['iit delhi'],
+        legitimateDomains: ['iitd.ac.in']
+    },
+    'iit madras': {
+        keywords: ['iit madras'],
+        legitimateDomains: ['iitm.ac.in']
+    },
+    'indian institute of science': {
+        keywords: ['indian institute of science', 'iisc'],
+        legitimateDomains: ['iisc.ac.in']
+    },
+    'indian institute of technology bombay': {
+        keywords: ['indian institute of technology bombay'],
+        legitimateDomains: ['iitb.ac.in']
+    },
+    'indian institute of technology delhi': {
+        keywords: ['indian institute of technology delhi'],
+        legitimateDomains: ['iitd.ac.in']
+    },
+    'indian institute of technology kanpur': {
+        keywords: ['indian institute of technology kanpur'],
+        legitimateDomains: ['iitk.ac.in']
+    },
+    'bni': {
+        keywords: ['bni', 'bank negara indonesia'],
+        legitimateDomains: ['bni.co.id']
+    },
+    'bri': {
+        keywords: ['bri', 'bank rakyat indonesia'],
+        legitimateDomains: ['bri.co.id']
+    },
+    'bank mandiri': {
+        keywords: ['bank mandiri'],
+        legitimateDomains: ['bankmandiri.co.id']
+    },
+    'jenius': {
+        keywords: ['jenius', 'btpn'],
+        legitimateDomains: ['jenius.com']
+    },
+    'pos indonesia': {
+        keywords: ['pos indonesia'],
+        legitimateDomains: ['posindonesia.co.id']
+    },
+    'directorate general of taxes': {
+        keywords: ['directorate general of taxes', 'djp'],
+        legitimateDomains: ['pajak.go.id']
+    },
+    'immigration': {
+        keywords: ['immigration', 'direktorat jenderal imigrasi'],
+        legitimateDomains: ['imigrasi.go.id']
+    },
+    'pln': {
+        keywords: ['pln', 'perusahaan listrik negara'],
+        legitimateDomains: ['pln.co.id']
+    },
+    'aib': {
+        keywords: ['aib'],
+        legitimateDomains: ['aib.ie']
+    },
+    'bank of ireland': {
+        keywords: ['bank of ireland'],
+        legitimateDomains: ['bankofireland.com']
+    },
+    'permanent tsb': {
+        keywords: ['permanent tsb'],
+        legitimateDomains: ['ptsb.ie']
+    },
+    'an garda síochána': {
+        keywords: ['an garda síochána'],
+        legitimateDomains: ['garda.ie']
+    },
+    'department of social protection': {
+        keywords: ['department of social protection'],
+        legitimateDomains: ['gov.ie']
+    },
+    'revenue': {
+        keywords: ['revenue'],
+        legitimateDomains: ['revenue.ie']
+    },
+    'trinity college dublin': {
+        keywords: ['trinity college dublin'],
+        legitimateDomains: ['tcd.ie']
+    },
+    'university college dublin': {
+        keywords: ['university college dublin'],
+        legitimateDomains: ['ucd.ie']
+    },
+    'bank hapoalim': {
+        keywords: ['bank hapoalim'],
+        legitimateDomains: ['bankhapoalim.co.il']
+    },
+    'bank leumi': {
+        keywords: ['bank leumi'],
+        legitimateDomains: ['leumi.co.il']
+    },
+    'israel discount bank': {
+        keywords: ['israel discount bank'],
+        legitimateDomains: ['discountbank.co.il']
+    },
+    'mizrahi-tefahot': {
+        keywords: ['mizrahi-tefahot'],
+        legitimateDomains: ['mizrahi-tefahot.co.il']
+    },
+    'israel tax authority': {
+        keywords: ['israel tax authority'],
+        legitimateDomains: ['taxes.gov.il']
+    },
+    'population and immigration authority': {
+        keywords: ['population and immigration authority'],
+        legitimateDomains: ['gov.il']
+    },
+    'bper banca': {
+        keywords: ['bper banca'],
+        legitimateDomains: ['bper.it']
+    },
+    'banco bpm': {
+        keywords: ['banco bpm'],
+        legitimateDomains: ['bancobpm.it']
+    },
+    'agenzia delle entrate': {
+        keywords: ['agenzia delle entrate'],
+        legitimateDomains: ['agenziaentrate.gov.it']
+    },
+    'inps': {
+        keywords: ['inps', 'social security'],
+        legitimateDomains: ['inps.it']
+    },
+    'ministero dell\'interno': {
+        keywords: ['ministero dell\'interno'],
+        legitimateDomains: ['interno.gov.it']
+    },
+    'ministero delle infrastrutture e dei trasporti': {
+        keywords: ['ministero delle infrastrutture e dei trasporti'],
+        legitimateDomains: ['mit.gov.it']
+    },
+    'polizia di stato': {
+        keywords: ['polizia di stato'],
+        legitimateDomains: ['poliziadistato.it']
+    },
+    'bonellierede': {
+        keywords: ['bonellierede'],
+        legitimateDomains: ['bonellierede.com']
+    },
+    'chiomenti': {
+        keywords: ['chiomenti'],
+        legitimateDomains: ['chiomenti.net']
+    },
+    'tim': {
+        keywords: ['tim'],
+        legitimateDomains: ['tim.it']
+    },
+    'vodafone italy': {
+        keywords: ['vodafone italy'],
+        legitimateDomains: ['vodafone.it']
+    },
+    'bocconi university': {
+        keywords: ['bocconi university'],
+        legitimateDomains: ['unibocconi.it']
+    },
+    'politecnico di milano': {
+        keywords: ['politecnico di milano'],
+        legitimateDomains: ['polimi.it']
+    },
+    'polytechnic university of turin': {
+        keywords: ['polytechnic university of turin'],
+        legitimateDomains: ['polito.it']
+    },
+    'sapienza university of rome': {
+        keywords: ['sapienza university of rome'],
+        legitimateDomains: ['uniroma1.it']
+    },
+    'university of bologna': {
+        keywords: ['university of bologna'],
+        legitimateDomains: ['unibo.it']
+    },
+    'university of milan': {
+        keywords: ['university of milan'],
+        legitimateDomains: ['unimi.it']
+    },
+    'a2a': {
+        keywords: ['a2a'],
+        legitimateDomains: ['a2a.eu']
+    },
+    'acea': {
+        keywords: ['acea'],
+        legitimateDomains: ['acea.it']
+    },
+    'snam': {
+        keywords: ['snam'],
+        legitimateDomains: ['snam.it']
+    },
+    'terna': {
+        keywords: ['terna'],
+        legitimateDomains: ['terna.it']
+    },
+    'japan post bank': {
+        keywords: ['japan post bank'],
+        legitimateDomains: ['jp-bank.japanpost.jp']
+    },
+    'rakuten bank': {
+        keywords: ['rakuten bank'],
+        legitimateDomains: ['rakuten-bank.co.jp']
+    },
+    'immigration services agency of japan': {
+        keywords: ['immigration services agency of japan'],
+        legitimateDomains: ['isa.go.jp']
+    },
+    'japan pension service': {
+        keywords: ['japan pension service'],
+        legitimateDomains: ['nenkin.go.jp']
+    },
+    'mynumber portal': {
+        keywords: ['mynumber portal'],
+        legitimateDomains: ['myna.go.jp']
+    },
+    'national tax agency': {
+        keywords: ['national tax agency', 'nta'],
+        legitimateDomains: ['nta.go.jp']
+    },
+    'kyoto university': {
+        keywords: ['kyoto university'],
+        legitimateDomains: ['kyoto-u.ac.jp']
+    },
+    'osaka university': {
+        keywords: ['osaka university'],
+        legitimateDomains: ['osaka-u.ac.jp']
+    },
+    'tohoku university': {
+        keywords: ['tohoku university'],
+        legitimateDomains: ['tohoku.ac.jp']
+    },
+    'university of tokyo': {
+        keywords: ['university of tokyo'],
+        legitimateDomains: ['u-tokyo.ac.jp']
+    },
+    'kansai electric power': {
+        keywords: ['kansai electric power', 'kepco'],
+        legitimateDomains: ['kepco.co.jp']
+    },
+    'osaka gas': {
+        keywords: ['osaka gas'],
+        legitimateDomains: ['osakagas.co.jp']
+    },
+    'tepco': {
+        keywords: ['tepco'],
+        legitimateDomains: ['tepco.co.jp']
+    },
+    'tokyo gas': {
+        keywords: ['tokyo gas'],
+        legitimateDomains: ['tokyo-gas.co.jp']
+    },
+    'equity bank kenya': {
+        keywords: ['equity bank kenya'],
+        legitimateDomains: ['equitybank.co.ke']
+    },
+    'kcb bank': {
+        keywords: ['kcb bank'],
+        legitimateDomains: ['kcbgroup.com']
+    },
+    'kenya post': {
+        keywords: ['kenya post'],
+        legitimateDomains: ['posta.co.ke']
+    },
+    'kenya revenue authority': {
+        keywords: ['kenya revenue authority', 'kra'],
+        legitimateDomains: ['kra.go.ke']
+    },
+    'ecitizen kenya': {
+        keywords: ['ecitizen kenya'],
+        legitimateDomains: ['ecitizen.go.ke']
+    },
+    'safaricom': {
+        keywords: ['safaricom'],
+        legitimateDomains: ['safaricom.co.ke']
+    },
+    'kenya power': {
+        keywords: ['kenya power'],
+        legitimateDomains: ['kplc.co.ke']
+    },
+    'hong leong bank': {
+        keywords: ['hong leong bank'],
+        legitimateDomains: ['hlb.com.my']
+    },
+    'public bank': {
+        keywords: ['public bank'],
+        legitimateDomains: ['publicbank.com.my']
+    },
+    'rhb bank': {
+        keywords: ['rhb bank'],
+        legitimateDomains: ['rhbgroup.com']
+    },
+    'pos malaysia': {
+        keywords: ['pos malaysia'],
+        legitimateDomains: ['pos.com.my']
+    },
+    'jabatan imigresen malaysia': {
+        keywords: ['jabatan imigresen malaysia'],
+        legitimateDomains: ['imi.gov.my']
+    },
+    'lhdn': {
+        keywords: ['lhdn'],
+        legitimateDomains: ['hasil.gov.my']
+    },
+    'bbva méxico': {
+        keywords: ['bbva méxico'],
+        legitimateDomains: ['bbva.mx']
+    },
+    'banco azteca': {
+        keywords: ['banco azteca'],
+        legitimateDomains: ['bancoazteca.com.mx']
+    },
+    'banorte': {
+        keywords: ['banorte'],
+        legitimateDomains: ['banorte.com']
+    },
+    'citibanamex': {
+        keywords: ['citibanamex'],
+        legitimateDomains: ['banamex.com']
+    },
+    'santander méxico': {
+        keywords: ['santander méxico'],
+        legitimateDomains: ['santander.com.mx']
+    },
+    'correos de méxico': {
+        keywords: ['correos de méxico'],
+        legitimateDomains: ['correosdemexico.gob.mx']
+    },
+    'imss': {
+        keywords: ['imss'],
+        legitimateDomains: ['imss.gob.mx']
+    },
+    'sat': {
+        keywords: ['sat'],
+        legitimateDomains: ['sat.gob.mx']
+    },
+    'sep': {
+        keywords: ['sep'],
+        legitimateDomains: ['gob.mx/sep']
+    },
+    'secretaría de relaciones exteriores': {
+        keywords: ['secretaría de relaciones exteriores', 'sre'],
+        legitimateDomains: ['gob.mx/sre']
+    },
+    'national autonomous university of mexico': {
+        keywords: ['national autonomous university of mexico', 'unam'],
+        legitimateDomains: ['unam.mx']
+    },
+    'tecnológico de monterrey': {
+        keywords: ['tecnológico de monterrey'],
+        legitimateDomains: ['tec.mx']
+    },
+    'cfe': {
+        keywords: ['cfe'],
+        legitimateDomains: ['cfe.mx']
+    },
+    'conagua': {
+        keywords: ['conagua'],
+        legitimateDomains: ['gob.mx/conagua']
+    },
+    'abn amro': {
+        keywords: ['abn amro'],
+        legitimateDomains: ['abnamro.com']
+    },
+    'bunq': {
+        keywords: ['bunq'],
+        legitimateDomains: ['bunq.com']
+    },
+    'belastingdienst': {
+        keywords: ['belastingdienst'],
+        legitimateDomains: ['belastingdienst.nl']
+    },
+    'duo': {
+        keywords: ['duo', 'education executive agency'],
+        legitimateDomains: ['duo.nl']
+    },
+    'digid': {
+        keywords: ['digid'],
+        legitimateDomains: ['digid.nl']
+    },
+    'ind': {
+        keywords: ['ind'],
+        legitimateDomains: ['ind.nl']
+    },
+    'politie': {
+        keywords: ['politie', 'netherlands police'],
+        legitimateDomains: ['politie.nl']
+    },
+    'buren': {
+        keywords: ['buren', 'nl law firm'],
+        legitimateDomains: ['burenlegal.com']
+    },
+    'vodafoneziggo': {
+        keywords: ['vodafoneziggo'],
+        legitimateDomains: ['vodafoneziggo.nl']
+    },
+    'delft university of technology': {
+        keywords: ['delft university of technology', 'tu delft'],
+        legitimateDomains: ['tudelft.nl']
+    },
+    'erasmus university rotterdam': {
+        keywords: ['erasmus university rotterdam'],
+        legitimateDomains: ['eur.nl']
+    },
+    'leiden university': {
+        keywords: ['leiden university'],
+        legitimateDomains: ['universiteitleiden.nl']
+    },
+    'university of amsterdam': {
+        keywords: ['university of amsterdam'],
+        legitimateDomains: ['uva.nl']
+    },
+    'wageningen university & research': {
+        keywords: ['wageningen university & research'],
+        legitimateDomains: ['wur.nl']
+    },
+    'eneco': {
+        keywords: ['eneco'],
+        legitimateDomains: ['eneco.com']
+    },
+    'vattenfall netherlands': {
+        keywords: ['vattenfall netherlands'],
+        legitimateDomains: ['vattenfall.nl']
+    },
+    'anz new zealand': {
+        keywords: ['anz new zealand'],
+        legitimateDomains: ['anz.co.nz']
+    },
+    'asb bank': {
+        keywords: ['asb bank'],
+        legitimateDomains: ['asb.co.nz']
+    },
+    'bnz': {
+        keywords: ['bnz'],
+        legitimateDomains: ['bnz.co.nz']
+    },
+    'kiwibank': {
+        keywords: ['kiwibank'],
+        legitimateDomains: ['kiwibank.co.nz']
+    },
+    'westpac nz': {
+        keywords: ['westpac nz'],
+        legitimateDomains: ['westpac.co.nz']
+    },
+    'nz post': {
+        keywords: ['nz post'],
+        legitimateDomains: ['nzpost.co.nz']
+    },
+    'immigration new zealand': {
+        keywords: ['immigration new zealand'],
+        legitimateDomains: ['immigration.govt.nz']
+    },
+    'inland revenue': {
+        keywords: ['inland revenue', 'nz'],
+        legitimateDomains: ['ird.govt.nz']
+    },
+    'university of auckland': {
+        keywords: ['university of auckland'],
+        legitimateDomains: ['auckland.ac.nz']
+    },
+    'university of otago': {
+        keywords: ['university of otago'],
+        legitimateDomains: ['otago.ac.nz']
+    },
+    'access bank': {
+        keywords: ['access bank'],
+        legitimateDomains: ['accessbankplc.com']
+    },
+    'firstbank nigeria': {
+        keywords: ['firstbank nigeria'],
+        legitimateDomains: ['firstbanknigeria.com']
+    },
+    'gtbank': {
+        keywords: ['gtbank'],
+        legitimateDomains: ['gtbank.com']
+    },
+    'zenith bank': {
+        keywords: ['zenith bank'],
+        legitimateDomains: ['zenithbank.com']
+    },
+    'firs': {
+        keywords: ['firs'],
+        legitimateDomains: ['firs.gov.ng']
+    },
+    'nigeria immigration service': {
+        keywords: ['nigeria immigration service'],
+        legitimateDomains: ['immigration.gov.ng']
+    },
+    'airtel africa': {
+        keywords: ['airtel africa'],
+        legitimateDomains: ['airtel.africa']
+    },
+    'glo': {
+        keywords: ['glo', 'globacom'],
+        legitimateDomains: ['gloworld.com']
+    },
+    'dnb': {
+        keywords: ['dnb'],
+        legitimateDomains: ['dnb.no']
+    },
+    'dnb bank': {
+        keywords: ['dnb bank', 'no'],
+        legitimateDomains: ['dnb.no']
+    },
+    'posten norge': {
+        keywords: ['posten norge'],
+        legitimateDomains: ['posten.no']
+    },
+    'norwegian police': {
+        keywords: ['norwegian police'],
+        legitimateDomains: ['politiet.no']
+    },
+    'skatteetaten': {
+        keywords: ['skatteetaten'],
+        legitimateDomains: ['skatteetaten.no']
+    },
+    'university of oslo': {
+        keywords: ['university of oslo'],
+        legitimateDomains: ['uio.no']
+    },
+    'banco de crédito del perú': {
+        keywords: ['banco de crédito del perú', 'bcp'],
+        legitimateDomains: ['viabcp.com']
+    },
+    'sunat': {
+        keywords: ['sunat'],
+        legitimateDomains: ['sunat.gob.pe']
+    },
+    'national university of san marcos': {
+        keywords: ['national university of san marcos'],
+        legitimateDomains: ['unmsm.edu.pe']
+    },
+    'bdo unibank': {
+        keywords: ['bdo unibank'],
+        legitimateDomains: ['bdo.com.ph']
+    },
+    'bank of the philippine islands': {
+        keywords: ['bank of the philippine islands', 'bpi'],
+        legitimateDomains: ['bpi.com.ph']
+    },
+    'metrobank': {
+        keywords: ['metrobank'],
+        legitimateDomains: ['metrobank.com.ph']
+    },
+    'philippine postal corporation': {
+        keywords: ['philippine postal corporation', 'phlpost'],
+        legitimateDomains: ['phlpost.gov.ph']
+    },
+    'bi': {
+        keywords: ['bi', 'bureau of immigration'],
+        legitimateDomains: ['immigration.gov.ph']
+    },
+    'bir': {
+        keywords: ['bir'],
+        legitimateDomains: ['bir.gov.ph']
+    },
+    'bank pekao': {
+        keywords: ['bank pekao'],
+        legitimateDomains: ['pekao.com.pl']
+    },
+    'pko bank polski': {
+        keywords: ['pko bank polski'],
+        legitimateDomains: ['pkobp.pl']
+    },
+    'santander bank polska': {
+        keywords: ['santander bank polska'],
+        legitimateDomains: ['santander.pl']
+    },
+    'mbank': {
+        keywords: ['mbank'],
+        legitimateDomains: ['mbank.pl']
+    },
+    'poczta polska': {
+        keywords: ['poczta polska'],
+        legitimateDomains: ['poczta-polska.pl']
+    },
+    'kas': {
+        keywords: ['kas'],
+        legitimateDomains: ['gov.pl']
+    },
+    'zus': {
+        keywords: ['zus', 'social insurance institution'],
+        legitimateDomains: ['zus.pl']
+    },
+    'caixa geral de depósitos': {
+        keywords: ['caixa geral de depósitos', 'cgd'],
+        legitimateDomains: ['cgd.pt']
+    },
+    'millennium bcp': {
+        keywords: ['millennium bcp'],
+        legitimateDomains: ['millenniumbcp.pt']
+    },
+    'novo banco': {
+        keywords: ['novo banco'],
+        legitimateDomains: ['novobanco.pt']
+    },
+    'ctt': {
+        keywords: ['ctt', 'portugal post'],
+        legitimateDomains: ['ctt.pt']
+    },
+    'autoridade tributária e aduaneira': {
+        keywords: ['autoridade tributária e aduaneira'],
+        legitimateDomains: ['portaldasfinancas.gov.pt']
+    },
+    'serviço de estrangeiros e fronteiras - legacy': {
+        keywords: ['serviço de estrangeiros e fronteiras - legacy', 'sef'],
+        legitimateDomains: ['sef.pt']
+    },
+    'banca transilvania': {
+        keywords: ['banca transilvania'],
+        legitimateDomains: ['bancatransilvania.ro']
+    },
+    'anaf': {
+        keywords: ['anaf'],
+        legitimateDomains: ['anaf.ro']
+    },
+    'riyad bank': {
+        keywords: ['riyad bank'],
+        legitimateDomains: ['riyadbank.com']
+    },
+    'saudi british bank': {
+        keywords: ['saudi british bank', 'sabb'],
+        legitimateDomains: ['sabb.com']
+    },
+    'saudi national bank': {
+        keywords: ['saudi national bank', 'snb'],
+        legitimateDomains: ['snb.com.sa']
+    },
+    'absher': {
+        keywords: ['absher'],
+        legitimateDomains: ['absher.sa']
+    },
+    'gosi': {
+        keywords: ['gosi'],
+        legitimateDomains: ['gosi.gov.sa']
+    },
+    'ministry of human resources and social development': {
+        keywords: ['ministry of human resources and social development'],
+        legitimateDomains: ['hrsd.gov.sa']
+    },
+    'ministry of interior': {
+        keywords: ['ministry of interior'],
+        legitimateDomains: ['moi.gov.sa']
+    },
+    'zatca': {
+        keywords: ['zatca'],
+        legitimateDomains: ['zatca.gov.sa']
+    },
+    'mobily': {
+        keywords: ['mobily'],
+        legitimateDomains: ['mobily.com.sa']
+    },
+    'zain saudi arabia': {
+        keywords: ['zain saudi arabia'],
+        legitimateDomains: ['sa.zain.com']
+    },
+    'stc': {
+        keywords: ['stc'],
+        legitimateDomains: ['stc.com.sa']
+    },
+    'saudi electricity company': {
+        keywords: ['saudi electricity company'],
+        legitimateDomains: ['se.com.sa']
+    },
+    'uob': {
+        keywords: ['uob'],
+        legitimateDomains: ['uobgroup.com']
+    },
+    'singpost': {
+        keywords: ['singpost'],
+        legitimateDomains: ['singpost.com']
+    },
+    'cpf board': {
+        keywords: ['cpf board'],
+        legitimateDomains: ['cpf.gov.sg']
+    },
+    'ica': {
+        keywords: ['ica'],
+        legitimateDomains: ['ica.gov.sg']
+    },
+    'iras': {
+        keywords: ['iras'],
+        legitimateDomains: ['iras.gov.sg']
+    },
+    'nanyang technological university': {
+        keywords: ['nanyang technological university', 'ntu'],
+        legitimateDomains: ['ntu.edu.sg']
+    },
+    'national university of singapore': {
+        keywords: ['national university of singapore', 'nus'],
+        legitimateDomains: ['nus.edu.sg']
+    },
+    'sars': {
+        keywords: ['sars'],
+        legitimateDomains: ['sars.gov.za']
+    },
+    'eskom': {
+        keywords: ['eskom'],
+        legitimateDomains: ['eskom.co.za']
+    },
+    'hana bank': {
+        keywords: ['hana bank'],
+        legitimateDomains: ['kebhana.com']
+    },
+    'kb kookmin bank': {
+        keywords: ['kb kookmin bank'],
+        legitimateDomains: ['kbstar.com']
+    },
+    'shinhan bank': {
+        keywords: ['shinhan bank'],
+        legitimateDomains: ['shinhan.com']
+    },
+    'woori bank': {
+        keywords: ['woori bank'],
+        legitimateDomains: ['wooribank.com']
+    },
+    'korea post': {
+        keywords: ['korea post'],
+        legitimateDomains: ['epost.go.kr']
+    },
+    'korea immigration service': {
+        keywords: ['korea immigration service'],
+        legitimateDomains: ['immigration.go.kr']
+    },
+    'korea national health insurance service': {
+        keywords: ['korea national health insurance service', 'nhis'],
+        legitimateDomains: ['nhis.or.kr']
+    },
+    'korean national police agency': {
+        keywords: ['korean national police agency'],
+        legitimateDomains: ['police.go.kr']
+    },
+    'national tax service': {
+        keywords: ['national tax service', 'nts'],
+        legitimateDomains: ['nts.go.kr']
+    },
+    'kaist': {
+        keywords: ['kaist'],
+        legitimateDomains: ['kaist.ac.kr']
+    },
+    'korea university': {
+        keywords: ['korea university'],
+        legitimateDomains: ['korea.edu']
+    },
+    'seoul national university': {
+        keywords: ['seoul national university'],
+        legitimateDomains: ['snu.ac.kr']
+    },
+    'yonsei university': {
+        keywords: ['yonsei university'],
+        legitimateDomains: ['yonsei.ac.kr']
+    },
+    'kogas': {
+        keywords: ['kogas', 'korea gas corporation'],
+        legitimateDomains: ['kogas.or.kr']
+    },
+    'bankinter': {
+        keywords: ['bankinter'],
+        legitimateDomains: ['bankinter.com']
+    },
+    'mrw': {
+        keywords: ['mrw'],
+        legitimateDomains: ['mrw.es']
+    },
+    'seur': {
+        keywords: ['seur'],
+        legitimateDomains: ['seur.com']
+    },
+    'agencia tributaria': {
+        keywords: ['agencia tributaria', 'aeat'],
+        legitimateDomains: ['agenciatributaria.es']
+    },
+    'dgt': {
+        keywords: ['dgt'],
+        legitimateDomains: ['dgt.es']
+    },
+    'policía nacional': {
+        keywords: ['policía nacional'],
+        legitimateDomains: ['policia.es']
+    },
+    'sepe': {
+        keywords: ['sepe', 'public employment service'],
+        legitimateDomains: ['sepe.es']
+    },
+    'seguridad social': {
+        keywords: ['seguridad social', 'spain'],
+        legitimateDomains: ['seg-social.es']
+    },
+    'garrigues': {
+        keywords: ['garrigues'],
+        legitimateDomains: ['garrigues.com']
+    },
+    'uría menéndez': {
+        keywords: ['uría menéndez'],
+        legitimateDomains: ['uria.com']
+    },
+    'orange spain': {
+        keywords: ['orange spain'],
+        legitimateDomains: ['orange.es']
+    },
+    'complutense university of madrid': {
+        keywords: ['complutense university of madrid'],
+        legitimateDomains: ['ucm.es']
+    },
+    'universidad autónoma de madrid': {
+        keywords: ['universidad autónoma de madrid'],
+        legitimateDomains: ['uam.es']
+    },
+    'university of barcelona': {
+        keywords: ['university of barcelona'],
+        legitimateDomains: ['ub.edu']
+    },
+    'aguas de barcelona': {
+        keywords: ['aguas de barcelona', 'agbar'],
+        legitimateDomains: ['aiguesdebarcelona.cat']
+    },
+    'endesa': {
+        keywords: ['endesa'],
+        legitimateDomains: ['endesa.com']
+    },
+    'iberdrola': {
+        keywords: ['iberdrola'],
+        legitimateDomains: ['iberdrola.com']
+    },
+    'iberdrola clientes': {
+        keywords: ['iberdrola clientes', 'spain'],
+        legitimateDomains: ['iberdrola.es']
+    },
+    'naturgy': {
+        keywords: ['naturgy'],
+        legitimateDomains: ['naturgy.com']
+    },
+    'handelsbanken': {
+        keywords: ['handelsbanken'],
+        legitimateDomains: ['handelsbanken.com']
+    },
+    'nordea': {
+        keywords: ['nordea', 'nordics'],
+        legitimateDomains: ['nordea.com']
+    },
+    'seb': {
+        keywords: ['seb'],
+        legitimateDomains: ['sebgroup.com']
+    },
+    'svenska handelsbanken': {
+        keywords: ['svenska handelsbanken', 'se'],
+        legitimateDomains: ['handelsbanken.se']
+    },
+    'swedbank': {
+        keywords: ['swedbank'],
+        legitimateDomains: ['swedbank.com']
+    },
+    'postnord': {
+        keywords: ['postnord'],
+        legitimateDomains: ['postnord.se']
+    },
+    'försäkringskassan': {
+        keywords: ['försäkringskassan', 'social insurance'],
+        legitimateDomains: ['forsakringskassan.se']
+    },
+    'skatteverket': {
+        keywords: ['skatteverket'],
+        legitimateDomains: ['skatteverket.se']
+    },
+    'swedish police': {
+        keywords: ['swedish police'],
+        legitimateDomains: ['polisen.se']
+    },
+    'karolinska institutet': {
+        keywords: ['karolinska institutet'],
+        legitimateDomains: ['ki.se']
+    },
+    'lund university': {
+        keywords: ['lund university'],
+        legitimateDomains: ['lunduniversity.lu.se']
+    },
+    'uppsala university': {
+        keywords: ['uppsala university'],
+        legitimateDomains: ['uu.se']
+    },
+    'credit suisse': {
+        keywords: ['credit suisse'],
+        legitimateDomains: ['credit-suisse.com']
+    },
+    'postfinance': {
+        keywords: ['postfinance'],
+        legitimateDomains: ['postfinance.ch']
+    },
+    'raiffeisen switzerland': {
+        keywords: ['raiffeisen switzerland'],
+        legitimateDomains: ['raiffeisen.ch']
+    },
+    'zürcher kantonalbank': {
+        keywords: ['zürcher kantonalbank', 'zkb'],
+        legitimateDomains: ['zkb.ch']
+    },
+    'sem': {
+        keywords: ['sem'],
+        legitimateDomains: ['sem.admin.ch']
+    },
+    'swiss federal tax administration': {
+        keywords: ['swiss federal tax administration', 'fta'],
+        legitimateDomains: ['estv.admin.ch']
+    },
+    'salt': {
+        keywords: ['salt'],
+        legitimateDomains: ['salt.ch']
+    },
+    'epfl': {
+        keywords: ['epfl'],
+        legitimateDomains: ['epfl.ch']
+    },
+    'eth zurich': {
+        keywords: ['eth zurich'],
+        legitimateDomains: ['ethz.ch']
+    },
+    'university of basel': {
+        keywords: ['university of basel'],
+        legitimateDomains: ['unibas.ch']
+    },
+    'university of geneva': {
+        keywords: ['university of geneva'],
+        legitimateDomains: ['unige.ch']
+    },
+    'university of zurich': {
+        keywords: ['university of zurich'],
+        legitimateDomains: ['uzh.ch']
+    },
+    'axpo': {
+        keywords: ['axpo'],
+        legitimateDomains: ['axpo.com']
+    },
+    'national university of taiwan': {
+        keywords: ['national university of taiwan'],
+        legitimateDomains: ['ntu.edu.tw']
+    },
+    'bangkok bank': {
+        keywords: ['bangkok bank'],
+        legitimateDomains: ['bangkokbank.com']
+    },
+    'kasikornbank': {
+        keywords: ['kasikornbank'],
+        legitimateDomains: ['kasikornbank.com']
+    },
+    'krungsri': {
+        keywords: ['krungsri', 'bank of ayudhya'],
+        legitimateDomains: ['krungsri.com']
+    },
+    'krungthai bank': {
+        keywords: ['krungthai bank'],
+        legitimateDomains: ['ktb.co.th']
+    },
+    'siam commercial bank': {
+        keywords: ['siam commercial bank', 'scb'],
+        legitimateDomains: ['scb.co.th']
+    },
+    'thailand post': {
+        keywords: ['thailand post'],
+        legitimateDomains: ['thailandpost.co.th']
+    },
+    'immigration bureau': {
+        keywords: ['immigration bureau', 'thailand'],
+        legitimateDomains: ['immigration.go.th']
+    },
+    'revenue department': {
+        keywords: ['revenue department', 'thailand'],
+        legitimateDomains: ['rd.go.th']
+    },
+    'akbank': {
+        keywords: ['akbank'],
+        legitimateDomains: ['akbank.com']
+    },
+    'garanti bbva': {
+        keywords: ['garanti bbva'],
+        legitimateDomains: ['garantibbva.com.tr']
+    },
+    'yapı kredi': {
+        keywords: ['yapı kredi'],
+        legitimateDomains: ['yapikredi.com.tr']
+    },
+    'i̇şbank': {
+        keywords: ['i̇şbank'],
+        legitimateDomains: ['isbank.com.tr']
+    },
+    'ptt': {
+        keywords: ['ptt'],
+        legitimateDomains: ['ptt.gov.tr']
+    },
+    'revenue administration': {
+        keywords: ['revenue administration', 'gi̇b'],
+        legitimateDomains: ['gib.gov.tr']
+    },
+    'sgk': {
+        keywords: ['sgk', 'social security institution'],
+        legitimateDomains: ['sgk.gov.tr']
+    },
+    'e-devlet': {
+        keywords: ['e-devlet'],
+        legitimateDomains: ['turkiye.gov.tr']
+    },
+    'abu dhabi commercial bank': {
+        keywords: ['abu dhabi commercial bank', 'adcb'],
+        legitimateDomains: ['adcb.com']
+    },
+    'dubai islamic bank': {
+        keywords: ['dubai islamic bank'],
+        legitimateDomains: ['dib.ae']
+    },
+    'emirates nbd': {
+        keywords: ['emirates nbd'],
+        legitimateDomains: ['emiratesnbd.com']
+    },
+    'first abu dhabi bank': {
+        keywords: ['first abu dhabi bank', 'fab'],
+        legitimateDomains: ['bankfab.com']
+    },
+    'dubai police': {
+        keywords: ['dubai police'],
+        legitimateDomains: ['dubaipolice.gov.ae']
+    },
+    'federal tax authority': {
+        keywords: ['federal tax authority', 'fta'],
+        legitimateDomains: ['tax.gov.ae']
+    },
+    'icp': {
+        keywords: ['icp'],
+        legitimateDomains: ['icp.gov.ae']
+    },
+    'addc': {
+        keywords: ['addc'],
+        legitimateDomains: ['addc.ae']
+    },
+    'dewa': {
+        keywords: ['dewa'],
+        legitimateDomains: ['dewa.gov.ae']
+    },
+    'metro bank': {
+        keywords: ['metro bank'],
+        legitimateDomains: ['metrobankonline.co.uk']
+    },
+    'starling bank': {
+        keywords: ['starling bank'],
+        legitimateDomains: ['starlingbank.com']
+    },
+    'tsb bank': {
+        keywords: ['tsb bank'],
+        legitimateDomains: ['tsb.co.uk']
+    },
+    'virgin money uk': {
+        keywords: ['virgin money uk'],
+        legitimateDomains: ['virginmoneyukplc.com']
+    },
+    'bath building society': {
+        keywords: ['bath building society'],
+        legitimateDomains: ['bathbuildingsociety.co.uk']
+    },
+    'beverley building society': {
+        keywords: ['beverley building society'],
+        legitimateDomains: ['beverleybuildingsociety.co.uk']
+    },
+    'buckinghamshire building society': {
+        keywords: ['buckinghamshire building society'],
+        legitimateDomains: ['bucksbs.co.uk']
+    },
+    'cambridge building society': {
+        keywords: ['cambridge building society'],
+        legitimateDomains: ['cambridgebs.co.uk']
+    },
+    'coventry building society': {
+        keywords: ['coventry building society'],
+        legitimateDomains: ['coventrybuildingsociety.co.uk']
+    },
+    'hinckley & rugby building society': {
+        keywords: ['hinckley & rugby building society'],
+        legitimateDomains: ['hrbs.co.uk']
+    },
+    'leeds building society': {
+        keywords: ['leeds building society'],
+        legitimateDomains: ['leedsbuildingsociety.co.uk']
+    },
+    'loughborough building society': {
+        keywords: ['loughborough building society'],
+        legitimateDomains: ['theloughborough.co.uk']
+    },
+    'market harborough building society': {
+        keywords: ['market harborough building society'],
+        legitimateDomains: ['mhbs.co.uk']
+    },
+    'marsden building society': {
+        keywords: ['marsden building society'],
+        legitimateDomains: ['themarsden.co.uk']
+    },
+    'monmouthshire building society': {
+        keywords: ['monmouthshire building society'],
+        legitimateDomains: ['monbs.com']
+    },
+    'nationwide building society': {
+        keywords: ['nationwide building society'],
+        legitimateDomains: ['nationwide.co.uk']
+    },
+    'newcastle building society': {
+        keywords: ['newcastle building society'],
+        legitimateDomains: ['newcastle.co.uk']
+    },
+    'nottingham building society': {
+        keywords: ['nottingham building society'],
+        legitimateDomains: ['thenottingham.com']
+    },
+    'penrith building society': {
+        keywords: ['penrith building society'],
+        legitimateDomains: ['penrithbs.co.uk']
+    },
+    'principality building society': {
+        keywords: ['principality building society'],
+        legitimateDomains: ['principality.co.uk']
+    },
+    'saffron building society': {
+        keywords: ['saffron building society'],
+        legitimateDomains: ['saffronbs.co.uk']
+    },
+    'skipton building society': {
+        keywords: ['skipton building society'],
+        legitimateDomains: ['skipton.co.uk']
+    },
+    'yorkshire building society': {
+        keywords: ['yorkshire building society'],
+        legitimateDomains: ['ybs.co.uk']
+    },
+    'dpd uk': {
+        keywords: ['dpd uk'],
+        legitimateDomains: ['dpd.co.uk']
+    },
+    'yodel': {
+        keywords: ['yodel'],
+        legitimateDomains: ['yodel.co.uk']
+    },
+    'companies house': {
+        keywords: ['companies house'],
+        legitimateDomains: ['companieshouse.gov.uk']
+    },
+    'driver and vehicle licensing agency': {
+        keywords: ['driver and vehicle licensing agency', 'dvla'],
+        legitimateDomains: ['dvla.gov.uk']
+    },
+    'hm revenue & customs': {
+        keywords: ['hm revenue & customs', 'hmrc'],
+        legitimateDomains: ['hmrc.gov.uk']
+    },
+    'home office': {
+        keywords: ['home office'],
+        legitimateDomains: ['homeoffice.gov.uk']
+    },
+    'bupa': {
+        keywords: ['bupa'],
+        legitimateDomains: ['bupa.co.uk']
+    },
+    'nuffield health': {
+        keywords: ['nuffield health'],
+        legitimateDomains: ['nuffieldhealth.com']
+    },
+    'ramsay health care uk': {
+        keywords: ['ramsay health care uk'],
+        legitimateDomains: ['ramsayhealth.co.uk']
+    },
+    'spire healthcare': {
+        keywords: ['spire healthcare'],
+        legitimateDomains: ['spirehealthcare.com']
+    },
+    'allen & overy': {
+        keywords: ['allen & overy'],
+        legitimateDomains: ['allenovery.com']
+    },
+    'ashurst': {
+        keywords: ['ashurst'],
+        legitimateDomains: ['ashurst.com']
+    },
+    'bird & bird': {
+        keywords: ['bird & bird'],
+        legitimateDomains: ['twobirds.com']
+    },
+    'cms': {
+        keywords: ['cms'],
+        legitimateDomains: ['cms.law']
+    },
+    'clifford chance': {
+        keywords: ['clifford chance'],
+        legitimateDomains: ['cliffordchance.com']
+    },
+    'eversheds sutherland': {
+        keywords: ['eversheds sutherland'],
+        legitimateDomains: ['eversheds-sutherland.com']
+    },
+    'freshfields': {
+        keywords: ['freshfields'],
+        legitimateDomains: ['freshfields.com']
+    },
+    'herbert smith freehills': {
+        keywords: ['herbert smith freehills'],
+        legitimateDomains: ['hsf.com']
+    },
+    'hogan lovells': {
+        keywords: ['hogan lovells'],
+        legitimateDomains: ['hoganlovells.com']
+    },
+    'linklaters': {
+        keywords: ['linklaters'],
+        legitimateDomains: ['linklaters.com']
+    },
+    'macfarlanes': {
+        keywords: ['macfarlanes'],
+        legitimateDomains: ['macfarlanes.com']
+    },
+    'norton rose fulbright': {
+        keywords: ['norton rose fulbright'],
+        legitimateDomains: ['nortonrosefulbright.com']
+    },
+    'pinsent masons': {
+        keywords: ['pinsent masons'],
+        legitimateDomains: ['pinsentmasons.com']
+    },
+    'slaughter and may': {
+        keywords: ['slaughter and may'],
+        legitimateDomains: ['slaughterandmay.com']
+    },
+    'stephenson harwood': {
+        keywords: ['stephenson harwood'],
+        legitimateDomains: ['shlegal.com']
+    },
+    'taylor wessing': {
+        keywords: ['taylor wessing'],
+        legitimateDomains: ['taylorwessing.com']
+    },
+    'virgin media o2': {
+        keywords: ['virgin media o2'],
+        legitimateDomains: ['virginmediao2.co.uk']
+    },
+    'imperial college london': {
+        keywords: ['imperial college london'],
+        legitimateDomains: ['imperial.ac.uk']
+    },
+    'king\'s college london': {
+        keywords: ['king\'s college london'],
+        legitimateDomains: ['kcl.ac.uk']
+    },
+    'london school of economics and political science': {
+        keywords: ['london school of economics and political science', 'lse'],
+        legitimateDomains: ['lse.ac.uk']
+    },
+    'ucl': {
+        keywords: ['ucl', 'university college london'],
+        legitimateDomains: ['ucl.ac.uk']
+    },
+    'university of birmingham': {
+        keywords: ['university of birmingham'],
+        legitimateDomains: ['bham.ac.uk']
+    },
+    'university of bristol': {
+        keywords: ['university of bristol'],
+        legitimateDomains: ['bristol.ac.uk']
+    },
+    'university of cambridge': {
+        keywords: ['university of cambridge'],
+        legitimateDomains: ['cam.ac.uk']
+    },
+    'university of edinburgh': {
+        keywords: ['university of edinburgh'],
+        legitimateDomains: ['ed.ac.uk']
+    },
+    'university of glasgow': {
+        keywords: ['university of glasgow'],
+        legitimateDomains: ['gla.ac.uk']
+    },
+    'university of leeds': {
+        keywords: ['university of leeds'],
+        legitimateDomains: ['leeds.ac.uk']
+    },
+    'university of manchester': {
+        keywords: ['university of manchester'],
+        legitimateDomains: ['manchester.ac.uk']
+    },
+    'university of nottingham': {
+        keywords: ['university of nottingham'],
+        legitimateDomains: ['nottingham.ac.uk']
+    },
+    'university of oxford': {
+        keywords: ['university of oxford'],
+        legitimateDomains: ['ox.ac.uk']
+    },
+    'university of sheffield': {
+        keywords: ['university of sheffield'],
+        legitimateDomains: ['sheffield.ac.uk']
+    },
+    'university of southampton': {
+        keywords: ['university of southampton'],
+        legitimateDomains: ['southampton.ac.uk']
+    },
+    'university of warwick': {
+        keywords: ['university of warwick'],
+        legitimateDomains: ['warwick.ac.uk']
+    },
+    'e.on uk': {
+        keywords: ['e.on uk'],
+        legitimateDomains: ['eonenergy.com']
+    },
+    'edf energy': {
+        keywords: ['edf energy'],
+        legitimateDomains: ['edfenergy.com']
+    },
+    'octopus energy': {
+        keywords: ['octopus energy'],
+        legitimateDomains: ['octopus.energy']
+    },
+    'scottishpower': {
+        keywords: ['scottishpower'],
+        legitimateDomains: ['scottishpower.co.uk']
+    },
+    'severn trent': {
+        keywords: ['severn trent'],
+        legitimateDomains: ['stwater.co.uk']
+    },
+    'thames water': {
+        keywords: ['thames water'],
+        legitimateDomains: ['thameswater.co.uk']
+    },
+    'united utilities': {
+        keywords: ['united utilities'],
+        legitimateDomains: ['uuplc.co.uk']
+    },
+    'arvest bank': {
+        keywords: ['arvest bank'],
+        legitimateDomains: ['arvest.com']
+    },
+    'associated bank': {
+        keywords: ['associated bank'],
+        legitimateDomains: ['associatedbank.com']
+    },
+    'bok financial / bank of oklahoma': {
+        keywords: ['bok financial / bank of oklahoma'],
+        legitimateDomains: ['bokf.com']
+    },
+    'banc of california': {
+        keywords: ['banc of california'],
+        legitimateDomains: ['bancofcal.com']
+    },
+    'cadence bank': {
+        keywords: ['cadence bank'],
+        legitimateDomains: ['cadencebank.com']
+    },
+    'citizens bank': {
+        keywords: ['citizens bank'],
+        legitimateDomains: ['citizensbank.com']
+    },
+    'city national bank': {
+        keywords: ['city national bank'],
+        legitimateDomains: ['cnb.com']
+    },
+    'comerica bank': {
+        keywords: ['comerica bank'],
+        legitimateDomains: ['comerica.com']
+    },
+    'current': {
+        keywords: ['current'],
+        legitimateDomains: ['current.com']
+    },
+    'first citizens bank': {
+        keywords: ['first citizens bank'],
+        legitimateDomains: ['firstcitizens.com']
+    },
+    'first hawaiian bank': {
+        keywords: ['first hawaiian bank'],
+        legitimateDomains: ['fhb.com']
+    },
+    'first interstate bank': {
+        keywords: ['first interstate bank'],
+        legitimateDomains: ['firstinterstatebank.com']
+    },
+    'frost bank': {
+        keywords: ['frost bank'],
+        legitimateDomains: ['frostbank.com']
+    },
+    'keybank': {
+        keywords: ['keybank'],
+        legitimateDomains: ['key.com']
+    },
+    'm&t bank': {
+        keywords: ['m&t bank'],
+        legitimateDomains: ['mtb.com']
+    },
+    'signature bank': {
+        keywords: ['signature bank'],
+        legitimateDomains: ['signatureny.com']
+    },
+    'silicon valley bank - legacy phishing': {
+        keywords: ['silicon valley bank - legacy phishing', 'svb'],
+        legitimateDomains: ['svb.com']
+    },
+    'synovus bank': {
+        keywords: ['synovus bank'],
+        legitimateDomains: ['synovus.com']
+    },
+    'valley bank': {
+        keywords: ['valley bank'],
+        legitimateDomains: ['valley.com']
+    },
+    'varo bank': {
+        keywords: ['varo bank'],
+        legitimateDomains: ['varomoney.com']
+    },
+    'webster bank': {
+        keywords: ['webster bank'],
+        legitimateDomains: ['websterbank.com']
+    },
+    'wintrust': {
+        keywords: ['wintrust'],
+        legitimateDomains: ['wintrust.com']
+    },
+    'zions bank': {
+        keywords: ['zions bank'],
+        legitimateDomains: ['zionsbank.com']
+    },
+    'alliant credit union': {
+        keywords: ['alliant credit union'],
+        legitimateDomains: ['alliantcreditunion.org']
+    },
+    'america first credit union': {
+        keywords: ['america first credit union'],
+        legitimateDomains: ['americafirst.com']
+    },
+    'america\'s credit union': {
+        keywords: ['america\'s credit union'],
+        legitimateDomains: ['americascu.org']
+    },
+    'arkansas federal credit union': {
+        keywords: ['arkansas federal credit union'],
+        legitimateDomains: ['afcu.org']
+    },
+    'becu': {
+        keywords: ['becu'],
+        legitimateDomains: ['becu.org']
+    },
+    'baxter credit union': {
+        keywords: ['baxter credit union', 'bcu'],
+        legitimateDomains: ['bcu.org']
+    },
+    'bellco credit union': {
+        keywords: ['bellco credit union'],
+        legitimateDomains: ['bellco.org']
+    },
+    'boulder valley credit union': {
+        keywords: ['boulder valley credit union'],
+        legitimateDomains: ['bvcu.org']
+    },
+    'connexus credit union': {
+        keywords: ['connexus credit union'],
+        legitimateDomains: ['connexuscu.org']
+    },
+    'desert financial credit union': {
+        keywords: ['desert financial credit union'],
+        legitimateDomains: ['desertfinancial.com']
+    },
+    'digital federal credit union': {
+        keywords: ['digital federal credit union', 'dcu'],
+        legitimateDomains: ['dcu.org']
+    },
+    'ent credit union': {
+        keywords: ['ent credit union'],
+        legitimateDomains: ['ent.com']
+    },
+    'first community credit union': {
+        keywords: ['first community credit union'],
+        legitimateDomains: ['firstcommunity.com']
+    },
+    'first tech federal credit union': {
+        keywords: ['first tech federal credit union'],
+        legitimateDomains: ['firsttechfed.com']
+    },
+    'gecu': {
+        keywords: ['gecu'],
+        legitimateDomains: ['gecu.com']
+    },
+    'georgia\'s own credit union': {
+        keywords: ['georgia\'s own credit union'],
+        legitimateDomains: ['georgiasown.org']
+    },
+    'golden 1 credit union': {
+        keywords: ['golden 1 credit union'],
+        legitimateDomains: ['golden1.com']
+    },
+    'harborstone credit union': {
+        keywords: ['harborstone credit union'],
+        legitimateDomains: ['harborstone.com']
+    },
+    'kinecta federal credit union': {
+        keywords: ['kinecta federal credit union'],
+        legitimateDomains: ['kinecta.org']
+    },
+    'langley federal credit union': {
+        keywords: ['langley federal credit union'],
+        legitimateDomains: ['langleyfcu.org']
+    },
+    'mountain america credit union': {
+        keywords: ['mountain america credit union'],
+        legitimateDomains: ['macu.com']
+    },
+    'navy army community credit union': {
+        keywords: ['navy army community credit union'],
+        legitimateDomains: ['navyarmyccu.com']
+    },
+    'nusenda credit union': {
+        keywords: ['nusenda credit union'],
+        legitimateDomains: ['nusenda.org']
+    },
+    'onpoint community credit union': {
+        keywords: ['onpoint community credit union'],
+        legitimateDomains: ['onpointcu.com']
+    },
+    'patelco credit union': {
+        keywords: ['patelco credit union'],
+        legitimateDomains: ['patelco.org']
+    },
+    'pentagon federal credit union': {
+        keywords: ['pentagon federal credit union', 'penfed'],
+        legitimateDomains: ['penfed.org']
+    },
+    'people\'s credit union': {
+        keywords: ['people\'s credit union', 'ri'],
+        legitimateDomains: ['peoplescu.com']
+    },
+    'rbfcu': {
+        keywords: ['rbfcu'],
+        legitimateDomains: ['rbfcu.org']
+    },
+    'redstone federal credit union': {
+        keywords: ['redstone federal credit union'],
+        legitimateDomains: ['redfcu.org']
+    },
+    'secu maryland': {
+        keywords: ['secu maryland'],
+        legitimateDomains: ['secu.com']
+    },
+    'schoolsfirst federal credit union': {
+        keywords: ['schoolsfirst federal credit union'],
+        legitimateDomains: ['schoolsfirstfcu.org']
+    },
+    'security service federal credit union': {
+        keywords: ['security service federal credit union'],
+        legitimateDomains: ['ssfcu.org']
+    },
+    'sound credit union': {
+        keywords: ['sound credit union'],
+        legitimateDomains: ['soundcu.com']
+    },
+    'space coast credit union': {
+        keywords: ['space coast credit union'],
+        legitimateDomains: ['sccu.com']
+    },
+    'spokane teachers credit union': {
+        keywords: ['spokane teachers credit union', 'stcu'],
+        legitimateDomains: ['stcu.org']
+    },
+    'state employees\' credit union': {
+        keywords: ['state employees\' credit union', 'nc secu'],
+        legitimateDomains: ['ncsecu.org']
+    },
+    'suncoast credit union': {
+        keywords: ['suncoast credit union'],
+        legitimateDomains: ['suncoastcreditunion.com']
+    },
+    'teachers federal credit union': {
+        keywords: ['teachers federal credit union'],
+        legitimateDomains: ['teachersfcu.org']
+    },
+    'tinker federal credit union': {
+        keywords: ['tinker federal credit union'],
+        legitimateDomains: ['tinkerfcu.org']
+    },
+    'travis credit union': {
+        keywords: ['travis credit union'],
+        legitimateDomains: ['traviscu.org']
+    },
+    'unfcu': {
+        keywords: ['unfcu'],
+        legitimateDomains: ['unfcu.org']
+    },
+    'unify financial credit union': {
+        keywords: ['unify financial credit union'],
+        legitimateDomains: ['unifyfcu.com']
+    },
+    'united federal credit union': {
+        keywords: ['united federal credit union'],
+        legitimateDomains: ['unitedfcu.com']
+    },
+    'vystar credit union': {
+        keywords: ['vystar credit union'],
+        legitimateDomains: ['vystarcu.org']
+    },
+    'wright-patt credit union': {
+        keywords: ['wright-patt credit union'],
+        legitimateDomains: ['wpcu.coop']
+    },
+    'adventhealth': {
+        keywords: ['adventhealth'],
+        legitimateDomains: ['adventhealth.com']
+    },
+    'ascension': {
+        keywords: ['ascension'],
+        legitimateDomains: ['ascension.org']
+    },
+    'banner health': {
+        keywords: ['banner health'],
+        legitimateDomains: ['bannerhealth.com']
+    },
+    'cleveland clinic': {
+        keywords: ['cleveland clinic'],
+        legitimateDomains: ['clevelandclinic.org']
+    },
+    'commonspirit health': {
+        keywords: ['commonspirit health'],
+        legitimateDomains: ['commonspirit.org']
+    },
+    'hca healthcare': {
+        keywords: ['hca healthcare'],
+        legitimateDomains: ['hcahealthcare.com']
+    },
+    'johns hopkins medicine': {
+        keywords: ['johns hopkins medicine'],
+        legitimateDomains: ['hopkinsmedicine.org']
+    },
+    'mass general brigham': {
+        keywords: ['mass general brigham'],
+        legitimateDomains: ['massgeneralbrigham.org']
+    },
+    'mayo clinic': {
+        keywords: ['mayo clinic'],
+        legitimateDomains: ['mayoclinic.org']
+    },
+    'nyu langone health': {
+        keywords: ['nyu langone health'],
+        legitimateDomains: ['nyulangone.org']
+    },
+    'providence': {
+        keywords: ['providence'],
+        legitimateDomains: ['providence.org']
+    },
+    'sutter health': {
+        keywords: ['sutter health'],
+        legitimateDomains: ['sutterhealth.org']
+    },
+    'trinity health': {
+        keywords: ['trinity health'],
+        legitimateDomains: ['trinity-health.org']
+    },
+    'upmc': {
+        keywords: ['upmc'],
+        legitimateDomains: ['upmc.com']
+    },
+    'akin': {
+        keywords: ['akin'],
+        legitimateDomains: ['akin.com']
+    },
+    'bclp': {
+        keywords: ['bclp'],
+        legitimateDomains: ['bclplaw.com']
+    },
+    'baker botts': {
+        keywords: ['baker botts'],
+        legitimateDomains: ['bakerbotts.com']
+    },
+    'baker mckenzie': {
+        keywords: ['baker mckenzie'],
+        legitimateDomains: ['bakermckenzie.com']
+    },
+    'cleary gottlieb': {
+        keywords: ['cleary gottlieb'],
+        legitimateDomains: ['cgsh.com']
+    },
+    'cooley': {
+        keywords: ['cooley'],
+        legitimateDomains: ['cooley.com']
+    },
+    'covington & burling': {
+        keywords: ['covington & burling'],
+        legitimateDomains: ['cov.com']
+    },
+    'dla piper': {
+        keywords: ['dla piper'],
+        legitimateDomains: ['dlapiper.com']
+    },
+    'debevoise & plimpton': {
+        keywords: ['debevoise & plimpton'],
+        legitimateDomains: ['debevoise.com']
+    },
+    'dentons': {
+        keywords: ['dentons'],
+        legitimateDomains: ['dentons.com']
+    },
+    'gibson, dunn & crutcher': {
+        keywords: ['gibson, dunn & crutcher'],
+        legitimateDomains: ['gibsondunn.com']
+    },
+    'goodwin': {
+        keywords: ['goodwin'],
+        legitimateDomains: ['goodwinlaw.com']
+    },
+    'greenberg traurig': {
+        keywords: ['greenberg traurig'],
+        legitimateDomains: ['gtlaw.com']
+    },
+    'holland & knight': {
+        keywords: ['holland & knight'],
+        legitimateDomains: ['hklaw.com']
+    },
+    'jones day': {
+        keywords: ['jones day'],
+        legitimateDomains: ['jonesday.com']
+    },
+    'king & spalding': {
+        keywords: ['king & spalding'],
+        legitimateDomains: ['kslaw.com']
+    },
+    'kirkland & ellis': {
+        keywords: ['kirkland & ellis'],
+        legitimateDomains: ['kirkland.com']
+    },
+    'latham & watkins': {
+        keywords: ['latham & watkins'],
+        legitimateDomains: ['lw.com']
+    },
+    'mayer brown': {
+        keywords: ['mayer brown'],
+        legitimateDomains: ['mayerbrown.com']
+    },
+    'milbank': {
+        keywords: ['milbank'],
+        legitimateDomains: ['milbank.com']
+    },
+    'morgan, lewis & bockius': {
+        keywords: ['morgan, lewis & bockius'],
+        legitimateDomains: ['morganlewis.com']
+    },
+    'o\'melveny & myers': {
+        keywords: ['o\'melveny & myers'],
+        legitimateDomains: ['omm.com']
+    },
+    'orrick': {
+        keywords: ['orrick'],
+        legitimateDomains: ['orrick.com']
+    },
+    'paul hastings': {
+        keywords: ['paul hastings'],
+        legitimateDomains: ['paulhastings.com']
+    },
+    'paul, weiss': {
+        keywords: ['paul, weiss'],
+        legitimateDomains: ['paulweiss.com']
+    },
+    'perkins coie': {
+        keywords: ['perkins coie'],
+        legitimateDomains: ['perkinscoie.com']
+    },
+    'quinn emanuel urquhart & sullivan': {
+        keywords: ['quinn emanuel urquhart & sullivan'],
+        legitimateDomains: ['quinnemanuel.com']
+    },
+    'reed smith': {
+        keywords: ['reed smith'],
+        legitimateDomains: ['reedsmith.com']
+    },
+    'ropes & gray': {
+        keywords: ['ropes & gray'],
+        legitimateDomains: ['ropesgray.com']
+    },
+    'shearman & sterling': {
+        keywords: ['shearman & sterling'],
+        legitimateDomains: ['shearman.com']
+    },
+    'sidley austin': {
+        keywords: ['sidley austin'],
+        legitimateDomains: ['sidley.com']
+    },
+    'simpson thacher & bartlett': {
+        keywords: ['simpson thacher & bartlett'],
+        legitimateDomains: ['stblaw.com']
+    },
+    'skadden, arps, slate, meagher & flom': {
+        keywords: ['skadden, arps, slate, meagher & flom'],
+        legitimateDomains: ['skadden.com']
+    },
+    'squire patton boggs': {
+        keywords: ['squire patton boggs'],
+        legitimateDomains: ['squirepattonboggs.com']
+    },
+    'sullivan & cromwell': {
+        keywords: ['sullivan & cromwell'],
+        legitimateDomains: ['sullcrom.com']
+    },
+    'weil, gotshal & manges': {
+        keywords: ['weil, gotshal & manges'],
+        legitimateDomains: ['weil.com']
+    },
+    'white & case': {
+        keywords: ['white & case'],
+        legitimateDomains: ['whitecase.com']
+    },
+    'wilmerhale': {
+        keywords: ['wilmerhale'],
+        legitimateDomains: ['wilmerhale.com']
+    },
+    'winston & strawn': {
+        keywords: ['winston & strawn'],
+        legitimateDomains: ['winston.com']
+    },
+    'amrock': {
+        keywords: ['amrock'],
+        legitimateDomains: ['amrock.com']
+    },
+    'fidelity national title': {
+        keywords: ['fidelity national title'],
+        legitimateDomains: ['fidelitynationaltitle.com']
+    },
+    'wfg national title': {
+        keywords: ['wfg national title'],
+        legitimateDomains: ['wfgtitle.com']
+    },
+    'california institute of technology': {
+        keywords: ['california institute of technology', 'caltech'],
+        legitimateDomains: ['caltech.edu']
+    },
+    'carnegie mellon university': {
+        keywords: ['carnegie mellon university'],
+        legitimateDomains: ['cmu.edu']
+    },
+    'columbia university': {
+        keywords: ['columbia university'],
+        legitimateDomains: ['columbia.edu']
+    },
+    'cornell university': {
+        keywords: ['cornell university'],
+        legitimateDomains: ['cornell.edu']
+    },
+    'duke university': {
+        keywords: ['duke university'],
+        legitimateDomains: ['duke.edu']
+    },
+    'georgia institute of technology': {
+        keywords: ['georgia institute of technology'],
+        legitimateDomains: ['gatech.edu']
+    },
+    'harvard university': {
+        keywords: ['harvard university'],
+        legitimateDomains: ['harvard.edu']
+    },
+    'johns hopkins university': {
+        keywords: ['johns hopkins university'],
+        legitimateDomains: ['jhu.edu']
+    },
+    'massachusetts institute of technology': {
+        keywords: ['massachusetts institute of technology', 'mit'],
+        legitimateDomains: ['mit.edu']
+    },
+    'new york university': {
+        keywords: ['new york university', 'nyu'],
+        legitimateDomains: ['nyu.edu']
+    },
+    'northwestern university': {
+        keywords: ['northwestern university'],
+        legitimateDomains: ['northwestern.edu']
+    },
+    'princeton university': {
+        keywords: ['princeton university'],
+        legitimateDomains: ['princeton.edu']
+    },
+    'stanford university': {
+        keywords: ['stanford university'],
+        legitimateDomains: ['stanford.edu']
+    },
+    'uc san diego': {
+        keywords: ['uc san diego'],
+        legitimateDomains: ['ucsd.edu']
+    },
+    'ucla': {
+        keywords: ['ucla'],
+        legitimateDomains: ['ucla.edu']
+    },
+    'university of california, berkeley': {
+        keywords: ['university of california, berkeley'],
+        legitimateDomains: ['berkeley.edu']
+    },
+    'university of chicago': {
+        keywords: ['university of chicago'],
+        legitimateDomains: ['uchicago.edu']
+    },
+    'university of michigan': {
+        keywords: ['university of michigan'],
+        legitimateDomains: ['umich.edu']
+    },
+    'university of pennsylvania': {
+        keywords: ['university of pennsylvania'],
+        legitimateDomains: ['upenn.edu']
+    },
+    'yale university': {
+        keywords: ['yale university'],
+        legitimateDomains: ['yale.edu']
+    },
+    'southern company': {
+        keywords: ['southern company'],
+        legitimateDomains: ['southerncompany.com']
+    },
+    'xcel energy': {
+        keywords: ['xcel energy'],
+        legitimateDomains: ['xcelenergy.com']
+    },
+    'bidv': {
+        keywords: ['bidv'],
+        legitimateDomains: ['bidv.com.vn']
+    },
+    'techcombank': {
+        keywords: ['techcombank'],
+        legitimateDomains: ['techcombank.com.vn']
+    },
+    'vpbank': {
+        keywords: ['vpbank'],
+        legitimateDomains: ['vpbank.com.vn']
+    },
+    'vietcombank': {
+        keywords: ['vietcombank'],
+        legitimateDomains: ['vietcombank.com.vn']
+    },
+    'vietinbank': {
+        keywords: ['vietinbank'],
+        legitimateDomains: ['vietinbank.vn']
+    },
+    'vietnam post': {
+        keywords: ['vietnam post'],
+        legitimateDomains: ['vnpost.vn']
+    },
+    'general department of taxation': {
+        keywords: ['general department of taxation', 'vietnam'],
+        legitimateDomains: ['gdt.gov.vn']
+    },
+    'vietnam immigration': {
+        keywords: ['vietnam immigration'],
+        legitimateDomains: ['immigration.gov.vn']
+    }
 };
 
 // ============================================
@@ -2731,7 +5486,777 @@ const IMPERSONATION_TARGETS = {
     'hopper': ['hopper.com'],
     'kayak': ['kayak.com'],
     'travelocity': ['travelocity.com'],
-    'orbitz': ['orbitz.com']
+    'orbitz': ['orbitz.com'],
+    // Cloudflare Top 50 Gap Fill
+    'caixa': ['caixa.gov.br', 'caixa.com.br'],
+    'caixa economica': ['caixa.gov.br', 'caixa.com.br'],
+    'caixa economica federal': ['caixa.gov.br', 'caixa.com.br'],
+    'bank millennium': ['bankmillennium.pl'],
+    'millennium bank': ['bankmillennium.pl'],
+    'inpost': ['inpost.pl', 'inpost.eu', 'inpost.co.uk'],
+    'dpd': ['dpd.com', 'dpd.de', 'dpd.co.uk', 'dpd.fr', 'dpd.com.pl'],
+    'dpd delivery': ['dpd.com', 'dpd.de', 'dpd.co.uk'],
+    'deutscher paketdienst': ['dpd.com', 'dpd.de'],
+    'lexisnexis': ['lexisnexis.com', 'lexis.com'],
+    'lexis nexis': ['lexisnexis.com', 'lexis.com'],
+    'nicos': ['nicos.co.jp', 'cr.mufg.jp'],
+    'nicos card': ['nicos.co.jp', 'cr.mufg.jp'],
+    'mitsubishi ufj nicos': ['nicos.co.jp', 'cr.mufg.jp'],
+    'national police agency': ['npa.go.jp'],
+    'japan police': ['npa.go.jp'],
+    'banco de la nación argentina': ['bna.com.ar'],
+    'afip': ['afip.gob.ar'],
+    'university of buenos aires': ['uba.ar'],
+    'uba': ['uba.ar'],
+    'bank australia': ['bankaust.com.au'],
+    'ing australia': ['ing.com.au'],
+    'macquarie bank': ['macquarie.com.au'],
+    'australian federal police': ['afp.gov.au'],
+    'department of home affairs': ['homeaffairs.gov.au'],
+    'australian national university': ['anu.edu.au'],
+    'anu': ['anu.edu.au'],
+    'monash university': ['monash.edu'],
+    'university of melbourne': ['unimelb.edu.au'],
+    'university of new south wales': ['unsw.edu.au'],
+    'unsw': ['unsw.edu.au'],
+    'university of queensland': ['uq.edu.au'],
+    'university of sydney': ['sydney.edu.au'],
+    'agl': ['agl.com.au'],
+    'energyaustralia': ['energyaustralia.com.au'],
+    'origin energy': ['originenergy.com.au'],
+    'erste bank': ['erstebank.at'],
+    'raiffeisen bank international': ['rbinternational.com'],
+    'unicredit bank austria': ['bankaustria.at'],
+    'finanzonline': ['finanzonline.bmf.gv.at'],
+    'oesterreich.gv.at': ['oesterreich.gv.at'],
+    'a1 telekom austria': ['a1.net'],
+    'tu wien': ['tuwien.at'],
+    'university of vienna': ['univie.ac.at'],
+    'bnp paribas fortis': ['bnpparibasfortis.be'],
+    'belfius': ['belfius.be'],
+    'ing belgium': ['ing.be'],
+    'kbc': ['kbc.com'],
+    'belgian federal police': ['police.be'],
+    'fps finance': ['finance.belgium.be'],
+    'spf finances': ['finance.belgium.be'],
+    'orange belgium': ['orange.be'],
+    'proximus': ['proximus.be'],
+    'telenet': ['telenet.be'],
+    'ghent university': ['ugent.be'],
+    'ku leuven': ['kuleuven.be'],
+    'caixa econômica federal': ['caixa.gov.br'],
+    'santander brasil': ['santander.com.br'],
+    'detran': ['gov.br'],
+    'detran-sp': ['detran.sp.gov.br'],
+    'inss': ['gov.br/inss'],
+    'polícia federal': ['gov.br/pf'],
+    'receita federal do brasil': ['gov.br/receitafederal'],
+    'gov.br': ['gov.br'],
+    'university of sao paulo': ['usp.br'],
+    'usp': ['usp.br'],
+    'eletrobras': ['eletrobras.com'],
+    'enel brasil': ['enel.com.br'],
+    'itaipu binacional': ['itaipu.gov.br'],
+    'sabesp': ['sabesp.com.br'],
+    'eq bank': ['eqbank.ca'],
+    'national bank of canada': ['nbc.ca'],
+    'tangerine': ['tangerine.ca'],
+    'atb financial': ['atb.com'],
+    'affinity credit union': ['affinitycu.ca'],
+    'coast capital savings': ['coastcapitalsavings.com'],
+    'desjardins': ['desjardins.com'],
+    'first west credit union': ['firstwestcu.ca'],
+    'meridian credit union': ['meridiancu.ca'],
+    'servus credit union': ['servus.ca'],
+    'vancity': ['vancity.com'],
+    'canada revenue agency': ['cra-arc.gc.ca'],
+    'revenu québec': ['revenuquebec.ca'],
+    'serviceontario': ['ontario.ca'],
+    'bell': ['bell.ca'],
+    'mcgill university': ['mcgill.ca'],
+    'university of alberta': ['ualberta.ca'],
+    'university of british columbia': ['ubc.ca'],
+    'university of toronto': ['utoronto.ca'],
+    'university of waterloo': ['uwaterloo.ca'],
+    'bc hydro': ['bchydro.com'],
+    'enbridge gas': ['enbridgegas.com'],
+    'hydro-québec': ['hydroquebec.com'],
+    'ontario power generation': ['opg.com'],
+    'toronto hydro': ['torontohydro.com'],
+    'banco de chile': ['bancochile.cl'],
+    'sii': ['sii.cl'],
+    'universidad de chile': ['uchile.cl'],
+    'agricultural bank of china': ['abchina.com'],
+    'abc': ['abchina.com'],
+    'bank of china': ['boc.cn'],
+    'china construction bank': ['ccb.com'],
+    'ccb': ['ccb.com'],
+    'china merchants bank': ['cmbchina.com'],
+    'industrial and commercial bank of china': ['icbc.com.cn'],
+    'icbc': ['icbc.com.cn'],
+    'webank': ['webank.com'],
+    'ministry of public security': ['mps.gov.cn'],
+    'national immigration administration': ['nia.gov.cn'],
+    'state taxation administration': ['chinatax.gov.cn'],
+    'fudan university': ['fudan.edu.cn'],
+    'hong kong university of science and technology': ['hkust.edu.hk'],
+    'hkust': ['hkust.edu.hk'],
+    'peking university': ['pku.edu.cn'],
+    'shanghai jiao tong university': ['sjtu.edu.cn'],
+    'tsinghua university': ['tsinghua.edu.cn'],
+    'university of hong kong': ['hku.hk'],
+    'china southern power grid': ['csg.cn'],
+    'state grid corporation of china': ['sgcc.com.cn'],
+    'banco de la república': ['banrep.gov.co'],
+    'colombia': ['banrep.gov.co'],
+    'dian': ['dian.gov.co'],
+    'national university of colombia': ['unal.edu.co'],
+    'česká spořitelna': ['csas.cz'],
+    'finanční správa': ['financnisprava.cz'],
+    'danske bank': ['danskebank.com'],
+    'nykredit': ['nykredit.dk'],
+    'postnord denmark': ['postnord.dk'],
+    'borger.dk': ['borger.dk'],
+    'danish police': ['politi.dk'],
+    'skat': ['skat.dk'],
+    'tax agency': ['skat.dk'],
+    'technical university of denmark': ['dtu.dk'],
+    'dtu': ['dtu.dk'],
+    'university of copenhagen': ['ku.dk'],
+    'national bank of egypt': ['nbe.com.eg'],
+    'egyptian national post organization': ['egyptpost.org'],
+    'egypt passport/immigration': ['moi.gov.eg'],
+    'moi portal': ['moi.gov.eg'],
+    'egyptian tax authority': ['eta.gov.eg'],
+    'aalto university': ['aalto.fi'],
+    'university of helsinki': ['helsinki.fi'],
+    'boursorama banque': ['boursorama.com'],
+    'crédit agricole': ['credit-agricole.com'],
+    'crédit lyonnais': ['lcl.fr'],
+    'lcl': ['lcl.fr'],
+    'crédit mutuel': ['creditmutuel.fr'],
+    'groupe bpce': ['bpce.fr'],
+    'la banque postale': ['labanquepostale.fr'],
+    'chronopost': ['chronopost.fr'],
+    'ants': ['ants.gouv.fr'],
+    'assurance maladie': ['ameli.fr'],
+    'caf': ['caf.fr'],
+    'french national police': ['police-nationale.interieur.gouv.fr'],
+    'service-public.fr': ['service-public.fr'],
+    'impots.gouv.fr': ['impots.gouv.fr'],
+    'bredin prat': ['bredinprat.com'],
+    'gide loyrette nouel': ['gide.com'],
+    'free': ['free.fr'],
+    'iliad': ['free.fr'],
+    'sorbonne université': ['sorbonne-universite.fr'],
+    'université psl': ['psl.eu'],
+    'école polytechnique': ['polytechnique.edu'],
+    'edf': ['edf.fr'],
+    'engie': ['engie.com'],
+    'rte': ['rte-france.com'],
+    'france transmission': ['rte-france.com'],
+    'veolia': ['veolia.com'],
+    'commerzbank': ['commerzbank.com'],
+    'dz bank': ['dzbank.com'],
+    'kfw': ['kfw.de'],
+    'n26': ['n26.com'],
+    'bvg': ['bvg.de'],
+    'bundesportal': ['bund.de'],
+    'bundeszentralamt für steuern': ['bzst.de'],
+    'bzst': ['bzst.de'],
+    'deutsche rentenversicherung': ['deutsche-rentenversicherung.de'],
+    'federal employment agency': ['arbeitsagentur.de'],
+    'federal police': ['bundespolizei.de'],
+    'bundespolizei': ['bundespolizei.de'],
+    'kraftfahrt-bundesamt': ['kba.de'],
+    'kba': ['kba.de'],
+    'zoll': ['zoll.de'],
+    'german customs': ['zoll.de'],
+    'gleiss lutz': ['gleisslutz.com'],
+    'hengeler mueller': ['hengeler.com'],
+    'noerr': ['noerr.com'],
+    'vodafone germany': ['vodafone.de'],
+    'heidelberg university': ['uni-heidelberg.de'],
+    'lmu munich': ['lmu.de'],
+    'rwth aachen university': ['rwth-aachen.de'],
+    'technical university of munich': ['tum.de'],
+    'tum': ['tum.de'],
+    'e.on': ['eon.com'],
+    'enbw': ['enbw.com'],
+    'rwe': ['rwe.com'],
+    'stadtwerke münchen': ['swm.de'],
+    'vattenfall germany': ['vattenfall.de'],
+    'bdo': ['bdo.com'],
+    'bdo uk': ['bdo.co.uk'],
+    'bdo usa': ['bdo.com'],
+    'baker tilly': ['bakertilly.com'],
+    'crowe': ['crowe.com'],
+    'crowe uk': ['crowe.co.uk'],
+    'deloitte': ['deloitte.com'],
+    'ey': ['ey.com'],
+    'grant thornton': ['grantthornton.global'],
+    'grant thornton us': ['grantthornton.com'],
+    'hlb': ['hlb.global'],
+    'kpmg': ['kpmg.com'],
+    'kreston global': ['kreston.com'],
+    'mazars': ['mazars.com'],
+    'moore global': ['moore-global.com'],
+    'nexia': ['nexia.com'],
+    'pkf': ['pkf.com'],
+    'primeglobal': ['primeglobal.net'],
+    'pwc': ['pwc.com'],
+    'rsm': ['rsm.global'],
+    'rsm us': ['rsmus.com'],
+    'gls': ['gls-group.com'],
+    'alpha bank': ['alpha.gr'],
+    'aade': ['aade.gr'],
+    'otp bank': ['otpbank.hu'],
+    'nav': ['nav.gov.hu'],
+    'indusind bank': ['indusind.com'],
+    'kotak mahindra bank': ['kotak.com'],
+    'digilocker': ['digilocker.gov.in'],
+    'epfo': ['epfindia.gov.in'],
+    'gst portal': ['gst.gov.in'],
+    'income tax department': ['incometax.gov.in'],
+    'npci': ['npci.org.in'],
+    'passport seva': ['passportindia.gov.in'],
+    'iit bombay': ['iitb.ac.in'],
+    'iit delhi': ['iitd.ac.in'],
+    'iit madras': ['iitm.ac.in'],
+    'indian institute of science': ['iisc.ac.in'],
+    'iisc': ['iisc.ac.in'],
+    'indian institute of technology bombay': ['iitb.ac.in'],
+    'indian institute of technology delhi': ['iitd.ac.in'],
+    'indian institute of technology kanpur': ['iitk.ac.in'],
+    'bni': ['bni.co.id'],
+    'bri': ['bri.co.id'],
+    'bank mandiri': ['bankmandiri.co.id'],
+    'jenius': ['jenius.com'],
+    'btpn': ['jenius.com'],
+    'pos indonesia': ['posindonesia.co.id'],
+    'directorate general of taxes': ['pajak.go.id'],
+    'djp': ['pajak.go.id'],
+    'immigration': ['imigrasi.go.id'],
+    'pln': ['pln.co.id'],
+    'aib': ['aib.ie'],
+    'bank of ireland': ['bankofireland.com'],
+    'permanent tsb': ['ptsb.ie'],
+    'an garda síochána': ['garda.ie'],
+    'department of social protection': ['gov.ie'],
+    'revenue': ['revenue.ie'],
+    'trinity college dublin': ['tcd.ie'],
+    'university college dublin': ['ucd.ie'],
+    'bank hapoalim': ['bankhapoalim.co.il'],
+    'bank leumi': ['leumi.co.il'],
+    'israel discount bank': ['discountbank.co.il'],
+    'mizrahi-tefahot': ['mizrahi-tefahot.co.il'],
+    'israel tax authority': ['taxes.gov.il'],
+    'population and immigration authority': ['gov.il'],
+    'bper banca': ['bper.it'],
+    'banco bpm': ['bancobpm.it'],
+    'agenzia delle entrate': ['agenziaentrate.gov.it'],
+    'inps': ['inps.it'],
+    'ministero dell\'interno': ['interno.gov.it'],
+    'ministero delle infrastrutture e dei trasporti': ['mit.gov.it'],
+    'polizia di stato': ['poliziadistato.it'],
+    'bonellierede': ['bonellierede.com'],
+    'chiomenti': ['chiomenti.net'],
+    'tim': ['tim.it'],
+    'vodafone italy': ['vodafone.it'],
+    'bocconi university': ['unibocconi.it'],
+    'politecnico di milano': ['polimi.it'],
+    'polytechnic university of turin': ['polito.it'],
+    'sapienza university of rome': ['uniroma1.it'],
+    'university of bologna': ['unibo.it'],
+    'university of milan': ['unimi.it'],
+    'a2a': ['a2a.eu'],
+    'acea': ['acea.it'],
+    'snam': ['snam.it'],
+    'terna': ['terna.it'],
+    'japan post bank': ['jp-bank.japanpost.jp'],
+    'rakuten bank': ['rakuten-bank.co.jp'],
+    'immigration services agency of japan': ['isa.go.jp'],
+    'japan pension service': ['nenkin.go.jp'],
+    'mynumber portal': ['myna.go.jp'],
+    'national tax agency': ['nta.go.jp'],
+    'nta': ['nta.go.jp'],
+    'kyoto university': ['kyoto-u.ac.jp'],
+    'osaka university': ['osaka-u.ac.jp'],
+    'tohoku university': ['tohoku.ac.jp'],
+    'university of tokyo': ['u-tokyo.ac.jp'],
+    'kansai electric power': ['kepco.co.jp'],
+    'kepco': ['kepco.co.jp'],
+    'osaka gas': ['osakagas.co.jp'],
+    'tepco': ['tepco.co.jp'],
+    'tokyo gas': ['tokyo-gas.co.jp'],
+    'equity bank kenya': ['equitybank.co.ke'],
+    'kcb bank': ['kcbgroup.com'],
+    'kenya post': ['posta.co.ke'],
+    'kenya revenue authority': ['kra.go.ke'],
+    'kra': ['kra.go.ke'],
+    'ecitizen kenya': ['ecitizen.go.ke'],
+    'safaricom': ['safaricom.co.ke'],
+    'kenya power': ['kplc.co.ke'],
+    'hong leong bank': ['hlb.com.my'],
+    'public bank': ['publicbank.com.my'],
+    'rhb bank': ['rhbgroup.com'],
+    'pos malaysia': ['pos.com.my'],
+    'jabatan imigresen malaysia': ['imi.gov.my'],
+    'lhdn': ['hasil.gov.my'],
+    'bbva méxico': ['bbva.mx'],
+    'banco azteca': ['bancoazteca.com.mx'],
+    'banorte': ['banorte.com'],
+    'citibanamex': ['banamex.com'],
+    'santander méxico': ['santander.com.mx'],
+    'correos de méxico': ['correosdemexico.gob.mx'],
+    'imss': ['imss.gob.mx'],
+    'sat': ['sat.gob.mx'],
+    'sep': ['gob.mx/sep'],
+    'secretaría de relaciones exteriores': ['gob.mx/sre'],
+    'sre': ['gob.mx/sre'],
+    'national autonomous university of mexico': ['unam.mx'],
+    'unam': ['unam.mx'],
+    'tecnológico de monterrey': ['tec.mx'],
+    'cfe': ['cfe.mx'],
+    'conagua': ['gob.mx/conagua'],
+    'abn amro': ['abnamro.com'],
+    'bunq': ['bunq.com'],
+    'belastingdienst': ['belastingdienst.nl'],
+    'duo': ['duo.nl'],
+    'digid': ['digid.nl'],
+    'ind': ['ind.nl'],
+    'politie': ['politie.nl'],
+    'netherlands police': ['politie.nl'],
+    'buren': ['burenlegal.com'],
+    'vodafoneziggo': ['vodafoneziggo.nl'],
+    'delft university of technology': ['tudelft.nl'],
+    'tu delft': ['tudelft.nl'],
+    'erasmus university rotterdam': ['eur.nl'],
+    'leiden university': ['universiteitleiden.nl'],
+    'university of amsterdam': ['uva.nl'],
+    'wageningen university & research': ['wur.nl'],
+    'eneco': ['eneco.com'],
+    'vattenfall netherlands': ['vattenfall.nl'],
+    'anz new zealand': ['anz.co.nz'],
+    'asb bank': ['asb.co.nz'],
+    'bnz': ['bnz.co.nz'],
+    'kiwibank': ['kiwibank.co.nz'],
+    'westpac nz': ['westpac.co.nz'],
+    'nz post': ['nzpost.co.nz'],
+    'immigration new zealand': ['immigration.govt.nz'],
+    'inland revenue': ['ird.govt.nz'],
+    'nz': ['ird.govt.nz'],
+    'university of auckland': ['auckland.ac.nz'],
+    'university of otago': ['otago.ac.nz'],
+    'access bank': ['accessbankplc.com'],
+    'firstbank nigeria': ['firstbanknigeria.com'],
+    'gtbank': ['gtbank.com'],
+    'zenith bank': ['zenithbank.com'],
+    'firs': ['firs.gov.ng'],
+    'nigeria immigration service': ['immigration.gov.ng'],
+    'airtel africa': ['airtel.africa'],
+    'glo': ['gloworld.com'],
+    'globacom': ['gloworld.com'],
+    'dnb': ['dnb.no'],
+    'dnb bank': ['dnb.no'],
+    'no': ['dnb.no'],
+    'posten norge': ['posten.no'],
+    'norwegian police': ['politiet.no'],
+    'skatteetaten': ['skatteetaten.no'],
+    'tax administration': ['skatteetaten.no'],
+    'university of oslo': ['uio.no'],
+    'banco de crédito del perú': ['viabcp.com'],
+    'bcp': ['viabcp.com'],
+    'sunat': ['sunat.gob.pe'],
+    'national university of san marcos': ['unmsm.edu.pe'],
+    'bdo unibank': ['bdo.com.ph'],
+    'bank of the philippine islands': ['bpi.com.ph'],
+    'bpi': ['bpi.com.ph'],
+    'metrobank': ['metrobank.com.ph'],
+    'philippine postal corporation': ['phlpost.gov.ph'],
+    'phlpost': ['phlpost.gov.ph'],
+    'bi': ['immigration.gov.ph'],
+    'bir': ['bir.gov.ph'],
+    'bank pekao': ['pekao.com.pl'],
+    'pko bank polski': ['pkobp.pl'],
+    'santander bank polska': ['santander.pl'],
+    'mbank': ['mbank.pl'],
+    'poczta polska': ['poczta-polska.pl'],
+    'kas': ['gov.pl'],
+    'zus': ['zus.pl'],
+    'caixa geral de depósitos': ['cgd.pt'],
+    'cgd': ['cgd.pt'],
+    'millennium bcp': ['millenniumbcp.pt'],
+    'novo banco': ['novobanco.pt'],
+    'ctt': ['ctt.pt'],
+    'portugal post': ['ctt.pt'],
+    'autoridade tributária e aduaneira': ['portaldasfinancas.gov.pt'],
+    'serviço de estrangeiros e fronteiras - legacy': ['sef.pt'],
+    'sef': ['sef.pt'],
+    'banca transilvania': ['bancatransilvania.ro'],
+    'anaf': ['anaf.ro'],
+    'riyad bank': ['riyadbank.com'],
+    'saudi british bank': ['sabb.com'],
+    'sabb': ['sabb.com'],
+    'saudi national bank': ['snb.com.sa'],
+    'snb': ['snb.com.sa'],
+    'absher': ['absher.sa'],
+    'gosi': ['gosi.gov.sa'],
+    'ministry of human resources and social development': ['hrsd.gov.sa'],
+    'ministry of interior': ['moi.gov.sa'],
+    'zatca': ['zatca.gov.sa'],
+    'mobily': ['mobily.com.sa'],
+    'zain saudi arabia': ['sa.zain.com'],
+    'stc': ['stc.com.sa'],
+    'saudi electricity company': ['se.com.sa'],
+    'uob': ['uobgroup.com'],
+    'singpost': ['singpost.com'],
+    'cpf board': ['cpf.gov.sg'],
+    'ica': ['ica.gov.sg'],
+    'iras': ['iras.gov.sg'],
+    'nanyang technological university': ['ntu.edu.sg'],
+    'ntu': ['ntu.edu.sg'],
+    'national university of singapore': ['nus.edu.sg'],
+    'nus': ['nus.edu.sg'],
+    'sars': ['sars.gov.za'],
+    'eskom': ['eskom.co.za'],
+    'hana bank': ['kebhana.com'],
+    'kb kookmin bank': ['kbstar.com'],
+    'shinhan bank': ['shinhan.com'],
+    'woori bank': ['wooribank.com'],
+    'korea post': ['epost.go.kr'],
+    'korea immigration service': ['immigration.go.kr'],
+    'korea national health insurance service': ['nhis.or.kr'],
+    'nhis': ['nhis.or.kr'],
+    'korean national police agency': ['police.go.kr'],
+    'national tax service': ['nts.go.kr'],
+    'nts': ['nts.go.kr'],
+    'kaist': ['kaist.ac.kr'],
+    'korea university': ['korea.edu'],
+    'seoul national university': ['snu.ac.kr'],
+    'yonsei university': ['yonsei.ac.kr'],
+    'kogas': ['kogas.or.kr'],
+    'bankinter': ['bankinter.com'],
+    'mrw': ['mrw.es'],
+    'seur': ['seur.com'],
+    'agencia tributaria': ['agenciatributaria.es'],
+    'aeat': ['agenciatributaria.es'],
+    'dgt': ['dgt.es'],
+    'policía nacional': ['policia.es'],
+    'sepe': ['sepe.es'],
+    'seguridad social': ['seg-social.es'],
+    'spain': ['seg-social.es'],
+    'garrigues': ['garrigues.com'],
+    'uría menéndez': ['uria.com'],
+    'orange spain': ['orange.es'],
+    'complutense university of madrid': ['ucm.es'],
+    'universidad autónoma de madrid': ['uam.es'],
+    'university of barcelona': ['ub.edu'],
+    'aguas de barcelona': ['aiguesdebarcelona.cat'],
+    'agbar': ['aiguesdebarcelona.cat'],
+    'endesa': ['endesa.com'],
+    'iberdrola': ['iberdrola.com'],
+    'iberdrola clientes': ['iberdrola.es'],
+    'naturgy': ['naturgy.com'],
+    'handelsbanken': ['handelsbanken.com'],
+    'nordea': ['nordea.com'],
+    'nordics': ['nordea.com'],
+    'seb': ['sebgroup.com'],
+    'svenska handelsbanken': ['handelsbanken.se'],
+    'se': ['handelsbanken.se'],
+    'swedbank': ['swedbank.com'],
+    'postnord': ['postnord.se'],
+    'försäkringskassan': ['forsakringskassan.se'],
+    'social insurance': ['forsakringskassan.se'],
+    'skatteverket': ['skatteverket.se'],
+    'swedish police': ['polisen.se'],
+    'karolinska institutet': ['ki.se'],
+    'lund university': ['lunduniversity.lu.se'],
+    'uppsala university': ['uu.se'],
+    'credit suisse': ['credit-suisse.com'],
+    'postfinance': ['postfinance.ch'],
+    'raiffeisen switzerland': ['raiffeisen.ch'],
+    'zürcher kantonalbank': ['zkb.ch'],
+    'zkb': ['zkb.ch'],
+    'sem': ['sem.admin.ch'],
+    'swiss federal tax administration': ['estv.admin.ch'],
+    'fta': ['estv.admin.ch'],
+    'salt': ['salt.ch'],
+    'epfl': ['epfl.ch'],
+    'eth zurich': ['ethz.ch'],
+    'university of basel': ['unibas.ch'],
+    'university of geneva': ['unige.ch'],
+    'university of zurich': ['uzh.ch'],
+    'axpo': ['axpo.com'],
+    'national university of taiwan': ['ntu.edu.tw'],
+    'bangkok bank': ['bangkokbank.com'],
+    'kasikornbank': ['kasikornbank.com'],
+    'krungsri': ['krungsri.com'],
+    'krungthai bank': ['ktb.co.th'],
+    'siam commercial bank': ['scb.co.th'],
+    'scb': ['scb.co.th'],
+    'thailand post': ['thailandpost.co.th'],
+    'immigration bureau': ['immigration.go.th'],
+    'thailand': ['immigration.go.th'],
+    'revenue department': ['rd.go.th'],
+    'akbank': ['akbank.com'],
+    'garanti bbva': ['garantibbva.com.tr'],
+    'yapı kredi': ['yapikredi.com.tr'],
+    'i̇şbank': ['isbank.com.tr'],
+    'ptt': ['ptt.gov.tr'],
+    'revenue administration': ['gib.gov.tr'],
+    'sgk': ['sgk.gov.tr'],
+    'e-devlet': ['turkiye.gov.tr'],
+    'abu dhabi commercial bank': ['adcb.com'],
+    'adcb': ['adcb.com'],
+    'dubai islamic bank': ['dib.ae'],
+    'emirates nbd': ['emiratesnbd.com'],
+    'first abu dhabi bank': ['bankfab.com'],
+    'fab': ['bankfab.com'],
+    'dubai police': ['dubaipolice.gov.ae'],
+    'federal tax authority': ['tax.gov.ae'],
+    'icp': ['icp.gov.ae'],
+    'addc': ['addc.ae'],
+    'dewa': ['dewa.gov.ae'],
+    'metro bank': ['metrobankonline.co.uk'],
+    'starling bank': ['starlingbank.com'],
+    'tsb bank': ['tsb.co.uk'],
+    'virgin money uk': ['virginmoneyukplc.com'],
+    'bath building society': ['bathbuildingsociety.co.uk'],
+    'beverley building society': ['beverleybuildingsociety.co.uk'],
+    'buckinghamshire building society': ['bucksbs.co.uk'],
+    'cambridge building society': ['cambridgebs.co.uk'],
+    'coventry building society': ['coventrybuildingsociety.co.uk'],
+    'hinckley & rugby building society': ['hrbs.co.uk'],
+    'leeds building society': ['leedsbuildingsociety.co.uk'],
+    'loughborough building society': ['theloughborough.co.uk'],
+    'market harborough building society': ['mhbs.co.uk'],
+    'marsden building society': ['themarsden.co.uk'],
+    'monmouthshire building society': ['monbs.com'],
+    'nationwide building society': ['nationwide.co.uk'],
+    'newcastle building society': ['newcastle.co.uk'],
+    'nottingham building society': ['thenottingham.com'],
+    'penrith building society': ['penrithbs.co.uk'],
+    'principality building society': ['principality.co.uk'],
+    'saffron building society': ['saffronbs.co.uk'],
+    'skipton building society': ['skipton.co.uk'],
+    'yorkshire building society': ['ybs.co.uk'],
+    'dpd uk': ['dpd.co.uk'],
+    'yodel': ['yodel.co.uk'],
+    'companies house': ['companieshouse.gov.uk'],
+    'driver and vehicle licensing agency': ['dvla.gov.uk'],
+    'hm revenue & customs': ['hmrc.gov.uk'],
+    'home office': ['homeoffice.gov.uk'],
+    'bupa': ['bupa.co.uk'],
+    'nuffield health': ['nuffieldhealth.com'],
+    'ramsay health care uk': ['ramsayhealth.co.uk'],
+    'spire healthcare': ['spirehealthcare.com'],
+    'allen & overy': ['allenovery.com'],
+    'ashurst': ['ashurst.com'],
+    'bird & bird': ['twobirds.com'],
+    'cms': ['cms.law'],
+    'clifford chance': ['cliffordchance.com'],
+    'eversheds sutherland': ['eversheds-sutherland.com'],
+    'freshfields': ['freshfields.com'],
+    'herbert smith freehills': ['hsf.com'],
+    'hogan lovells': ['hoganlovells.com'],
+    'linklaters': ['linklaters.com'],
+    'macfarlanes': ['macfarlanes.com'],
+    'norton rose fulbright': ['nortonrosefulbright.com'],
+    'pinsent masons': ['pinsentmasons.com'],
+    'slaughter and may': ['slaughterandmay.com'],
+    'stephenson harwood': ['shlegal.com'],
+    'taylor wessing': ['taylorwessing.com'],
+    'virgin media o2': ['virginmediao2.co.uk'],
+    'imperial college london': ['imperial.ac.uk'],
+    'king\'s college london': ['kcl.ac.uk'],
+    'london school of economics and political science': ['lse.ac.uk'],
+    'lse': ['lse.ac.uk'],
+    'ucl': ['ucl.ac.uk'],
+    'university of birmingham': ['bham.ac.uk'],
+    'university of bristol': ['bristol.ac.uk'],
+    'university of cambridge': ['cam.ac.uk'],
+    'university of edinburgh': ['ed.ac.uk'],
+    'university of glasgow': ['gla.ac.uk'],
+    'university of leeds': ['leeds.ac.uk'],
+    'university of manchester': ['manchester.ac.uk'],
+    'university of nottingham': ['nottingham.ac.uk'],
+    'university of oxford': ['ox.ac.uk'],
+    'university of sheffield': ['sheffield.ac.uk'],
+    'university of southampton': ['southampton.ac.uk'],
+    'university of warwick': ['warwick.ac.uk'],
+    'e.on uk': ['eonenergy.com'],
+    'edf energy': ['edfenergy.com'],
+    'octopus energy': ['octopus.energy'],
+    'scottishpower': ['scottishpower.co.uk'],
+    'severn trent': ['stwater.co.uk'],
+    'thames water': ['thameswater.co.uk'],
+    'united utilities': ['uuplc.co.uk'],
+    'arvest bank': ['arvest.com'],
+    'associated bank': ['associatedbank.com'],
+    'bok financial / bank of oklahoma': ['bokf.com'],
+    'banc of california': ['bancofcal.com'],
+    'cadence bank': ['cadencebank.com'],
+    'citizens bank': ['citizensbank.com'],
+    'city national bank': ['cnb.com'],
+    'comerica bank': ['comerica.com'],
+    'current': ['current.com'],
+    'first citizens bank': ['firstcitizens.com'],
+    'first hawaiian bank': ['fhb.com'],
+    'first interstate bank': ['firstinterstatebank.com'],
+    'frost bank': ['frostbank.com'],
+    'keybank': ['key.com'],
+    'm&t bank': ['mtb.com'],
+    'signature bank': ['signatureny.com'],
+    'silicon valley bank - legacy phishing': ['svb.com'],
+    'svb': ['svb.com'],
+    'synovus bank': ['synovus.com'],
+    'valley bank': ['valley.com'],
+    'varo bank': ['varomoney.com'],
+    'webster bank': ['websterbank.com'],
+    'wintrust': ['wintrust.com'],
+    'zions bank': ['zionsbank.com'],
+    'alliant credit union': ['alliantcreditunion.org'],
+    'america first credit union': ['americafirst.com'],
+    'america\'s credit union': ['americascu.org'],
+    'arkansas federal credit union': ['afcu.org'],
+    'becu': ['becu.org'],
+    'baxter credit union': ['bcu.org'],
+    'bcu': ['bcu.org'],
+    'bellco credit union': ['bellco.org'],
+    'boulder valley credit union': ['bvcu.org'],
+    'connexus credit union': ['connexuscu.org'],
+    'desert financial credit union': ['desertfinancial.com'],
+    'digital federal credit union': ['dcu.org'],
+    'dcu': ['dcu.org'],
+    'ent credit union': ['ent.com'],
+    'first community credit union': ['firstcommunity.com'],
+    'first tech federal credit union': ['firsttechfed.com'],
+    'gecu': ['gecu.com'],
+    'georgia\'s own credit union': ['georgiasown.org'],
+    'golden 1 credit union': ['golden1.com'],
+    'harborstone credit union': ['harborstone.com'],
+    'kinecta federal credit union': ['kinecta.org'],
+    'langley federal credit union': ['langleyfcu.org'],
+    'mountain america credit union': ['macu.com'],
+    'navy army community credit union': ['navyarmyccu.com'],
+    'nusenda credit union': ['nusenda.org'],
+    'onpoint community credit union': ['onpointcu.com'],
+    'patelco credit union': ['patelco.org'],
+    'pentagon federal credit union': ['penfed.org'],
+    'penfed': ['penfed.org'],
+    'people\'s credit union': ['peoplescu.com'],
+    'ri': ['peoplescu.com'],
+    'rbfcu': ['rbfcu.org'],
+    'redstone federal credit union': ['redfcu.org'],
+    'secu maryland': ['secu.com'],
+    'schoolsfirst federal credit union': ['schoolsfirstfcu.org'],
+    'security service federal credit union': ['ssfcu.org'],
+    'sound credit union': ['soundcu.com'],
+    'space coast credit union': ['sccu.com'],
+    'spokane teachers credit union': ['stcu.org'],
+    'stcu': ['stcu.org'],
+    'state employees\' credit union': ['ncsecu.org'],
+    'nc secu': ['ncsecu.org'],
+    'suncoast credit union': ['suncoastcreditunion.com'],
+    'teachers federal credit union': ['teachersfcu.org'],
+    'tinker federal credit union': ['tinkerfcu.org'],
+    'travis credit union': ['traviscu.org'],
+    'unfcu': ['unfcu.org'],
+    'unify financial credit union': ['unifyfcu.com'],
+    'united federal credit union': ['unitedfcu.com'],
+    'vystar credit union': ['vystarcu.org'],
+    'wright-patt credit union': ['wpcu.coop'],
+    'adventhealth': ['adventhealth.com'],
+    'ascension': ['ascension.org'],
+    'banner health': ['bannerhealth.com'],
+    'cleveland clinic': ['clevelandclinic.org'],
+    'commonspirit health': ['commonspirit.org'],
+    'hca healthcare': ['hcahealthcare.com'],
+    'johns hopkins medicine': ['hopkinsmedicine.org'],
+    'mass general brigham': ['massgeneralbrigham.org'],
+    'mayo clinic': ['mayoclinic.org'],
+    'nyu langone health': ['nyulangone.org'],
+    'providence': ['providence.org'],
+    'sutter health': ['sutterhealth.org'],
+    'trinity health': ['trinity-health.org'],
+    'upmc': ['upmc.com'],
+    'akin': ['akin.com'],
+    'bclp': ['bclplaw.com'],
+    'baker botts': ['bakerbotts.com'],
+    'baker mckenzie': ['bakermckenzie.com'],
+    'cleary gottlieb': ['cgsh.com'],
+    'cooley': ['cooley.com'],
+    'covington & burling': ['cov.com'],
+    'dla piper': ['dlapiper.com'],
+    'debevoise & plimpton': ['debevoise.com'],
+    'dentons': ['dentons.com'],
+    'gibson, dunn & crutcher': ['gibsondunn.com'],
+    'goodwin': ['goodwinlaw.com'],
+    'greenberg traurig': ['gtlaw.com'],
+    'holland & knight': ['hklaw.com'],
+    'jones day': ['jonesday.com'],
+    'king & spalding': ['kslaw.com'],
+    'kirkland & ellis': ['kirkland.com'],
+    'latham & watkins': ['lw.com'],
+    'mayer brown': ['mayerbrown.com'],
+    'milbank': ['milbank.com'],
+    'morgan, lewis & bockius': ['morganlewis.com'],
+    'o\'melveny & myers': ['omm.com'],
+    'orrick': ['orrick.com'],
+    'paul hastings': ['paulhastings.com'],
+    'paul, weiss': ['paulweiss.com'],
+    'perkins coie': ['perkinscoie.com'],
+    'quinn emanuel urquhart & sullivan': ['quinnemanuel.com'],
+    'reed smith': ['reedsmith.com'],
+    'ropes & gray': ['ropesgray.com'],
+    'shearman & sterling': ['shearman.com'],
+    'sidley austin': ['sidley.com'],
+    'simpson thacher & bartlett': ['stblaw.com'],
+    'skadden, arps, slate, meagher & flom': ['skadden.com'],
+    'squire patton boggs': ['squirepattonboggs.com'],
+    'sullivan & cromwell': ['sullcrom.com'],
+    'weil, gotshal & manges': ['weil.com'],
+    'white & case': ['whitecase.com'],
+    'wilmerhale': ['wilmerhale.com'],
+    'winston & strawn': ['winston.com'],
+    'amrock': ['amrock.com'],
+    'fidelity national title': ['fidelitynationaltitle.com'],
+    'wfg national title': ['wfgtitle.com'],
+    'california institute of technology': ['caltech.edu'],
+    'caltech': ['caltech.edu'],
+    'carnegie mellon university': ['cmu.edu'],
+    'columbia university': ['columbia.edu'],
+    'cornell university': ['cornell.edu'],
+    'duke university': ['duke.edu'],
+    'georgia institute of technology': ['gatech.edu'],
+    'harvard university': ['harvard.edu'],
+    'johns hopkins university': ['jhu.edu'],
+    'massachusetts institute of technology': ['mit.edu'],
+    'mit': ['mit.edu'],
+    'new york university': ['nyu.edu'],
+    'nyu': ['nyu.edu'],
+    'northwestern university': ['northwestern.edu'],
+    'princeton university': ['princeton.edu'],
+    'stanford university': ['stanford.edu'],
+    'uc san diego': ['ucsd.edu'],
+    'ucla': ['ucla.edu'],
+    'university of california, berkeley': ['berkeley.edu'],
+    'university of chicago': ['uchicago.edu'],
+    'university of michigan': ['umich.edu'],
+    'university of pennsylvania': ['upenn.edu'],
+    'yale university': ['yale.edu'],
+    'southern company': ['southerncompany.com'],
+    'xcel energy': ['xcelenergy.com'],
+    'bidv': ['bidv.com.vn'],
+    'techcombank': ['techcombank.com.vn'],
+    'vpbank': ['vpbank.com.vn'],
+    'vietcombank': ['vietcombank.com.vn'],
+    'vietinbank': ['vietinbank.vn'],
+    'vietnam post': ['vnpost.vn'],
+    'general department of taxation': ['gdt.gov.vn'],
+    'vietnam': ['gdt.gov.vn'],
+    'vietnam immigration': ['immigration.gov.vn']
 
 };
 
@@ -3471,12 +6996,171 @@ let authInProgress = false;
 let contactsFetched = false;
 
 // ============================================
+// USER-TRUSTED DOMAINS (Learned from Sent Items)
+// ============================================
+let userTrustedDomains = {};
+const USER_TRUSTED_KEY = 'efa_trusted_domains';
+const MAX_TRUSTED_DOMAINS = 500;
+const FREE_EMAIL_PROVIDERS = [
+    'gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'aol.com',
+    'icloud.com', 'mail.com', 'protonmail.com', 'proton.me', 'zoho.com',
+    'yandex.com', 'yandex.ru', 'mail.ru', 'gmx.com', 'gmx.net', 'web.de',
+    'yahoo.co.jp', 'naver.com', 'daum.net', '163.com', '126.com', 'qq.com',
+    'live.com', 'msn.com', 'me.com', 'mac.com'
+];
+
+// ============================================
+// USER-TRUSTED DOMAIN FUNCTIONS
+// Learned automatically from user's Sent Items.
+// Viktor gate: No domain enters this list if it's
+// a lookalike of any known brand, org, or existing
+// trusted domain. Viktor cannot poison this list
+// without compromising the user's own mailbox.
+// ============================================
+
+function loadUserTrustedDomains() {
+    try {
+        const data = Office.context.roamingSettings.get(USER_TRUSTED_KEY);
+        userTrustedDomains = data || {};
+        console.log('Loaded ' + Object.keys(userTrustedDomains).length + ' user-trusted domains');
+    } catch (e) {
+        console.log('Could not load user-trusted domains:', e.message);
+        userTrustedDomains = {};
+    }
+}
+
+function saveUserTrustedDomains() {
+    try {
+        Office.context.roamingSettings.set(USER_TRUSTED_KEY, userTrustedDomains);
+        Office.context.roamingSettings.saveAsync((result) => {
+            if (result.status !== Office.AsyncResultStatus.Succeeded) {
+                console.log('Failed to save user-trusted domains');
+            }
+        });
+    } catch (e) {
+        console.log('Could not save user-trusted domains:', e.message);
+    }
+}
+
+// VIKTOR GATE: The single chokepoint. Every domain must pass this
+// before entering the trusted list. Checks against ALL known lists.
+function isLookalikeOfKnownDomain(domain) {
+    const d = domain.toLowerCase();
+    
+    // Check against existing user-trusted domains
+    for (const trusted of Object.keys(userTrustedDomains)) {
+        const distance = levenshteinDistance(d, trusted);
+        if (distance > 0 && distance <= 2) return true;
+    }
+    
+    // Check against hardcoded trusted domains (stock exchange companies, etc.)
+    for (const trusted of CONFIG.trustedDomains) {
+        const distance = levenshteinDistance(d, trusted);
+        if (distance > 0 && distance <= 2) return true;
+    }
+    
+    // Check against BRAND_CONTENT_DETECTION legitimate domains
+    for (const brand of Object.values(BRAND_CONTENT_DETECTION)) {
+        for (const legit of brand.legitimateDomains) {
+            const distance = levenshteinDistance(d, legit);
+            if (distance > 0 && distance <= 2) return true;
+        }
+    }
+    
+    // Check against IMPERSONATION_TARGETS domains
+    for (const domains of Object.values(IMPERSONATION_TARGETS)) {
+        for (const legit of domains) {
+            const distance = levenshteinDistance(d, legit);
+            if (distance > 0 && distance <= 2) return true;
+        }
+    }
+    
+    return false;
+}
+
+function addUserTrustedDomain(domain) {
+    const d = domain.toLowerCase();
+    
+    // Skip free email providers (everyone uses them, no lookalike value)
+    if (FREE_EMAIL_PROVIDERS.includes(d)) return;
+    
+    // Skip known ESPs (not real company domains)
+    if (KNOWN_ESP_DOMAINS.includes(d)) return;
+    
+    // If already trusted, just update counter and timestamp
+    if (userTrustedDomains[d]) {
+        userTrustedDomains[d].c++;
+        userTrustedDomains[d].t = Date.now();
+        return true;
+    }
+    
+    // VIKTOR GATE: Reject if lookalike of any known domain
+    if (isLookalikeOfKnownDomain(d)) {
+        console.log('Gate rejected domain (lookalike): ' + d);
+        return false;
+    }
+    
+    // Evict least-contacted domain if at capacity
+    const keys = Object.keys(userTrustedDomains);
+    if (keys.length >= MAX_TRUSTED_DOMAINS) {
+        let minKey = keys[0], minCount = userTrustedDomains[keys[0]].c;
+        for (const k of keys) {
+            if (userTrustedDomains[k].c < minCount) {
+                minCount = userTrustedDomains[k].c;
+                minKey = k;
+            }
+        }
+        delete userTrustedDomains[minKey];
+    }
+    
+    userTrustedDomains[d] = { c: 1, t: Date.now() };
+    return true;
+}
+
+async function syncSentItemsDomains() {
+    const token = await getAccessToken();
+    if (!token) return;
+    
+    try {
+        const response = await fetch(
+            'https://graph.microsoft.com/v1.0/me/mailFolders/SentItems/messages?$select=toRecipients,ccRecipients&$top=50&$orderby=sentDateTime desc',
+            { headers: { 'Authorization': 'Bearer ' + token } }
+        );
+        
+        if (!response.ok) {
+            console.log('Sent Items sync failed:', response.status);
+            return;
+        }
+        
+        const data = await response.json();
+        let added = 0;
+        
+        for (const msg of data.value || []) {
+            const recipients = [...(msg.toRecipients || []), ...(msg.ccRecipients || [])];
+            for (const r of recipients) {
+                const email = (r.emailAddress?.address || '').toLowerCase();
+                const domain = email.split('@')[1];
+                if (domain && addUserTrustedDomain(domain)) added++;
+            }
+        }
+        
+        if (added > 0) {
+            saveUserTrustedDomains();
+            console.log('Sent Items sync: processed domains, total trusted: ' + Object.keys(userTrustedDomains).length);
+        }
+    } catch (e) {
+        console.log('Sent Items sync error:', e.message);
+    }
+}
+
+// ============================================
 // INITIALIZATION
 // ============================================
 Office.onReady(async (info) => {
     console.log('Email Fraud Detector v4.2.11 (Phase 2 Silent) script loaded, host:', info.host);
     if (info.host === Office.HostType.Outlook) {
         console.log('Email Fraud Detector v4.2.11 initializing for Outlook...');
+        loadUserTrustedDomains();
         await initializeMsal();
         setupEventHandlers();
         analyzeCurrentEmail();
@@ -3646,7 +7330,8 @@ async function fetchAllKnownContacts() {
 // HELPER FUNCTIONS
 // ============================================
 function isTrustedDomain(domain) {
-    return CONFIG.trustedDomains.includes(domain.toLowerCase());
+    const d = domain.toLowerCase();
+    return CONFIG.trustedDomains.includes(d) || userTrustedDomains.hasOwnProperty(d);
 }
 
 function escapeRegex(string) {
@@ -4645,7 +8330,15 @@ function detectHomoglyphs(email) {
 }
 
 function detectLookalikeDomain(domain) {
+    // Check against hardcoded trusted domains
     for (const trusted of CONFIG.trustedDomains) {
+        const distance = levenshteinDistance(domain, trusted);
+        if (distance > 0 && distance <= 2) {
+            return { trustedDomain: trusted, distance: distance };
+        }
+    }
+    // Check against user-trusted domains (learned from Sent Items)
+    for (const trusted of Object.keys(userTrustedDomains)) {
         const distance = levenshteinDistance(domain, trusted);
         if (distance > 0 && distance <= 2) {
             return { trustedDomain: trusted, distance: distance };
@@ -5151,6 +8844,9 @@ async function analyzeCurrentEmail() {
         if (knownContacts.size === 0 && !contactsFetched) {
             await fetchAllKnownContacts();
         }
+        
+        // Sync user-trusted domains from Sent Items (non-blocking)
+        syncSentItemsDomains().catch(e => console.log('Background sync:', e.message));
         
         const item = Office.context.mailbox.item;
         const from = item.from;
