@@ -1876,15 +1876,15 @@ const BRAND_CONTENT_DETECTION = {
     },
     'inss': {
         keywords: ['inss'],
-        legitimateDomains: ['gov.br/inss']
+        legitimateDomains: ['inss.gov.br']
     },
     'polícia federal': {
         keywords: ['polícia federal'],
-        legitimateDomains: ['gov.br/pf']
+        legitimateDomains: ['pf.gov.br']
     },
     'receita federal do brasil': {
         keywords: ['receita federal do brasil'],
-        legitimateDomains: ['gov.br/receitafederal']
+        legitimateDomains: ['rfb.gov.br']
     },
     'gov.br': {
         keywords: ['gov.br'],
@@ -2836,11 +2836,11 @@ const BRAND_CONTENT_DETECTION = {
     },
     'sep': {
         keywords: ['sep'],
-        legitimateDomains: ['gob.mx/sep']
+        legitimateDomains: ['sep.gob.mx']
     },
     'secretaría de relaciones exteriores': {
         keywords: ['secretaría de relaciones exteriores', 'sre'],
-        legitimateDomains: ['gob.mx/sre']
+        legitimateDomains: ['sre.gob.mx']
     },
     'national autonomous university of mexico': {
         keywords: ['national autonomous university of mexico', 'unam'],
@@ -2856,7 +2856,7 @@ const BRAND_CONTENT_DETECTION = {
     },
     'conagua': {
         keywords: ['conagua'],
-        legitimateDomains: ['gob.mx/conagua']
+        legitimateDomains: ['conagua.gob.mx']
     },
     'abn amro': {
         keywords: ['abn amro'],
@@ -5548,9 +5548,9 @@ const IMPERSONATION_TARGETS = {
     'santander brasil': ['santander.com.br'],
     'detran': ['gov.br'],
     'detran-sp': ['detran.sp.gov.br'],
-    'inss': ['gov.br/inss'],
-    'polícia federal': ['gov.br/pf'],
-    'receita federal do brasil': ['gov.br/receitafederal'],
+    'inss': ['inss.gov.br'],
+    'polícia federal': ['pf.gov.br'],
+    'receita federal do brasil': ['rfb.gov.br'],
     'gov.br': ['gov.br'],
     'university of sao paulo': ['usp.br'],
     'usp': ['usp.br'],
@@ -5811,14 +5811,14 @@ const IMPERSONATION_TARGETS = {
     'correos de méxico': ['correosdemexico.gob.mx'],
     'imss': ['imss.gob.mx'],
     'sat': ['sat.gob.mx'],
-    'sep': ['gob.mx/sep'],
-    'secretaría de relaciones exteriores': ['gob.mx/sre'],
-    'sre': ['gob.mx/sre'],
+    'sep': ['sep.gob.mx'],
+    'secretaría de relaciones exteriores': ['sre.gob.mx'],
+    'sre': ['sre.gob.mx'],
     'national autonomous university of mexico': ['unam.mx'],
     'unam': ['unam.mx'],
     'tecnológico de monterrey': ['tec.mx'],
     'cfe': ['cfe.mx'],
-    'conagua': ['gob.mx/conagua'],
+    'conagua': ['conagua.gob.mx'],
     'abn amro': ['abnamro.com'],
     'bunq': ['bunq.com'],
     'belastingdienst': ['belastingdienst.nl'],
@@ -6399,6 +6399,45 @@ function getKeywordExplanation(keyword) {
 }
 
 // Homoglyph characters (Cyrillic only)
+// v4.3.1: Unicode normalization - strips zero-width characters and applies NFKC.
+// Viktor: "Zero-width joiners in 'Fidelity' or Cyrillic 'а' for Latin 'a' are trivial attacks."
+function stripUnicodeThreats(text) {
+    if (!text) return '';
+    // Strip zero-width characters: ZWSP, ZWNJ, ZWJ, soft hyphen, zero-width no-break space, word joiner
+    let cleaned = text.replace(/[\u200B\u200C\u200D\u00AD\uFEFF\u2060\u200E\u200F]/g, '');
+    // v4.3.2: Strip additional deceptive Unicode that bypasses brand keyword matching.
+    // Viktor: "I insert an invisible separator inside 'Microsoft' and your keyword check
+    // sees 'micro[invisible]soft' which doesn't match 'microsoft'. User sees the brand name
+    // perfectly. Brand impersonation detection is blind."
+    // Covers: exotic whitespace (en/em/thin/hair/figure/punctuation/math spaces, no-break space),
+    // invisible math operators (separator, times, function apply, plus),
+    // bidi controls (LRE, RLE, PDF, LRO, RLO, LRI, RLI, FSI, PDI),
+    // and deceptive punctuation (middle dot, bullet) used as visual separators.
+    // Does NOT strip standard ASCII punctuation (&, -, ', etc.) to preserve AT&T, T-Mobile, Lowe's.
+    cleaned = cleaned.replace(/[\u00A0\u00B7\u2000-\u200A\u2022\u202A-\u202F\u205F\u2061-\u2064\u2066-\u2069]/g, '');
+    // Apply NFKC normalization (converts visual confusables to canonical forms)
+    if (typeof cleaned.normalize === 'function') {
+        cleaned = cleaned.normalize('NFKC');
+    }
+    return cleaned;
+}
+
+// v4.3.3: Fuzzy phrase normalization for keyword evasion.
+// Viktor: "I write 'acc ount susp-ended' or 'verif.y your identity' and your exact
+// phrase matching sees garbage. User reads it perfectly. I bypass every keyword list."
+// Solution: collapse internal separators (spaces, hyphens, dots, underscores) between
+// lowercase letters. Run as secondary pass — exact match first, then collapsed.
+function collapseForMatch(text) {
+    if (!text) return '';
+    return text.replace(/(?<=[a-z])[\s\-_.,;:]+(?=[a-z])/g, '');
+}
+
+function phraseMatchesContent(lowerContent, collapsedContent, phrase) {
+    if (lowerContent.includes(phrase)) return true;
+    const collapsedPhrase = phrase.replace(/\s+/g, '');
+    return collapsedPhrase.length > 3 && collapsedContent.includes(collapsedPhrase);
+}
+
 const HOMOGLYPHS = {
     '\u0430': 'a', '\u0435': 'e', '\u043e': 'o', '\u0440': 'p', '\u0441': 'c', '\u0445': 'x',
     '\u0456': 'i', '\u0458': 'j', '\u0455': 's', '\u0501': 'd', '\u0261': 'g', '\u0578': 'n',
@@ -7031,6 +7070,19 @@ function loadUserTrustedDomains() {
 
 function saveUserTrustedDomains() {
     try {
+        // v4.3.3: RoamingSettings has a 32KB cap (Microsoft docs).
+        // Guard against silent truncation by checking size and pruning if needed.
+        const MAX_ROAMING_BYTES = 28000; // 28KB, leaving 4KB headroom
+        let serialized = JSON.stringify(userTrustedDomains);
+        while (serialized.length > MAX_ROAMING_BYTES && Object.keys(userTrustedDomains).length > 0) {
+            // Prune lowest-count domain
+            let minKey = null, minCount = Infinity;
+            for (const [k, v] of Object.entries(userTrustedDomains)) {
+                if (v.c < minCount) { minCount = v.c; minKey = k; }
+            }
+            if (minKey) delete userTrustedDomains[minKey];
+            serialized = JSON.stringify(userTrustedDomains);
+        }
         Office.context.roamingSettings.set(USER_TRUSTED_KEY, userTrustedDomains);
         Office.context.roamingSettings.saveAsync((result) => {
             if (result.status !== Office.AsyncResultStatus.Succeeded) {
@@ -7088,8 +7140,14 @@ function addUserTrustedDomain(domain) {
     if (KNOWN_ESP_DOMAINS.includes(d)) return;
     
     // If already trusted, just update counter and timestamp
+    // Track distinct days: only increment d when last seen was a different calendar day
     if (userTrustedDomains[d]) {
         userTrustedDomains[d].c++;
+        const lastDay = new Date(userTrustedDomains[d].t).toDateString();
+        const today = new Date().toDateString();
+        if (lastDay !== today) {
+            userTrustedDomains[d].d = (userTrustedDomains[d].d || 1) + 1;
+        }
         userTrustedDomains[d].t = Date.now();
         return true;
     }
@@ -7113,7 +7171,7 @@ function addUserTrustedDomain(domain) {
         delete userTrustedDomains[minKey];
     }
     
-    userTrustedDomains[d] = { c: 1, t: Date.now() };
+    userTrustedDomains[d] = { c: 1, t: Date.now(), d: 1 };
     return true;
 }
 
@@ -7329,9 +7387,18 @@ async function fetchAllKnownContacts() {
 // ============================================
 // HELPER FUNCTIONS
 // ============================================
+// v4.3.1: User-learned domains require minimum 3 sends before earning trust.
+// Viktor: "One tricked reply shouldn't buy me a free pass on all future emails."
+const USER_TRUST_MIN_COUNT = 5;
+const USER_TRUST_MIN_DAYS = 2;
+
 function isTrustedDomain(domain) {
     const d = domain.toLowerCase();
-    return CONFIG.trustedDomains.includes(d) || userTrustedDomains.hasOwnProperty(d);
+    if (CONFIG.trustedDomains.includes(d)) return true;
+    const entry = userTrustedDomains[d];
+    // Require both minimum message count AND seen across multiple distinct days.
+    // Viktor: "Getting 3 replies in one thread shouldn't make my domain trusted."
+    return entry != null && entry.c >= USER_TRUST_MIN_COUNT && (entry.d || 1) >= USER_TRUST_MIN_DAYS;
 }
 
 function escapeRegex(string) {
@@ -7355,8 +7422,8 @@ function formatEntityName(name) {
 }
 
 function formatEmailForDisplay(email) {
-    if (!email || !email.includes('@')) return email;
-    return email.replace('@', '@<br>');
+    if (!email || !email.includes('@')) return escapeHtml(email);
+    return escapeHtml(email).replace('@', '@<br>');
 }
 
 function levenshteinDistance(a, b) {
@@ -7454,10 +7521,11 @@ function detectPhishingUrgency(bodyText, subject) {
     if (!bodyText && !subject) return null;
     
     const textToCheck = ((subject || '') + ' ' + (bodyText || '')).toLowerCase();
+    const collapsedText = collapseForMatch(textToCheck);
     const foundKeywords = [];
     
     for (const keyword of PHISHING_URGENCY_KEYWORDS) {
-        if (textToCheck.includes(keyword.toLowerCase())) {
+        if (phraseMatchesContent(textToCheck, collapsedText, keyword.toLowerCase())) {
             foundKeywords.push(keyword);
         }
     }
@@ -7759,8 +7827,29 @@ function detectAuthFailure(headers, senderDomain) {
     let score = 0;
     const failures = [];
     
-    const authMatch = headers.match(/Authentication-Results:[\s\S]*?(?=\nReceived:|\nReturn-Path:|\nFrom:|\nDate:|\nSubject:|\nMIME-Version:|\nContent-Type:|\nX-Priority:|\nX-SFDC|\nX-MS-Exchange)/i);
-    const authText = authMatch ? authMatch[0].toLowerCase() : '';
+    // v4.3.2: RFC 5322 compliant header extraction. Previous regex terminated on a hardcoded
+    // list of header names and missed non-standard headers (ARC-Seal, X-Google-DKIM-Signature, etc).
+    // Now: find Authentication-Results line, collect folded continuation lines (start with whitespace),
+    // stop when a new header starts (line begins with non-whitespace + colon).
+    // Viktor: "Different mail servers insert different headers. Brittle regex = inconsistent detection."
+    let authText = '';
+    const headerLines = headers.split('\n');
+    let capturing = false;
+    for (const line of headerLines) {
+        if (/^Authentication-Results:/i.test(line)) {
+            capturing = true;
+            authText += line + '\n';
+        } else if (capturing) {
+            if (/^\s/.test(line)) {
+                // RFC 5322 folded header continuation
+                authText += line + '\n';
+            } else {
+                // New header started
+                break;
+            }
+        }
+    }
+    authText = authText.toLowerCase();
     
     if (authText) {
         if (/dmarc\s*=\s*fail/i.test(authText)) {
@@ -7811,9 +7900,10 @@ function detectAuthFailure(headers, senderDomain) {
 function detectBrandImpersonation(subject, body, senderDomain, displayName) {
     console.log('BRAND CHECK CALLED - Domain:', senderDomain);
     
-    const subjectLower = (subject || '').toLowerCase();
-    const bodyLower = (body || '').toLowerCase();
-    const displayNameLower = (displayName || '').toLowerCase();
+    // v4.3.1: Normalize Unicode before matching to defeat zero-width and confusable attacks
+    const subjectLower = stripUnicodeThreats((subject || '')).toLowerCase();
+    const bodyLower = stripUnicodeThreats((body || '')).toLowerCase();
+    const displayNameLower = stripUnicodeThreats((displayName || '')).toLowerCase();
     
     for (const [brandName, config] of Object.entries(BRAND_CONTENT_DETECTION)) {
         // v4.3.0: Use word boundary matching to avoid substring false positives
@@ -7904,7 +7994,31 @@ function detectBrandImpersonation(subject, body, senderDomain, displayName) {
                     }
                 }
                 if (senderIsKnownBrand) {
-                    console.log('BRAND CHECK SKIPPED (sender is known brand) -', brandName, 'mentioned in body from', senderDomain);
+                    // v4.3.1: Don't skip entirely - compromised vendor accounts are a real BEC vector.
+                    // Viktor: "I compromise a legit vendor and send brand-themed phishing through their domain."
+                    // Require BOTH urgency AND 3+ brand mentions for known senders.
+                    const hasUrgency = PHISHING_URGENCY_KEYWORDS.some(phrase => 
+                        (subjectLower + ' ' + bodyLower).includes(phrase.toLowerCase())
+                    );
+                    let brandMentionCount = 0;
+                    for (const keyword of config.keywords) {
+                        const kw = keyword.toLowerCase();
+                        let pos = 0;
+                        while ((pos = bodyLower.indexOf(kw, pos)) !== -1) {
+                            brandMentionCount++;
+                            pos += kw.length;
+                        }
+                        if (brandMentionCount >= 3) break;
+                    }
+                    if (hasUrgency && brandMentionCount >= 3) {
+                        console.log('BRAND CHECK TRIGGERED (known sender but strong signals) -', brandName, 'from', senderDomain);
+                        return {
+                            brandName: formatEntityName(brandName),
+                            senderDomain: senderDomain,
+                            legitimateDomains: config.legitimateDomains
+                        };
+                    }
+                    console.log('BRAND CHECK SKIPPED (sender is known brand, weak signals) -', brandName, 'mentioned in body from', senderDomain);
                     continue;
                 }
                 
@@ -8320,11 +8434,17 @@ function detectDisplayNameDomainMismatch(displayName, senderDomain) {
 }
 
 function detectHomoglyphs(email) {
+    // v4.3.1: Normalize before checking - catches zero-width insertions
+    const normalizedEmail = stripUnicodeThreats(email);
     let found = [];
     for (const [homoglyph, latin] of Object.entries(HOMOGLYPHS)) {
-        if (email.includes(homoglyph)) {
+        if (normalizedEmail.includes(homoglyph)) {
             found.push(`"${homoglyph}" looks like "${latin}"`);
         }
+    }
+    // Also flag if normalization changed the email (zero-width chars were present)
+    if (normalizedEmail !== email && normalizedEmail.length < email.length) {
+        found.push('Hidden invisible characters detected');
     }
     return found.length > 0 ? found.join(', ') : null;
 }
@@ -8349,8 +8469,10 @@ function detectLookalikeDomain(domain) {
 
 function detectWireFraudKeywords(content) {
     const found = [];
+    const lowerContent = content.toLowerCase();
+    const collapsedContent = collapseForMatch(lowerContent);
     for (const keyword of WIRE_FRAUD_KEYWORDS) {
-        if (content.toLowerCase().includes(keyword.toLowerCase())) {
+        if (phraseMatchesContent(lowerContent, collapsedContent, keyword.toLowerCase())) {
             found.push(keyword);
         }
     }
@@ -8380,7 +8502,13 @@ function detectContactLookalike(senderEmail) {
     const publicDomains = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'aol.com', 
                            'icloud.com', 'mail.com', 'protonmail.com', 'zoho.com', 'yandex.com'];
     
+    // v4.3.1: Cap comparison set to prevent UI lag on large contact lists.
+    // Viktor: "I don't need to hack anything - just triggering slow analysis degrades trust in the tool."
+    const MAX_CONTACT_COMPARE = 500;
+    let compared = 0;
+    
     for (const contact of knownContacts) {
+        if (++compared > MAX_CONTACT_COMPARE) break;
         if (contact === senderEmail) continue;
         
         const contactParts = contact.toLowerCase().split('@');
@@ -8435,6 +8563,7 @@ function detectContactLookalike(senderEmail) {
 function detectPhase2CredentialLanguage(content) {
     if (!content) return null;
     const lowerContent = content.toLowerCase();
+    const collapsedContent = collapseForMatch(lowerContent);
 
     let hasExclusion = false;
     for (const exclusion of CREDENTIAL_EXCLUSION_PHRASES) {
@@ -8446,7 +8575,7 @@ function detectPhase2CredentialLanguage(content) {
 
     const matched = [];
     for (const phrase of CREDENTIAL_REQUEST_PHRASES) {
-        if (lowerContent.includes(phrase)) {
+        if (phraseMatchesContent(lowerContent, collapsedContent, phrase)) {
             matched.push(phrase);
         }
     }
@@ -8460,9 +8589,10 @@ function detectPhase2CredentialLanguage(content) {
 function detectPhase2UnlockLanguage(content) {
     if (!content) return null;
     const lowerContent = content.toLowerCase();
+    const collapsedContent = collapseForMatch(lowerContent);
     const matched = [];
     for (const phrase of UNLOCK_LANGUAGE_PHRASES) {
-        if (lowerContent.includes(phrase)) matched.push(phrase);
+        if (phraseMatchesContent(lowerContent, collapsedContent, phrase)) matched.push(phrase);
     }
     if (matched.length === 0) return null;
     return { signal: 'unlock_language', matched: matched, count: matched.length };
@@ -8471,14 +8601,15 @@ function detectPhase2UnlockLanguage(content) {
 function detectPhase2PaymentChangeLanguage(content) {
     if (!content) return null;
     const lowerContent = content.toLowerCase();
+    const collapsedContent = collapseForMatch(lowerContent);
     const matchedPhrases = [];
     for (const phrase of PAYMENT_CHANGE_PHRASES) {
-        if (lowerContent.includes(phrase)) matchedPhrases.push(phrase);
+        if (phraseMatchesContent(lowerContent, collapsedContent, phrase)) matchedPhrases.push(phrase);
     }
     if (matchedPhrases.length === 0) return null;
     const matchedTokens = [];
     for (const token of BANKING_TOKENS) {
-        if (lowerContent.includes(token)) matchedTokens.push(token);
+        if (phraseMatchesContent(lowerContent, collapsedContent, token)) matchedTokens.push(token);
     }
     if (matchedTokens.length === 0) return null;
     return { signal: 'payment_change_language', matchedPhrases: matchedPhrases, matchedTokens: matchedTokens };
@@ -8487,12 +8618,41 @@ function detectPhase2PaymentChangeLanguage(content) {
 function detectPhase2SecrecyLanguage(content) {
     if (!content) return null;
     const lowerContent = content.toLowerCase();
+    const collapsedContent = collapseForMatch(lowerContent);
     const matched = [];
     for (const phrase of SECRECY_PHRASES) {
-        if (lowerContent.includes(phrase)) matched.push(phrase);
+        if (phraseMatchesContent(lowerContent, collapsedContent, phrase)) matched.push(phrase);
     }
     if (matched.length === 0) return null;
     return { signal: 'secrecy_language', matched: matched };
+}
+
+// v4.3.2: Standalone banking token detection for Pattern E alternate path.
+// Viktor paraphrases "updated wire instructions" but still needs to include
+// actual banking details (routing number, SWIFT, etc.) to complete the scam.
+// This catches BEC emails that avoid our payment change phrases but still
+// contain the banking tokens that make the attack actionable.
+function detectPhase2BankingTokensOnly(content) {
+    if (!content) return null;
+    const lowerContent = content.toLowerCase();
+    const collapsedContent = collapseForMatch(lowerContent);
+    const matched = [];
+    for (const token of BANKING_TOKENS) {
+        if (phraseMatchesContent(lowerContent, collapsedContent, token)) matched.push(token);
+    }
+    // Require 2+ banking tokens to reduce false positives on legit financial emails
+    if (matched.length < 2) return null;
+    return { signal: 'banking_tokens', matched: matched, count: matched.length };
+}
+
+function decodeSafeLink(url) {
+    try {
+        const urlObj = new URL(url);
+        if (!urlObj.hostname.toLowerCase().endsWith('safelinks.protection.outlook.com')) return null;
+        const orig = urlObj.searchParams.get('url') || urlObj.searchParams.get('data');
+        if (!orig) return null;
+        return decodeURIComponent(orig);
+    } catch (e) { return null; }
 }
 
 function extractPhase2Urls(bodyText) {
@@ -8504,7 +8664,9 @@ function extractPhase2Urls(bodyText) {
     const seenHosts = new Set();
     for (let i = 0; i < Math.min(matches.length, PHASE2_CONFIG.maxUrlsToExtract); i++) {
         try {
-            const url = matches[i].replace(/[.,;:!?)>\]]+$/, '');
+            let url = matches[i].replace(/[.,;:!?)>\]]+$/, '');
+            const decoded = decodeSafeLink(url);
+            if (decoded) url = decoded;
             const urlObj = new URL(url);
             const host = urlObj.hostname.toLowerCase();
             if (!seenHosts.has(host)) {
@@ -8563,17 +8725,38 @@ function detectPhase2SenderLinkMismatch(senderDomain, urls) {
         'office.com', 'outlook.com', 'live.com', 'cloudflare.com', 'akamai.net',
         'amazonaws.com', 'azurewebsites.net', 'doubleclick.net', 'googlesyndication.com',
         'googleadservices.com', 'facebook.com', 'fbcdn.net', 'twitter.com', 'linkedin.com'];
+    // v4.3.2: User-content-hosting subdomains within infra providers.
+    // These should NOT be excluded from mismatch detection because anyone can host
+    // content on them. Viktor: "I just put my phishing page on Google Sites or
+    // a public S3 bucket and your infra exclusion gives me a free pass."
+    const userContentHosts = [
+        'docs.google.com', 'sites.google.com', 'drive.google.com', 'forms.gle',
+        'storage.googleapis.com', 'storage.cloud.google.com',
+        's3.amazonaws.com',
+        'azurewebsites.net',
+        'sharepoint.com',
+        'sway.office.com',
+        'onedrive.live.com',
+        'forms.office.com'
+    ];
     for (const urlInfo of urls) {
         const linkDomain = urlInfo.domain;
         if (!linkDomain) continue;
         if (linkDomain === senderDomainLower) continue;
         if (linkDomain.endsWith('.' + senderDomainLower)) continue;
         if (senderDomainLower.endsWith('.' + linkDomain)) continue;
-        let isInfra = false;
-        for (const infra of infraDomains) {
-            if (linkDomain === infra || linkDomain.endsWith('.' + infra)) { isInfra = true; break; }
+        // Check if this is a user-content host (do NOT exclude these)
+        let isUserContent = false;
+        for (const uch of userContentHosts) {
+            if (urlInfo.host === uch || urlInfo.host.endsWith('.' + uch)) { isUserContent = true; break; }
         }
-        if (isInfra) continue;
+        if (!isUserContent) {
+            let isInfra = false;
+            for (const infra of infraDomains) {
+                if (linkDomain === infra || linkDomain.endsWith('.' + infra)) { isInfra = true; break; }
+            }
+            if (isInfra) continue;
+        }
         mismatched.push({ sender: senderDomainLower, linkDomain: linkDomain, url: urlInfo.url });
     }
     if (mismatched.length === 0) return null;
@@ -8588,7 +8771,11 @@ function analyzePhase2Attachments(attachments) {
         dangerousFiles: [], htmlFiles: [], allFiles: []
     };
     for (const attachment of attachments) {
-        const name = (attachment.name || attachment.fileName || '').toLowerCase();
+        // v4.3.2: Strip bidi control characters (including RLO) from filenames before analysis.
+        // RLO (U+202E) can reverse visual rendering so "invoice_exe.pdf" displays as "invoice_fdp.exe"
+        // but JavaScript string operations still see the original order.
+        // Stripping them is cheap insurance against any edge case where rendering affects parsing.
+        const name = (attachment.name || attachment.fileName || '').replace(/[\u202A-\u202E\u2066-\u2069]/g, '').toLowerCase();
         results.allFiles.push(name);
         const ext = '.' + name.split('.').pop();
         if (DANGEROUS_ATTACHMENT_EXTENSIONS.html.includes(ext)) {
@@ -8723,19 +8910,29 @@ function evaluatePatternD(signals, coreWarnings) {
 }
 
 function evaluatePatternE(signals, coreWarnings) {
-    const { paymentChangeLanguage, secrecyLanguage } = signals;
-    if (!paymentChangeLanguage) return null;
+    const { paymentChangeLanguage, bankingTokensOnly, secrecyLanguage } = signals;
+    // Primary path: explicit payment change phrases detected
+    // Alternate path: no payment change phrases, but 2+ banking tokens present
+    // Viktor: "I just reword 'updated wire instructions' to 'please redirect future remittances'
+    // but I still need to include the routing number and account number to get paid."
+    const hasPaymentSignal = paymentChangeLanguage || bankingTokensOnly;
+    if (!hasPaymentSignal) return null;
     const hasReplyToMismatch = coreWarnings.some(w => w.type === 'replyto-mismatch');
     const hasOnBehalfOf = coreWarnings.some(w => w.type === 'on-behalf-of');
     if (!hasReplyToMismatch && !hasOnBehalfOf) return null;
     const hasUrgency = coreWarnings.some(w => w.type === 'phishing-urgency');
     if (!hasUrgency && !secrecyLanguage) return null;
+    // Alternate path (banking tokens only, no explicit payment phrases) = medium confidence
+    // Primary path (explicit payment change phrases) = critical confidence
+    const confidence = paymentChangeLanguage ? 'critical' : 'high';
     return {
         patternId: 'pattern_e_payment_redirect',
         patternName: 'Payment Redirect / Business Email Compromise',
-        confidence: 'critical',
-        signals: { payment_change_language: paymentChangeLanguage, reply_to_mismatch: hasReplyToMismatch || null, on_behalf_of: hasOnBehalfOf || null, urgency: hasUrgency || null, secrecy_language: secrecyLanguage || null },
-        description: 'This email requests a change to payment instructions while using a spoofed sender identity and pressure tactics. This is a textbook BEC attack.',
+        confidence: confidence,
+        signals: { payment_change_language: paymentChangeLanguage || null, banking_tokens: bankingTokensOnly || null, reply_to_mismatch: hasReplyToMismatch || null, on_behalf_of: hasOnBehalfOf || null, urgency: hasUrgency || null, secrecy_language: secrecyLanguage || null },
+        description: paymentChangeLanguage 
+            ? 'This email requests a change to payment instructions while using a spoofed sender identity and pressure tactics. This is a textbook BEC attack.'
+            : 'This email contains banking details (routing numbers, account numbers) combined with a spoofed sender identity and pressure tactics. This is consistent with a BEC attack.',
         recommendation: 'STOP. Do NOT process any payment changes from this email. Call the supposed sender at a KNOWN phone number to verify.'
     };
 }
@@ -8760,6 +8957,7 @@ function runPhase2Engine(emailData, coreWarnings) {
         credentialLanguage: detectPhase2CredentialLanguage(body),
         unlockLanguage: detectPhase2UnlockLanguage(body),
         paymentChangeLanguage: detectPhase2PaymentChangeLanguage(body),
+        bankingTokensOnly: detectPhase2BankingTokensOnly(body),
         secrecyLanguage: detectPhase2SecrecyLanguage(body),
         urls: urls,
         suspiciousHostingLink: detectPhase2SuspiciousHostingLink(urls),
@@ -8820,7 +9018,7 @@ function runPhase2Engine(emailData, coreWarnings) {
         }
         finalWarnings.push({
             type: 'phase2-phishing-pattern',
-            severity: highestConfidence === 'critical' ? 'critical' : 'critical',
+            severity: highestConfidence === 'critical' ? 'critical' : highestConfidence === 'high' ? 'high' : 'medium',
             title: matchedPatterns.length === 1 ? matchedPatterns[0].patternName : 'Multiple Phishing Indicators Detected',
             description: matchedPatterns.map(p => p.description).join(' '),
             recommendation: matchedPatterns[0].recommendation,
@@ -9410,8 +9608,18 @@ function showError(message) {
     document.body.className = '';
 }
 
+function escapeHtml(s) {
+    if (!s) return s;
+    return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 function wrapDomain(domain) {
-    return `<span style="white-space: nowrap;">${domain}</span>`;
+    return `<span style="white-space: nowrap;">${escapeHtml(domain)}</span>`;
 }
 
 function truncateText(text, maxLen = 38) {
@@ -9496,8 +9704,8 @@ function displayResults(warnings) {
             if (w.type === 'phase2-phishing-pattern' && w.details) {
                 const patternHtml = w.details.patterns.map(p => 
                     `<div class="warning-email-row">
-                        <span class="warning-email-label">${p.patternName}:</span>
-                        <span class="warning-email-value suspicious">${p.confidence} confidence</span>
+                        <span class="warning-email-label">${escapeHtml(p.patternName)}:</span>
+                        <span class="warning-email-value suspicious">${escapeHtml(p.confidence)} confidence</span>
                     </div>`
                 ).join('');
                 emailHtml = `
@@ -9505,12 +9713,12 @@ function displayResults(warnings) {
                         ${patternHtml}
                     </div>
                     <div class="warning-advice">
-                        <strong>What to do:</strong> ${w.recommendation}
+                        <strong>What to do:</strong> ${escapeHtml(w.recommendation)}
                     </div>
                 `;
             } else if ((w.type === 'wire-fraud' || w.type === 'phishing-urgency') && w.keywords) {
                 const keywordTags = w.keywords.slice(0, 5).map(k => 
-                    `<span class="keyword-tag">${k}</span>`
+                    `<span class="keyword-tag">${escapeHtml(k)}</span>`
                 ).join('');
                 emailHtml = `
                     <div class="warning-keywords-section">
@@ -9518,7 +9726,7 @@ function displayResults(warnings) {
                         <div class="warning-keywords">${keywordTags}</div>
                     </div>
                     <div class="warning-advice">
-                        <strong>Why this matters:</strong> ${w.keywordExplanation}
+                        <strong>Why this matters:</strong> ${escapeHtml(w.keywordExplanation)}
                     </div>
                 `;
             } else if (w.type === 'org-impersonation') {
@@ -9526,7 +9734,7 @@ function displayResults(warnings) {
                     <div class="warning-emails">
                         <div class="warning-email-row">
                             <span class="warning-email-label">Claims to be:</span>
-                            <span class="warning-email-value known">${w.entityClaimed}</span>
+                            <span class="warning-email-value known">${escapeHtml(w.entityClaimed)}</span>
                         </div>
                         <div class="warning-email-row">
                             <span class="warning-email-label">Actually from:</span>
@@ -9543,7 +9751,7 @@ function displayResults(warnings) {
                     <div class="warning-emails">
                         <div class="warning-email-row">
                             <span class="warning-email-label">This email claims to be from:</span>
-                            <span class="warning-email-value known">${w.brandClaimed}</span>
+                            <span class="warning-email-value known">${escapeHtml(w.brandClaimed)}</span>
                         </div>
                         <div class="warning-email-row">
                             <span class="warning-email-label">But is actually from:</span>
@@ -9560,7 +9768,7 @@ function displayResults(warnings) {
                     <div class="warning-emails">
                         <div class="warning-email-row">
                             <span class="warning-email-label">Display name:</span>
-                            <span class="warning-email-value known">${w.displayName}</span>
+                            <span class="warning-email-value known">${escapeHtml(w.displayName)}</span>
                         </div>
                         <div class="warning-email-row">
                             <span class="warning-email-label">Sender domain:</span>
@@ -9575,13 +9783,13 @@ function displayResults(warnings) {
                 if (w.genericUse && w.genericMessage) {
                     emailHtml = `
                         <div class="warning-international-info">
-                            <p>${w.genericMessage}</p>
+                            <p>${escapeHtml(w.genericMessage)}</p>
                         </div>
                     `;
                 } else {
                     emailHtml = `
                         <div class="warning-international-info">
-                            <p>This sender's email address includes a country code: ${w.tld}<br>(${w.country})</p>
+                            <p>This sender's email address includes a country code: ${escapeHtml(w.tld)}<br>(${escapeHtml(w.country)})</p>
                             <p style="margin-top: 8px;">Be careful, this could be a phishing attempt.</p>
                             <p style="margin-top: 8px;">Most legitimate business emails use .com domains.</p>
                         </div>
@@ -9624,11 +9832,11 @@ function displayResults(warnings) {
                     <div class="warning-emails">
                         <div class="warning-email-row">
                             <span class="warning-email-label">Claims to be:</span>
-                            <span class="warning-email-value known">${w.displayName}</span>
+                            <span class="warning-email-value known">${escapeHtml(w.displayName)}</span>
                         </div>
                         <div class="warning-email-row">
                             <span class="warning-email-label">Your organization:</span>
-                            <span class="warning-email-value known">${w.recipientDomain}</span>
+                            <span class="warning-email-value known">${escapeHtml(w.recipientDomain)}</span>
                         </div>
                         <div class="warning-email-row">
                             <span class="warning-email-label">Actually from:</span>
@@ -9642,7 +9850,7 @@ function displayResults(warnings) {
             } else if (w.type === 'fake-tld') {
                 emailHtml = `
                     <div class="warning-international-info">
-                        <p>The domain extension <strong>${w.tld}</strong> is not a real top-level domain. No legitimate email can come from this address. This email is fraudulent. Do not interact with it.</p>
+                        <p>The domain extension <strong>${escapeHtml(w.tld)}</strong> is not a real top-level domain. No legitimate email can come from this address. This email is fraudulent. Do not interact with it.</p>
                     </div>
                 `;
             } else if (w.type === 'via-routing') {
@@ -9654,7 +9862,7 @@ function displayResults(warnings) {
                         </div>
                         <div class="warning-email-row">
                             <span class="warning-email-label">Routed via:</span>
-                            <span class="warning-email-value suspicious">${w.viaDomain}</span>
+                            <span class="warning-email-value suspicious">${escapeHtml(w.viaDomain)}</span>
                         </div>
                     </div>
                 `;
@@ -9667,7 +9875,7 @@ function displayResults(warnings) {
                         </div>
                         <div class="warning-email-row">
                             <span class="warning-email-label">Platform:</span>
-                            <span class="warning-email-value suspicious">${w.hostingPlatform}</span>
+                            <span class="warning-email-value suspicious">${escapeHtml(w.hostingPlatform)}</span>
                         </div>
                     </div>
                 `;
@@ -9704,17 +9912,17 @@ function displayResults(warnings) {
                             <span class="warning-email-label">${matchLabel}:</span>
                             <span class="warning-email-value ${w.type === 'gibberish-domain' ? 'suspicious' : 'known'}">${formatEmailForDisplay(w.matchedEmail)}</span>
                         </div>
-                        ${w.reason ? `<div class="warning-reason">${w.reason}</div>` : ''}
+                        ${w.reason ? `<div class="warning-reason">${escapeHtml(w.reason)}</div>` : ''}
                     </div>
                 `;
             } else if (w.detail) {
-                emailHtml = `<div class="warning-reason">${w.detail}</div>`;
+                emailHtml = `<div class="warning-reason">${escapeHtml(w.detail)}</div>`;
             }
             
             return `
                 <div class="warning-item ${w.severity}">
-                    <div class="warning-title">${w.title}</div>
-                    <div class="warning-description">${w.description}</div>
+                    <div class="warning-title">${escapeHtml(w.title)}</div>
+                    <div class="warning-description">${escapeHtml(w.description)}</div>
                     ${emailHtml}
                 </div>
             `;
